@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Receita extends Model
+{
+protected $table = 'receitas';
+
+protected $fillable = [
+    'idUser',
+    'descricao',
+    'valor',
+    'data',
+    'idBanco',
+    'idFormaPagamento',
+    'parcela',
+    'totalParcelas',
+    'agendado',
+    'dataAgendamento',
+    'recebido',
+];
+
+public function user()
+{
+    return $this->belongsTo(User::class, 'idUser');
+}
+
+public function banco()
+{
+    return $this->belongsTo(Banco::class, 'idBanco');
+}
+
+public function formaPagamento()
+{
+    return $this->belongsTo(FormaPagamento::class, 'idFormaPagamento');
+}
+
+}
