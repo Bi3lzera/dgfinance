@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use \App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -21,11 +20,11 @@ return new class extends Migration
             $table->date('data'); //Data da despesa; Caso a seja uma despesa agendada, este campo poderá ficar em branco.
             $table->integer('idBanco'); //id do banco que debitou o valor
             $table->integer('idFormaPagamento'); //id da forma de pagamento da despesa
-            $table->integer('parcela'); //Parcela atual
-            $table->integer('totalParcelas'); //Total de parcela
-            $table->char('agendado'); //Identifica se é uma despesa agendada ou não, a classificação se dará: 'S' para Sim, 'N' para Não
-            $table->date('dataAgendamento'); //Se for uma despesa agendada deverá haver a data estimada para o pagamento
-            $table->char('pago'); //Identifica se a despesa foi paga ou nao, a classificação se dará: 'S' para Sim, 'N' para Não; 
+            $table->integer('parcela')->default(1); //Parcela atual
+            $table->integer('totalParcelas')->default(1); //Total de parcela
+            $table->char('agendado')->nullable(); //Identifica se é uma despesa agendada ou não, a classificação se dará: 'S' para Sim, 'N' para Não
+            $table->date('dataAgendamento')->nullable(); //Se for uma despesa agendada deverá haver a data estimada para o pagamento
+            $table->char('pago')->nullable(); //Identifica se a despesa foi paga ou nao, a classificação se dará: 'S' para Sim, 'N' para Não; 
                                   //Caso sim, deverá ser informada no cmapo data o dia efetivo do pagamento
             $table->timestamps();
         });

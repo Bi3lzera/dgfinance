@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\FormaPagamento;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FormaPagamento>
@@ -17,7 +19,7 @@ class FormaPagamentoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nome' => $this->faker->unique()->randomWord(),            
+            'nome' => $this->faker->unique()->word(),            
         ];
     }
 }

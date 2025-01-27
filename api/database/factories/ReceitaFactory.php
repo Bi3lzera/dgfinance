@@ -3,6 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Models\Banco;
+use App\Models\FormaPagamento;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Receita>
@@ -20,9 +23,11 @@ class ReceitaFactory extends Factory
             'descricao' => $this->faker->sentence(6),
             'valor' => $this->faker->randomFloat(2, 0, 10000),
             'data' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'idBanco' => Banco::factory(),
-            'idFormaPagamento' => FormaPagamento::factory(),
-            'idUser' => User::factory(),
+            'idBanco' => Banco::all()->random()->id,
+            'idFormaPagamento' => FormaPagamento::all()->random()->id,
+            'idUser' => User::all()->random()->id,
+            'parcela' => $this->faker->numberBetween(1, 12),
+            'totalParcelas' => $this->faker->numberBetween(1, 12),
         ];
     }
 }
