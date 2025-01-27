@@ -1,0 +1,2 @@
+# dgfinance
+A finance manager.
