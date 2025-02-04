@@ -5,7 +5,6 @@ namespace App\Services;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-
 class AuthenticationService
 {
     public function doLogin(string $login, string $password): Response
@@ -16,7 +15,6 @@ class AuthenticationService
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
 
-            $user->type = $user->getType();
             $user = $user->toArray();
 
             return new Response(['user' => $user, 'token' => $token], Response::HTTP_OK);
@@ -29,7 +27,6 @@ class AuthenticationService
     {
         $user = Auth::user();
 
-        $user->type = $user->getType();
         $user = $user->toArray();
 
         return new Response($user, Response::HTTP_OK);

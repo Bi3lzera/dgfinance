@@ -1,0 +1,54 @@
+services:
+  php:
+    build:
+      context: .docker/php
+    container_name: dgfinance-php
+    volumes:
+      - ./:/var/www/html/dgfinance
+    networks:
+      - dgfinance-network
+
+  nginx:
+    build:
+      context: .docker/nginx
+    container_name: dgfinance-nginx
+    volumes:
+      - ./:/var/www/html/dgfinance
+    ports:
+      - "8080:80"
+    networks:
+      - dgfinance-network
+
+  mysql:
+    image: mysql:9.0.0
+    container_name: dgfinance-mysql
+    platform: linux/x86_64
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: localhost
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - dgfinance-network
+
+  # node:
+  #   image: dgfinance-node
+  #   build:
+  #     context: .
+  #     dockerfile: .docker/node/Dockerfile
+  #   #    environment:
+  #   #      NODE_ENV: production
+  #   ports:
+  #     - "5173:5173"
+  #   volumes:
+  #     - ./app:/app
+  #   networks:
+  #     - dgfinance-network
+
+networks:
+  dgfinance-network:
+    driver: bridge
+volumes:
+  mysql-data:
