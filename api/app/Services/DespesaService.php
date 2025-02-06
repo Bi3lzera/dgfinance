@@ -15,7 +15,13 @@ class DespesaService
 
     public function getAllDespesas(): array
     {
-        return Despesa::where('idUser', auth()->user()->id)->get()->toArray();
+        return Despesa::where('idUser', auth()->user()->id)
+            ->get()
+            ->map(function ($despesa) {
+                $despesa->fParcela = $despesa->parcela . '/' . $despesa->totalParcelas;
+                return $despesa->toArray();
+            })
+            ->toArray();
     }
 
     public function getDespesa(int $id): Despesa

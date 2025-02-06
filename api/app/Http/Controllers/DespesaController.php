@@ -7,16 +7,16 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\DespesaService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth\Factory;
+use Whoops\Handler\JsonResponseHandler;
 
 class DespesaController extends Controller
 {
     public function __construct(
-        public DespesaService $service)
-    {
-        
-    }
+        public DespesaService $service
+    ) {}
 
     public function index()
     {
