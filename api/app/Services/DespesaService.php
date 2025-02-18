@@ -16,12 +16,13 @@ class DespesaService
     public function getAllDespesas(): array
     {
         return Despesa::where('idUser', auth()->user()->id)
-            ->get()
-            ->map(function ($despesa) {
-                $despesa->fParcela = $despesa->parcela . '/' . $despesa->totalParcelas;
-                return $despesa->toArray();
-            })
-            ->toArray();
+               ->join('bancos', 'idBanco', '=', 'bancos.id')
+               ->join('forma_pagamentos', 'idFormaPagamento', '=', 'forma_pagamentos.id')
+               ->select('despesas.*',
+               'bancos.nome as bancoNome',
+               'forma_pagamentos.nome as formaPagamentoNome',
+               Despesa::raw("CONCAT(despesas.parcela, '/', despesas.totalParcelas) as fParcela"))
+               ->get()->toArray();
     }
 
     public function getDespesa(int $id): Despesa
