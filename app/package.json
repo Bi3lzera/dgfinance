@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-select": "^2.1.6",
     "axios": "^1.7.9",
+    "lucide-react": "^0.475.0",
     "normalize.css": "^8.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
