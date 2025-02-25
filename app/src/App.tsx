@@ -4,6 +4,7 @@ import DespesasPage from '../../app/pages/despesas/page';
 import ReceitasPage from '../../app/pages/receitas/page';
 import HomePage from '../../app/pages/home/page';
 import SideBar from '../../app/components/SideBar/SideBar';
+import TopBar from '../../app/components/TopBar/TopBar';
 
 const App = () => {
     // Estado para controlar a página atual
@@ -14,7 +15,6 @@ const App = () => {
         setPaginaAtual(pagina);
     };
 
-    // Renderiza a página com base no estado
     const renderizarPagina = () => {
         switch (paginaAtual) {
             case 'extrato':
@@ -24,21 +24,19 @@ const App = () => {
             case 'receita':
                 return <ReceitasPage />;
             default:
-                return <HomePage />; // Página padrão
+                return <HomePage />;
         }
     };
 
     return (
         <div className='Base'>
             <div className='TopBar'>
-                <h1>TopBar</h1>
+                <TopBar />
             </div>
             <div className='SideBar'>
-                {/* Passa a função mudarPagina para o SideBar */}
                 <SideBar mudarPagina={mudarPagina} />
             </div>
             <div className='Main'>
-                {/* Renderiza a página atual */}
                 {renderizarPagina()}
             </div>
         </div>

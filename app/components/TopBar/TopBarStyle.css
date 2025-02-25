@@ -1,0 +1,94 @@
+.topBar {
+    width: 100%;
+    height: 98%;
+    border-color: #000000;
+    align-content: center;
+    border-radius: 0px 0px 5px 5px;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    padding: 0px 10px;
+}
+
+.yearContainer{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.monthContainer{
+    display: flex;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.monthContainer * {
+    box-sizing: border-box;
+}
+
+.monthInputContainer{
+    width: 20%;
+    height: 90%;
+    border-radius: 5px;
+    display: flex;
+}
+
+.monthTextContainer{
+    display: flex;
+    width: 100px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.monthInput *{
+    align-content: center;
+    width: 100%;
+    height: 90%;
+    margin-top: 5%;
+    align-items: center;
+    border-radius: 5px;
+    color: black;
+    font-size: 24px;
+}
+
+.text{
+    color: black;
+    font-size: 12px;
+    text-align: center;
+    align-content: center;
+}
+
+.yearInputContainer{
+    width: 5%;
+    height: 90%;
+    border-radius: 5px;
+    display: flex;
+}
+
+.yearInput {
+    align-content: center;
+    width: 100%;
+    height: 90%;
+    margin-top: 5%;
+    align-items: center;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    font-size: 32px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.yearTextContainer{
+    display: flex;
+    width: 100px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    align-self: center;
+    margin-left: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+}
