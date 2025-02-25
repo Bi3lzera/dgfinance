@@ -3,7 +3,7 @@ import { useTable } from 'react-table';
 import '../style/table.css';
 
 interface Props {
-  dados: any[];
+  dados: Array<{ data: string; descricao: string; valor: number; bancoNome: string; formaPagamentoNome: string; fParcela: string; }>;
 }
 
 function Tabela(props: Props) {

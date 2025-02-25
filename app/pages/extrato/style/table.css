@@ -1,7 +1,6 @@
 .tableContainer {
-    height: 98%;
-    width: 98%;
-    margin-top: 1%;
+    height: 100%;
+    width: 100%;
     margin-bottom: 1%;
     overflow-y: scroll;
     border-radius: 5px 5px 5px 5px;

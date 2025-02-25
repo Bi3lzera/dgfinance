@@ -6,8 +6,8 @@ import BilheteIcon from '../../assets/bilhete.png';
 
 const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => {
   return (
-    <div className='SideBar'>
-      <div>
+    <div className='justify-center items-center mt-1 justify-center'>
+      <section className='flex flex-col gap-2 justify-center items-center'>
         <div onClick={() => mudarPagina('home')}>
           <SideBarButton icon={HomeIcon} label="Home" />
         </div>
@@ -23,7 +23,7 @@ const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => 
         <div onClick={() => mudarPagina('extrato')}>
           <SideBarButton icon={BilheteIcon} label="Extrato" />
         </div>
-      </div>
+      </section>
     </div>
   );
 };
