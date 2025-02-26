@@ -1,4 +1,5 @@
 import Lancamentos from './lancamentos';
+import LancamentosAgendados from './lancamentosAgendados';
 
 export default function DespesasPage() {
     return (
@@ -7,7 +8,7 @@ export default function DespesasPage() {
                 <Lancamentos/>
             </section>
             <section className="h-[46vh]">
-                <Lancamentos />
+                <LancamentosAgendados />
             </section>
         </div>
     );

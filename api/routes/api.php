@@ -16,6 +16,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('show', [DespesaController::class, 'show']);
         Route::put('update', [DespesaController::class, 'update'])->where('id', '[0-9]+');
         Route::delete('delete', [DespesaController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::get('total', [DespesaController::class, 'total']);
+        Route::get('despesaAgendada', [DespesaController::class, 'despesaAgendada']);
     });
 
     Route::group(['prefix' => 'receita'], function () {

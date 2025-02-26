@@ -42,4 +42,9 @@ class DespesaController extends Controller
     {
         return new Response($this->service->deleteDespesa($request->query('id')), Response::HTTP_OK);
     }
+
+    public function despesaAgendada(Request $request)
+    {
+        return response()->json($this->service->getDespesaAgendada());
+    }
 }

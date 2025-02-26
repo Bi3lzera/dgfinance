@@ -10,3 +10,13 @@ export const getDespesas = async () => {
     const data = response.data
     return data
 }
+
+export const getDespesasAgendadas = async () => {
+    if (AuthenticationService.getToken() == null) {
+        AuthenticationService.doDevLogin()
+    }
+
+    const response = await axiosInstance.get('despesa/despesaAgendada')
+    const data = response.data
+    return data
+}

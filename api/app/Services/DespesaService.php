@@ -41,4 +41,11 @@ class DespesaService
         Despesa::where('id', $id)->where('idUser', auth()->user()->id)->delete();
         return new Response(['message' => 'Despesa deletada com sucesso.'], Response::HTTP_OK);
     }
+
+    public function getDespesaAgendada(): Array
+    {
+        return Despesa::where('idUser', auth()->user()->id)
+            ->where('agendado', '=', 'S')
+            ->get()->toArray();
+    }
 }

@@ -13,9 +13,8 @@ const TopBar: React.FC<TopBarProps> = ({ pageDescription }) => {
 
     const MonthTextBox = () => {
         return (
-            <div>
-                <label htmlFor="months" className="block text-sm font-medium text-gray-700">Selecione o mês</label>
-                <select id="months" name="months" className="block w-full rounded-md shadow-sm focus:bg-gray-500 focus:outline-none focus:ring-indigo-900 focus:border-indigo-500">
+            <div className="flex justify-start rounded-md">
+                <select id="months" name="months" className="text-center block rounded-md shadow-sm focus:bg-gray-500 focus:outline-none focus:ring-indigo-900 focus:border-indigo-500">
                     <option value="janeiro">Janeiro</option>
                     <option value="fevereiro">Fevereiro</option>
                     <option value="marco">Março</option>
@@ -28,7 +27,7 @@ const TopBar: React.FC<TopBarProps> = ({ pageDescription }) => {
                     <option value="outubro">Outubro</option>
                     <option value="novembro">Novembro</option>
                     <option value="dezembro">Dezembro</option>
-                </select>;
+                </select>
             </div>
     )
     };
