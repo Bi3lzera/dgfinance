@@ -43,8 +43,11 @@ export default function AddDespesa({ voltar }: { voltar: () => void }) {
                     <BancoLista />
                 </div>
                 <div className="flex flex-row gap-2 mt-4 justify-end w-full mr-5">
-                    <button onClick={voltar} className="bg-blue-500 text-white px-4 py-2 rounded">
-                        Voltar
+                    <button onClick={voltar} className="bg-red-500 text-white px-4 py-2 rounded">
+                        Cancelar
+                    </button>
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded">
+                        Salvar
                     </button>
                 </div>
             </div>

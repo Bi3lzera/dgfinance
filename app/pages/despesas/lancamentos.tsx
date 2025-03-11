@@ -34,7 +34,6 @@ export default function Lancamentos() {
                                 className="text-3xl cursor-pointer"
                                 onClick={() => setMostrarAddDespesa(true)}
                             />
-                            <FaTrash className="text-2xl cursor-pointer"/>
                         </section>
                     </div>
                     <div>
