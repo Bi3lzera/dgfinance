@@ -23,20 +23,36 @@ export default function AddDespesa({ voltar }: { voltar: () => void }) {
         )
     };
 
+    const CategoriaLista = () => {
+        return (
+            <div className="flex justify-start rounded-md">
+                <select isSearchable id="months" name="formaPagamentoList" className="text-center block rounded-md shadow-sm focus:bg-white-300 focus:outline-gray-300 focus:ring-indigo-900 focus:border-indigo-500">
+                    <option value="restaurante">Restaurante</option>
+                    <option value="combustivel">Combustível</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+        )
+    };
+
     return (
         <div className="add-despesa bg-opacity-50 backdrop-blur-sm border fixed inset-0 z-50 flex flex-col justify-center items-center">
             <h2 className="font-bold text-2xl">ADICIONAR DESPESA</h2>
 
-            <div className="bg-white border w-250 h-50 gap-2 rounded-md flex flex-col justify-center items-center">
-                <div className="flex flex-row gap-2">
+            <div className="bg-white border w-250 h-120 gap-2 rounded-md flex flex-col justify-center items-center">
+                <div className="flex flex-col gap-3">
                     <p>Descrição</p>
-                    <input type="text" placeholder="Caixa com 12 cervejas..." className="border border-gray-600 rounded-md w-[] h-[3vh]"/>
-                    <p>Valor</p>
-                    <input type="text" placeholder="42,00" className="text-center border border-gray-600 rounded-md w-[5vw] h-[3vh]"/>
-                    <p>Quantidade</p>
-                    <input type="text" placeholder="10" className="text-center border border-gray-600 rounded-md w-[3vw] h-[3vh]"/>
+                    <input type="text" placeholder="Caixa com 12 cervejas..." className="border-b-1 border-gray-600 focus:outline-none focus:border-blue-500 transition-all duration-200 w-[50vh] h-[3vh]"/>
+                    <section className="flex-row flex">
+                        <p>Quantidade</p>
+                        <input type="text" placeholder="10" className="border-b-1 border-gray-600 focus:outline-none focus:border-blue-500 transition-all duration-200   text-center w-[3vw] h-[3vh]"/>
+                        <p>Valor</p>
+                        <input type="text" placeholder="42,00" className="border-b-1 border-gray-600 focus:outline-none focus:border-blue-500 transition-all duration-200 text-center w-[5vw] h-[3vh]"/>
+                    </section>
                 </div>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-3">
+                    <p>Categoria</p>
+                    <CategoriaLista />
                     <p>Forma de Pagamento</p>
                     <FormaPagamentoLista />
                     <p>Banco</p>
