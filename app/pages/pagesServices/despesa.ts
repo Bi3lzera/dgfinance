@@ -25,7 +25,7 @@ export const deleteDespesa = async (id: string, atualizarDados: () => void) => {
 
     if (confirmacao) {
         try {
-            // Envia a requisição DELETE para sua API, passando a ID como query parameter
+            // Envia a requisição DELETE para a API, passando a ID como query parameter
             await axiosInstance.delete(`/despesa/delete?id=${id}`);
 
             alert('Item deletado com sucesso!');
