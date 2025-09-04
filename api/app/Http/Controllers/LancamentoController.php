@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Despesa;
+use App\Models\Lancamento;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\DespesaService;
+use App\Services\LancamentoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth\Factory;
 use Whoops\Handler\JsonResponseHandler;
 
-class DespesaController extends Controller
+class LancamentoController extends Controller
 {
     public function __construct(
-        public DespesaService $service
+        public LancamentoService $service
     ) {}
 
     public function index()
     {
-        return response()->json($this->service->getAllDespesas());
+        return response()->json($this->service->getAllData());
     }
 
+    /*
     public function show(Request $despesa)
     {
         return response()->json($this->service->getDespesa($despesa->id));
@@ -47,4 +48,5 @@ class DespesaController extends Controller
     {
         return response()->json($this->service->getDespesaAgendada());
     }
+    */
 }

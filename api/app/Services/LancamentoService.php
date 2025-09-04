@@ -8,6 +8,19 @@ use Illuminate\Http\Response;
 
 class LancamentoService
 {
+    public function getAllData(): array
+    {
+        return Lancamento::where('idUser', auth()->user()->id)
+            ->join('bancos', 'idBanco', '=', 'bancos.id')
+            ->join('forma_pagamentos', 'idFormaPagamento', '=', 'forma_pagamentos.id')
+            ->select(
+                'lancamentos.*',
+                'bancos.nome as bancoNome',
+                'forma_pagamentos.nome as formaPagamentoNome'
+            )
+            ->get()->toArray();
+    }
+
     public function createLancamento(array $data): Response
     {
         Lancamento::create($data);

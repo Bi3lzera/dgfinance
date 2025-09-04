@@ -13,16 +13,29 @@ function Tabela(props: Props) {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
+            
         }).format(valor);
     };
 
   const colunas = React.useMemo(() => [
     { Header: 'Data', accessor: 'data', className: 'dataColumn'},
     { Header: 'Descrição', accessor: 'descricao', className: 'descriptionColumn' },
-    { Header: 'Valor', accessor: 'valor', className: 'valorColumn', Cell: ({ value }: { value: number }) => formatarValor(value)},
     { Header: 'Banco', accessor: 'bancoNome', classnames: 'bancoColumn' },
     { Header: 'Forma Pagamento', accessor: 'formaPagamentoNome', classnames: 'formaPagamentoColumn' },
     { Header: 'Parcela', accessor: 'fParcela' , className: 'parcelaColumnn' },
+    { Header: 'Valor', accessor: 'valor', className: 'valorColumn', 
+      Cell: ({ value, row }: { value: number, row: any }) => {
+        const tipo = row.original.tipo;
+        const cor = tipo === 'R' ? 'valor-positivo' : tipo === 'D' ? 'valor-negativo' : '';
+        return (
+          <span className={cor}>
+            {formatarValor(value)}
+          </span>
+        );
+      }
+    },
+    { Header: 'Tipo', accessor: 'tipo', className: 'tipoColumn' },
+    
   ], []);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns: colunas, data: dados });

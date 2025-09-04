@@ -6,7 +6,7 @@ export const getDespesas = async () => {
         AuthenticationService.doDevLogin()
     }
 
-    const response = await axiosInstance.get('despesa/index')
+    const response = await axiosInstance.get('lancamentos/index')
     const data = response.data
     return data
 }

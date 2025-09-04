@@ -55,7 +55,7 @@
     width: 600px;
 }
 
-valorColumn {
+.valorColumn {
     width: 50px;
     text-align: right;
 }
@@ -70,4 +70,12 @@ valorColumn {
 
 .parcelaColumn {
     width: 10px;
+}
+
+.valor-positivo {
+  color: green;
+}
+
+.valor-negativo {
+  color: red;
 }

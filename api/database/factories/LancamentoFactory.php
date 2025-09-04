@@ -29,7 +29,7 @@ class LancamentoFactory extends Factory
             'totalParcelas' => $this->faker->numberBetween(1, 12),
             'agendado' => $this->faker->randomElement(['S', 'N']),
             'dataAgendamento' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'tipo' => $this->faker->randomElement(['R', 'D']) // Receita (R) ou Despesa (D)
+            'tipo' => $this->faker->randomElement(['C', 'D']) // Crédito (C) ou Débito (D)
         ];
     }
 }

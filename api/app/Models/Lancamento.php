@@ -21,7 +21,7 @@ class Lancamento extends Model
         'totalParcelas', //Número total de parcelas, as parcelas pagas deverão serem consideradas as pagas na tabela operacao, se parcelado
         'agendado', //Determina se está agendado ou não, S (sim) ou N (não)
         'dataAgendamento', //Data do agendamento, se houver. Matenndo a data mesmo se o lançamento não estiver mais agendado.
-        'tipo', //Receita (R) ou Despesa (D)
+        'tipo', //Credito (C) ou Débito (D)
     ];
 
     // Example relationship method
