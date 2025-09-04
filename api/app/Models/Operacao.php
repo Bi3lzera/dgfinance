@@ -14,9 +14,9 @@ class Operacao extends Model
     protected $fillable = [
         'idLancamento',
         'operacao', // 'C' para crédito, 'D' para débito.
-        'valor',
-        'parcela', // número da parcela, se aplicável
-        'data' // data da operação
+        'valorOperacao',
+        'parcelaOperacao', // número da parcela, se aplicável
+        'dataOperacao' // data da operação
     ];
 
     public function operacao()

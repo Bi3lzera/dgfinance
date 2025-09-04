@@ -1,54 +1,48 @@
-import React, { useState } from 'react';
-
-function getYear() {
-    return new Date().getFullYear();
-}
-
-function getCurrentMonthValue() {
-    const meses = [
-        "janeiro", "fevereiro", "marco", "abril", "maio", "junho",
-        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
-    ];
-    return meses[new Date().getMonth()];
-}
+import React, { useState } from 'react'; 
 
 type TopBarProps = {
     pageDescription: string;
+    mes: string;
+    setMes: (mes: string) => void;
+    ano: number;
+    setAno: (ano: number) => void;
 };
 
-const TopBar: React.FC<TopBarProps> = ({ pageDescription }) => {
-    const [selectedMonth, setSelectedMonth] = useState(getCurrentMonthValue());
+const TopBar: React.FC<TopBarProps> = ({ pageDescription, mes, setMes, ano, setAno }) => {
+    const YearTextBox = () => (
+        <input
+            type='number'
+            value={ano}
+            onChange={e => setAno(Number(e.target.value))}
+            placeholder='20..'
+            className="font-bold text-center text-2xl border border-gray-600 shadow-sm w-20 rounded-sm"
+        />
+    );
 
-    const YearTextBox = () => {
-        return <input type='text' defaultValue={getYear()} placeholder='20..' className="font-bold text-center text-2xl border border-gray-600 shadow-sm w-15 rounded-sm" />;
-    };
-
-    const MonthTextBox = () => {
-        return (
-            <div className="flex justify-start rounded-md">
-                <select
-                    id="months"
-                    name="months"
-                    value={selectedMonth}
-                    onChange={e => setSelectedMonth(e.target.value)}
-                    className="text-center block rounded-md shadow-sm focus:bg-gray-500 focus:outline-none focus:ring-indigo-900 focus:border-indigo-500"
-                >
-                    <option value="janeiro">Janeiro</option>
-                    <option value="fevereiro">Fevereiro</option>
-                    <option value="marco">Março</option>
-                    <option value="abril">Abril</option>
-                    <option value="maio">Maio</option>
-                    <option value="junho">Junho</option>
-                    <option value="julho">Julho</option>
-                    <option value="agosto">Agosto</option>
-                    <option value="setembro">Setembro</option>
-                    <option value="outubro">Outubro</option>
-                    <option value="novembro">Novembro</option>
-                    <option value="dezembro">Dezembro</option>
-                </select>
-            </div>
-        )
-    };
+    const MonthTextBox = () => (
+        <div className="flex justify-start rounded-md">
+            <select
+                id="months"
+                name="months"
+                value={mes}
+                onChange={e => setMes(e.target.value)}
+                className="text-center block rounded-md shadow-sm focus:bg-gray-500 focus:outline-none focus:ring-indigo-900 focus:border-indigo-500"
+            >
+                <option value="janeiro">Janeiro</option>
+                <option value="fevereiro">Fevereiro</option>
+                <option value="marco">Março</option>
+                <option value="abril">Abril</option>
+                <option value="maio">Maio</option>
+                <option value="junho">Junho</option>
+                <option value="julho">Julho</option>
+                <option value="agosto">Agosto</option>
+                <option value="setembro">Setembro</option>
+                <option value="outubro">Outubro</option>
+                <option value="novembro">Novembro</option>
+                <option value="dezembro">Dezembro</option>
+            </select>
+        </div>
+    );
 
     return (
         <div className='flex w-full items-center'>

@@ -20,9 +20,9 @@ class OperacaoFactory extends Factory
 
         return [
             'idLancamento' => $lancamento->id,
-            'data' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'valor' => $lancamento->valor,
-            'parcela' => $this->faker->numberBetween(1, 1),
+            'dataOperacao' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'valorOperacao' => $lancamento->valor,
+            'parcelaOperacao' => $this->faker->numberBetween(1, 1),
             'operacao' => $this->faker->randomElement(['C', 'D']),
         ];
     }

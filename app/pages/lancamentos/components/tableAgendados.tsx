@@ -38,7 +38,8 @@ function tableAgendados(props: Props) {
     };
 
     const colunas = React.useMemo(() => [
-        { Header: 'Data', accessor: 'data', className: 'text-center' },
+        { Header: 'Data Lançamento', accessor: 'data', className: 'text-center' },
+        { Header: 'Data Agendada', accessor: 'dataAgendamento', className: 'text-center' },
         { Header: 'Descrição', accessor: 'descricao', className: '' },
         {
             Header: 'Valor',
@@ -46,8 +47,6 @@ function tableAgendados(props: Props) {
             className: 'text-center',
             Cell: ({ value }: { value: number }) => formatarValor(value),
         },
-        { Header: 'Banco', accessor: 'bancoNome', className: '' },
-        { Header: 'Forma Pagamento', accessor: 'formaPagamentoNome', className: '' },
         { Header: 'Parcela', accessor: 'fParcela', className: 'text-center' },
         {
             Header: 'Ações',
@@ -75,7 +74,7 @@ function tableAgendados(props: Props) {
     });
 
     return (
-        <div className="max-h-64 overflow-auto rounded-md shadow-md" >
+        <div className="max-h-85 overflow-auto rounded-md shadow-md" >
             <table {...getTableProps()} className="min-w-full border-collapse shadow-lg">
                 <thead className='sticky top-0 bg-blue-300 rounded-tb-md'>
                 {headerGroups.map((headerGroup: {

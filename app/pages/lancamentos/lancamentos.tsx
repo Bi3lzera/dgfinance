@@ -1,45 +1,53 @@
 import Tabela from './components/table'
-import {useEffect, useState} from "react";
-import {getDespesas} from "../../services/pageServices/lancamentos.ts";
+import { useEffect, useState } from "react";
+import { getLancamentos } from "../../services/pageServices/lancamentos.ts";
 import { IoMdAddCircle } from "react-icons/io";
-import { FaTrash } from "react-icons/fa6";
-import AddDespesa from './components/addDespesa'; // Importa o componente
+import AddLancamento from './components/addLancamento.tsx'; // Importa o componente
 
-export default function Lancamentos() {
+interface LancamentosPageProps {
+    mes: string;
+    ano: number;
+}
+
+export default function Lancamentos({ mes, ano }: LancamentosPageProps) {
     const [dados, setDados] = useState([]);
-    const [mostrarAddDespesa, setMostrarAddDespesa] = useState(false); // Estado para alternar telas
+    const [mostrarAddLancamento, setMostrarAddLancamento] = useState(false); // Estado para alternar telas
 
     const handleClick = async () => {
-        const response = await getDespesas();
+        const response = await getLancamentos(mes, ano);
         console.log(`Response: `, response);
         setDados(response);
     };
 
     useEffect(() => {
+        console.log(`Ano: ${ano}, Mês: ${mes}`);
+    }, [ano, mes]);
+
+    useEffect(() => {
         handleClick();
-    }, []);
+    }, [mes, ano]);
 
     return (
         <div>
-            {mostrarAddDespesa ? (
-                <AddDespesa voltar={() => setMostrarAddDespesa(false)} />
+            {mostrarAddLancamento ? (
+                <AddLancamento voltar={() => setMostrarAddLancamento(false)} />
             ) : (
                 <>
                     <div className="flex justify-between items-center">
                         <section className="w-[10vw]">
-                            <p>Lançamentos</p>
+                            <p>Lançamentos do mês</p>
                         </section>
                         <section className="w-[80vw] flex justify-end flex-row gap-2 mr-4 mb-1 items-center">
                             <IoMdAddCircle
                                 className="text-3xl cursor-pointer"
-                                onClick={() => setMostrarAddDespesa(true)}
+                                onClick={() => setMostrarAddLancamento(true)}
                             />
                         </section>
                     </div>
                     <div>
                         <Tabela dados={dados} onAlterar={function (id: string): void {
-                                throw new Error('Function not implemented.');
-                            } }/>
+                            throw new Error('Function not implemented.');
+                        }} />
                     </div>
                     <div className="flex justify-start items-center mt-4 gap-5">
                         <p>Total dos Lançamentos</p>

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('idLancamento'); //id do lançamento ao qual a operação pertence
             $table->char('operacao'); //Tipo da operação D (débito) ou C (Crédito)
-            $table->double('valor'); //Valor pago na operação, que pode
-            $table->integer('parcela')->default(1); //Número da parcela paga, se for o caso
-            $table->date('data'); //Data em que a operação foi realizada
+            $table->double('valorOperacao'); //Valor pago na operação, que pode
+            $table->integer('parcelaOperacao')->default(1); //Número da parcela paga, se for o caso
+            $table->date('dataOperacao'); //Data em que a operação foi realizada
             
             $table->timestamps();
         });

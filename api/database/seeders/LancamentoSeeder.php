@@ -13,6 +13,6 @@ class LancamentoSeeder extends Seeder
      */
     public function run(): void
     {
-        Lancamento::factory()->count(100)->create();
+        Lancamento::factory()->count(900)->create();
     }
 }

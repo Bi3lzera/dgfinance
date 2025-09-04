@@ -10,6 +10,10 @@ interface ExtratoPageProps {
 export default function ExtratoPage({ mes, ano }: ExtratoPageProps) {
   const [dados, setDados] = useState([]);
 
+  useEffect(() => {
+    console.log(`Ano: ${ano}, Mês: ${mes}`);
+  }, [ano, mes]);
+
   const handleClick = async () => {
     const response = await getLancamentos(mes, ano); 
     console.log(`Response: `, response);

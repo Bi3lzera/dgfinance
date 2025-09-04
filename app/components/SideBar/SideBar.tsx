@@ -12,8 +12,8 @@ const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => 
           <SideBarButton icon={HomeIcon} label="Home" />
         </div>
 
-        <div onClick={() => mudarPagina('despesa')}>
-          <SideBarButton icon={DespesaIcon} label="Despesa" />
+        <div onClick={() => mudarPagina('lancamento')}>
+          <SideBarButton icon={DespesaIcon} label="Lançamentos" />
         </div>
 
         <div onClick={() => mudarPagina('receita')}>

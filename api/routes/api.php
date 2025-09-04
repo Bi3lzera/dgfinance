@@ -10,13 +10,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
 
     Route::group(['prefix' => 'lancamentos'], function () {
-        Route::get('index', [LancamentoController::class, 'index']);
+        Route::get('index', [LancamentoController::class, 'index'])->where('mes', '[a-zA-Z]+')->where('ano', '[0-9]+');
+        Route::get('lancamentoAgendado', [LancamentoController::class, 'lancamentoAgendado']);
+        Route::get('lancamentoEfetivado', [LancamentoController::class, 'lancamentoEfetivado'])->where('ano', '[0-9]+');
 
         //Route::post('store', [DespesaController::class, 'store']);        
-        //Route::get('show', [DespesaController::class, 'show']);
+        //
         //Route::put('update', [DespesaController::class, 'update'])->where('id', '[0-9]+');
         //Route::delete('delete', [DespesaController::class, 'destroy'])->where('id', '[0-9]+');
         //Route::get('total', [DespesaController::class, 'total']);
-        //Route::get('despesaAgendada', [DespesaController::class, 'despesaAgendada']);
+        //
     });
 })->middleware('auth:sanctum', 'unauthenticated');

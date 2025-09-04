@@ -7,7 +7,7 @@ interface SideBarButtonProps {
 
 const SideBarButton: React.FC<SideBarButtonProps> = ({ icon, label }) => {
   return (
-    <div className='flex flex-col border border-blue-400 shadow-lg w-[3.8vw] h-17 rounded-md justify-center items-center hover:bg-blue-300'>
+    <div className='flex flex-col border border-blue-400 shadow-lg w-[8vw] h-17 rounded-md justify-center items-center hover:bg-blue-300'>
         <img src={icon}></img>
         <p>{label}</p>
     </div>

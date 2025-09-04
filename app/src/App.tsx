@@ -1,16 +1,26 @@
 import { useState } from 'react';
 import ExtratoPage from '../../app/pages/extrato/page';
-import DespesasPage from '../../app/pages/despesas/page';
 import ReceitasPage from '../../app/pages/receitas/page';
 import HomePage from '../../app/pages/home/page';
 import SideBar from '../../app/components/SideBar/SideBar';
 import TopBar from '../../app/components/TopBar/TopBar';
+import LancamentosPage from '../../app/pages/lancamentos/page';
+
+const getCurrentMonthValue = () => {
+    const meses = [
+        "janeiro", "fevereiro", "marco", "abril", "maio", "junho",
+        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+    ];
+    return meses[new Date().getMonth()];
+};
+
+const getYear = () => new Date().getFullYear();
 
 const App = () => {
-    // Estado para controlar a página atual
     const [paginaAtual, setPaginaAtual] = useState('HomePage');
+    const [mes, setMes] = useState(getCurrentMonthValue());
+    const [ano, setAno] = useState(getYear());
 
-    // Função para alterar a página
     const mudarPagina = (pagina: string) => {
         setPaginaAtual(pagina);
     };
@@ -18,9 +28,9 @@ const App = () => {
     const renderizarPagina = () => {
         switch (paginaAtual) {
             case 'extrato':
-                return <ExtratoPage />;
-            case 'despesa':
-                return <DespesasPage />;
+                return <ExtratoPage mes={mes} ano={ano} />;
+            case 'lancamento':
+                return <LancamentosPage mes={mes} ano={ano}/>;
             case 'receita':
                 return <ReceitasPage />;
             default:
@@ -29,12 +39,11 @@ const App = () => {
     };
 
     const descPagina = () => {
-        console.log("paginaAtual: " + paginaAtual);
         switch (paginaAtual) {
             case 'extrato':
                 return "Extrato";
-            case 'despesa':
-                return "Lançamento de Despesas/Saídas";
+            case 'lancamento':
+                return "Lançamento de Despesas e Receitas";
             case 'receita':
                 return "Receitas";
             default:
@@ -45,13 +54,19 @@ const App = () => {
     return (
         <div className='Base'>
             <div className="flex bg-gray-700 text-white rounded-b-sm h-10">
-                <TopBar pageDescription={descPagina()}/>
+                <TopBar
+                    pageDescription={descPagina()}
+                    mes={mes}
+                    setMes={setMes}
+                    ano={ano}
+                    setAno={setAno}
+                />
             </div>
             <div className='flex gap-2 w-[99vw] h-[92vh] mt-2'>
-                <section className='flex w-[4vw] bg-blue-400 rounded-r-md justify-center'>
+                <section className='flex w-[8vw] bg-blue-400 rounded-r-md justify-center'>
                     <SideBar mudarPagina={mudarPagina} />
                 </section>
-                <section className='flex rounded-md w-[95vw]'>
+                <section className='flex rounded-md w-[91.15vw]'>
                     {renderizarPagina()}
                 </section>
             </div>

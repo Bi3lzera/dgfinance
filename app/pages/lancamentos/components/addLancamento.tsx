@@ -1,4 +1,4 @@
-export default function AddDespesa({ voltar }: { voltar: () => void }) {
+export default function AddLancamento({ voltar }: { voltar: () => void }) {
     const BancoLista = () => {
         return (
             <div className="flex justify-start rounded-md">
@@ -37,7 +37,7 @@ export default function AddDespesa({ voltar }: { voltar: () => void }) {
 
     return (
         <div className="add-despesa bg-opacity-50 backdrop-blur-sm border fixed inset-0 z-50 flex flex-col justify-center items-center">
-            <h2 className="font-bold text-2xl">ADICIONAR DESPESA</h2>
+            <h2 className="font-bold text-2xl">REGISTRAR LANÇAMENTO</h2>
 
             <div className="bg-white border w-250 h-120 gap-2 rounded-md flex flex-col justify-center items-center">
                 <div className="flex flex-col gap-3">
