@@ -4,7 +4,7 @@ import axios from 'axios';
 import {IoMdAddCircle} from "react-icons/io";
 import {FaTrash} from "react-icons/fa6";
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import { deleteDespesa } from '../../pagesServices/despesa';
+import { deleteDespesa } from '../../../services/pageServices/lancamentos.ts';
 
 interface Props {
     dados: any[];

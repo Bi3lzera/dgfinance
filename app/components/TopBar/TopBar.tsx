@@ -1,5 +1,15 @@
+import React, { useState } from 'react';
+
 function getYear() {
     return new Date().getFullYear();
+}
+
+function getCurrentMonthValue() {
+    const meses = [
+        "janeiro", "fevereiro", "marco", "abril", "maio", "junho",
+        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+    ];
+    return meses[new Date().getMonth()];
 }
 
 type TopBarProps = {
@@ -7,14 +17,22 @@ type TopBarProps = {
 };
 
 const TopBar: React.FC<TopBarProps> = ({ pageDescription }) => {
+    const [selectedMonth, setSelectedMonth] = useState(getCurrentMonthValue());
+
     const YearTextBox = () => {
-        return <input type='text' defaultValue={getYear()} placeholder='20..' className="font-bold text-center text-2xl border border-gray-600 shadow-sm w-15 rounded-sm"/>;
+        return <input type='text' defaultValue={getYear()} placeholder='20..' className="font-bold text-center text-2xl border border-gray-600 shadow-sm w-15 rounded-sm" />;
     };
 
     const MonthTextBox = () => {
         return (
             <div className="flex justify-start rounded-md">
-                <select id="months" name="months" className="text-center block rounded-md shadow-sm focus:bg-gray-500 focus:outline-none focus:ring-indigo-900 focus:border-indigo-500">
+                <select
+                    id="months"
+                    name="months"
+                    value={selectedMonth}
+                    onChange={e => setSelectedMonth(e.target.value)}
+                    className="text-center block rounded-md shadow-sm focus:bg-gray-500 focus:outline-none focus:ring-indigo-900 focus:border-indigo-500"
+                >
                     <option value="janeiro">Janeiro</option>
                     <option value="fevereiro">Fevereiro</option>
                     <option value="marco">Março</option>
@@ -29,7 +47,7 @@ const TopBar: React.FC<TopBarProps> = ({ pageDescription }) => {
                     <option value="dezembro">Dezembro</option>
                 </select>
             </div>
-    )
+        )
     };
 
     return (

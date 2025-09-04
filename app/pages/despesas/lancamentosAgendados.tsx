@@ -1,6 +1,6 @@
 import Tabela from './components/tableAgendados'
 import {useEffect, useState} from "react";
-import {getDespesas, getDespesasAgendadas} from "../pagesServices/despesa.ts";
+import {getDespesas, getDespesasAgendadas} from "../../services/pageServices/lancamentos.ts";
 import { IoMdAddCircle } from "react-icons/io";
 import { FaTrash } from "react-icons/fa6";
 import { GiConfirmed } from "react-icons/gi";

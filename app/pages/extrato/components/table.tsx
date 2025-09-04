@@ -26,7 +26,7 @@ function Tabela(props: Props) {
     { Header: 'Valor', accessor: 'valor', className: 'valorColumn', 
       Cell: ({ value, row }: { value: number, row: any }) => {
         const tipo = row.original.tipo;
-        const cor = tipo === 'R' ? 'valor-positivo' : tipo === 'D' ? 'valor-negativo' : '';
+        const cor = tipo === 'C' ? 'valor-positivo' : tipo === 'D' ? 'valor-negativo' : '';
         return (
           <span className={cor}>
             {formatarValor(value)}

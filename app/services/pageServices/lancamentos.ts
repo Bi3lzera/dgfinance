@@ -1,12 +1,17 @@
-import { AuthenticationService } from "../../services/auth/AuthService"
+import { AuthenticationService } from "../auth/AuthService"
 import axiosInstance from "../../config/axiosConfig"
 
-export const getDespesas = async () => {
+export const getLancamentos = async (mes: string, ano: number) => {
     if (AuthenticationService.getToken() == null) {
         AuthenticationService.doDevLogin()
     }
 
-    const response = await axiosInstance.get('lancamentos/index')
+    const response = await axiosInstance.get('lancamentos/index', {
+        params: {
+            mes,
+            ano
+        }
+    })
     const data = response.data
     return data
 }

@@ -8,9 +8,11 @@ use Illuminate\Http\Response;
 
 class LancamentoService
 {
-    public function getAllData(): array
+    public function getAllData(string $mes, int $ano): array
     {
         return Lancamento::where('idUser', auth()->user()->id)
+            ->where('mes', $mes)
+            ->where('ano', $ano)
             ->join('bancos', 'idBanco', '=', 'bancos.id')
             ->join('forma_pagamentos', 'idFormaPagamento', '=', 'forma_pagamentos.id')
             ->select(

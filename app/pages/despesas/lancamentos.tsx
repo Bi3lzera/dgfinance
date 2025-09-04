@@ -1,6 +1,6 @@
 import Tabela from './components/table'
 import {useEffect, useState} from "react";
-import {getDespesas} from "../pagesServices/despesa.ts";
+import {getDespesas} from "../../services/pageServices/lancamentos.ts";
 import { IoMdAddCircle } from "react-icons/io";
 import { FaTrash } from "react-icons/fa6";
 import AddDespesa from './components/addDespesa'; // Importa o componente

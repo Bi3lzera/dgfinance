@@ -1,26 +1,27 @@
 <?php
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class UserSeeder extends Seeder
 {
-    public function run(): void
+    public function definition(): array
     {
-        User::create([
-            'name' => fake()->name(),
-            'email' => 'insomnia@teste.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
+        return [
+            User::create([
+                'name' => fake()->name(),
+                'email' => 'insomnia@teste.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ]),
 
-        User::create([
-            'name' => fake()->name(),
-            'email' => 'dev@teste.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ]);
+            User::create([
+                'name' => fake()->name(),
+                'email' => 'dev@teste.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ])
+        ];
     }
 }

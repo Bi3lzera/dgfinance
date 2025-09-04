@@ -33,7 +33,7 @@ export class AuthenticationService {
     };
 
     static async doDevLogin (){
-        const credentials = { login: 'raegan29@example.org', password: 'password' };
+        const credentials = { login: 'dev@teste.com', password: 'password' };
         await this.login(credentials);
     }
 }

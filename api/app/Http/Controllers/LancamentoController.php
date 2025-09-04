@@ -18,9 +18,11 @@ class LancamentoController extends Controller
         public LancamentoService $service
     ) {}
 
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        return response()->json($this->service->getAllData());
+        $mes = $request->query('mes');
+        $ano = $request->query('ano');
+        return response()->json($this->service->getAllData($mes, $ano));
     }
 
     /*
