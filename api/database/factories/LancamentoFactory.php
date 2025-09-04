@@ -10,7 +10,7 @@ use App\Models\FormaPagamento;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Despesa>
  */
-class DespesaFactory extends Factory
+class LancamentoFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -26,8 +26,10 @@ class DespesaFactory extends Factory
             'idBanco' => Banco::all()->random()->id,
             'idFormaPagamento' => FormaPagamento::all()->random()->id,
             'idUser' => User::all()->random()->id,
-            'parcela' => $this->faker->numberBetween(1, 12),
             'totalParcelas' => $this->faker->numberBetween(1, 12),
+            'agendado' => $this->faker->randomElement(['S', 'N']),
+            'dataAgendamento' => $this->faker->dateTimeBetween('now', '+1 year'),
+            'tipo' => $this->faker->randomElement(['R', 'D']) // Receita (R) ou Despesa (D)
         ];
     }
 }

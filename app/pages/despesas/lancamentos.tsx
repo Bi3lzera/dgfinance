@@ -37,7 +37,9 @@ export default function Lancamentos() {
                         </section>
                     </div>
                     <div>
-                        <Tabela dados={dados}/>
+                        <Tabela dados={dados} onAlterar={function (id: string): void {
+                                throw new Error('Function not implemented.');
+                            } }/>
                     </div>
                     <div className="flex justify-start items-center mt-4 gap-5">
                         <p>Total dos Lançamentos</p>

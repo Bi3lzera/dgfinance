@@ -13,13 +13,8 @@ class Banco extends Model
         'nome',
     ];
 
-    public function despesas()
+    public function lancamentos()
     {
-        return $this->hasMany(Despesa::class);
-    }
-
-    public function receitas()
-    {
-        return $this->hasMany(Receita::class);
+        return $this->hasMany(lancamento::class, 'idBanco');
     }
 }

@@ -13,13 +13,8 @@ class FormaPagamento extends Model
         'forma_pagamento'
     ];
 
-    public function despesas()
+    public function formaDePagamento()
     {
-        return $this->hasMany(Despesa::class);
-    }
-
-    public function receitas()
-    {
-        return $this->hasMany(Receita::class);
+        return $this->hasMany(lancamento::class);
     }
 }
