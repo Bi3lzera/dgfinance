@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('totalParcelas')->default(1); //Total de parcela
             $table->char('agendado')->nullable(); //Identifica se é uma despesa agendada ou não, a classificação se dará: 'S' para Sim, 'N' para Não
             $table->date('dataAgendamento')->nullable(); //Se for uma despesa agendada deverá haver a data estimada para o pagamento
-            $table->char('tipo'); //Receita (R) ou Despesa (D)
+            $table->char('tipo'); //Crédito (R) ou Débito (D)
 
             $table->timestamps();
         });
