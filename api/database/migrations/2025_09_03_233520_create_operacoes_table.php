@@ -18,7 +18,9 @@ return new class extends Migration
             $table->double('valorOperacao'); //Valor pago na operação, que pode
             $table->integer('parcelaOperacao')->default(1); //Número da parcela paga, se for o caso
             $table->date('dataOperacao'); //Data em que a operação foi realizada
-            
+            $table->integer('idBanco')->nullable(); //id do banco que debitou o valor
+            $table->integer('idFormaPagamento')->nullable(); //id da forma de pagamento da despesa
+
             $table->timestamps();
         });
     }

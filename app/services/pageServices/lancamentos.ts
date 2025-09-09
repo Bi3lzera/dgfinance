@@ -6,7 +6,7 @@ export const getLancamentos = async (mes: string, ano: number) => {
         AuthenticationService.doDevLogin()
     }
 
-    const response = await axiosInstance.get('lancamentos/lancamentoEfetivado', {
+    const response = await axiosInstance.get('lancamentos/efetivado', {
         params: {
             mes,
             ano
@@ -21,7 +21,7 @@ export const getLancamentosAgendados = async () => {
         AuthenticationService.doDevLogin()
     }
 
-    const response = await axiosInstance.get('lancamentos/lancamentoAgendado')
+    const response = await axiosInstance.get('lancamentos/agendado')
     const data = response.data
     return data
 }

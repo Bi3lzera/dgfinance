@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\LancamentoService;
+use App\Http\Requests\CreateLancamentoRequest;
+use App\Http\Requests\CreateOperacaoRequest;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -21,9 +23,7 @@ class LancamentoController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $mes = $request->query('mes');
-        $ano = $request->query('ano');
-        return response()->json($this->service->getAllData($mes, $ano));
+        return response()->json($this->service->getAllData($request->query('mes'), $request->query('ano')));
     }
 
     public function lancamentoAgendado(Request $request)
@@ -33,22 +33,23 @@ class LancamentoController extends Controller
 
     public function lancamentoEfetivado(Request $request): JsonResponse
     {
-        $mes = $request->query('mes');
-        $ano = $request->query('ano');
-        return response()->json($this->service->getLancamentos($mes, $ano));
+        return response()->json($this->service->getLancamentos($request->query('mes'), $request->query('ano')));
     }
 
-    /*
-    
-
-    public function store(Request $request): Response
+    public function createLancamento(CreateLancamentoRequest $request): Response
     {
-        return new Response($this->service->createDespesa($request->all()), Response::HTTP_CREATED);
+        return new Response($this->service->createLancamento($request->all()), Response::HTTP_CREATED);
     }
 
+    public function createOperacao(CreateOperacaoRequest $request): Response
+    {
+        return new Response($this->service->createOperacao($request->all()), Response::HTTP_CREATED);
+    }
+    
+    /*
     public function update(Request $request): Response
     {
-        return new Response($this->service->updateDespesa($request->all(), $request->query('id')), Response::HTTP_OK);
+        return new Response($this->service->updateDespesa($request->all(), $request->query('id')), Response::HTTP_OK); 
     }
 
     public function destroy(Request $request): Response

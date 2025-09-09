@@ -3,19 +3,24 @@
 namespace App\Services;
 
 use App\Models\Lancamento;
+use App\Models\Operacao;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class LancamentoService
 {
+    //Função para retornar todos os lançamentos cadastrados no mês/ano informado,
+    //independente se tiveram ou não operações naquele período.
     public function getAllData(string $mes, int $ano): array
     {
         $mes = $this->monthId($mes);
 
-        return Lancamento::where('idUser', auth()->user()->id)
+        return Lancamento::where('idUser', Auth::user()->id)
             ->whereMonth('data', $mes)
             ->whereYear('data', $ano)
-            ->join('bancos', 'idBanco', '=', 'bancos.id')
-            ->join('forma_pagamentos', 'idFormaPagamento', '=', 'forma_pagamentos.id')
+            ->leftJoin('operacoes', 'lancamentos.id', '=', 'operacoes.idLancamento')
+            ->leftJoin('bancos', 'idBanco', '=', 'bancos.id')
+            ->leftJoin('forma_pagamentos', 'idFormaPagamento', '=', 'forma_pagamentos.id')
             ->select(
                 'lancamentos.*',
                 'bancos.nome as bancoNome',
@@ -26,16 +31,18 @@ class LancamentoService
             ->toArray();
     }
 
+    //Função para retornar todos os lançamentos que tiveram operações no mês/ano informado, 
+    //ou seja, lançamentos que foram efetivados naquela data.
     public function getLancamentos(string $mes, int $ano): array
     {
         $mes = $this->monthId($mes);
 
-        return Lancamento::where('idUser', auth()->user()->id)
+        return Lancamento::where('idUser', Auth::user()->id)
             ->whereMonth('data', $mes)
             ->whereYear('data', $ano)
-            ->join('bancos', 'idBanco', '=', 'bancos.id')
-            ->join('forma_pagamentos', 'idFormaPagamento', '=', 'forma_pagamentos.id')
-            ->join('operacoes', 'operacoes.idLancamento', '=', 'lancamentos.id')
+            ->rightJoin('operacoes', 'lancamentos.id', '=', 'operacoes.idLancamento')
+            ->leftJoin('bancos', 'operacoes.idBanco', '=', 'bancos.id')
+            ->leftJoin('forma_pagamentos', 'operacoes.idFormaPagamento', '=', 'forma_pagamentos.id')
             ->select(
                 'lancamentos.*',
                 'bancos.nome as bancoNome',
@@ -48,17 +55,13 @@ class LancamentoService
             ->toArray();
     }
 
-    public function getDespesa(int $id): Lancamento
-    {
-        return Lancamento::where('id', $id)
-            ->where('idUser', auth()->user()->id)
-            ->first();
-    }
-
+    //Função para retornar todos os lançamentos que estão agendados para o futuro.
+    //TODO: Implementar filtro por data.
     public function getLancamentosAgendado(): array
     {
-        return Lancamento::where('idUser', auth()->user()->id)
+        return Lancamento::where('idUser', Auth::user()->id)
             ->where('agendado', '=', 'S')
+            ->rightJoin('operacoes', 'lancamentos.id', '=', 'operacoes.idLancamento')
             ->join('bancos', 'idBanco', '=', 'bancos.id')
             ->join('forma_pagamentos', 'idFormaPagamento', '=', 'forma_pagamentos.id')
             ->select(
@@ -72,22 +75,17 @@ class LancamentoService
             ->toArray();
     }
 
+    //Função para criar um novo lançamento
     public function createLancamento(array $data): Response
     {
         Lancamento::create($data);
         return new Response(['message' => 'Lancamento criada com sucesso.'], Response::HTTP_CREATED);
     }
 
-        public function updateLancamento(array $data, int $id): Response
+    public function createOperacao(array $data): Response
     {
-        Lancamento::where('id', $id)->where('idUser', auth()->user()->id)->update($data);
-        return new Response(['message' => 'Lancamento atualizada com sucesso.'], Response::HTTP_OK);
-    }
-
-    public function deleteLancamento(int $id): Response
-    {
-        Lancamento::where('id', $id)->where('idUser', auth()->user()->id)->delete();
-        return new Response(['message' => 'Lancamento deletado com sucesso.'], Response::HTTP_OK);
+        Operacao::create($data);
+        return new Response(['message' => 'Operação criada com sucesso.'], Response::HTTP_CREATED);
     }
 
     public function monthId(string $mes): int
@@ -109,4 +107,19 @@ class LancamentoService
 
         return $months[$mes] ?? 1;
     }
+
+    //CÓDIGO VELHO, COM POSSIBILIDADE DE REUTILIZAÇÃO.
+    /*
+    public function updateLancamento(array $data, int $id): Response
+    {
+        Lancamento::where('id', $id)->where('idUser', auth()->user()->id)->update($data);
+        return new Response(['message' => 'Lancamento atualizada com sucesso.'], Response::HTTP_OK);
+    }
+
+    public function deleteLancamento(int $id): Response
+    {
+        Lancamento::where('id', $id)->where('idUser', auth()->user()->id)->delete();
+        return new Response(['message' => 'Lancamento deletado com sucesso.'], Response::HTTP_OK);
+    }
+    */
 }

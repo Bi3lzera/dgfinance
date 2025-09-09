@@ -3,6 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Banco;
+use App\Models\FormaPagamento;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Operacao>
@@ -24,6 +27,8 @@ class OperacaoFactory extends Factory
             'valorOperacao' => $lancamento->valor,
             'parcelaOperacao' => $this->faker->numberBetween(1, 1),
             'operacao' => $this->faker->randomElement(['C', 'D']),
+            'idBanco' => Banco::all()->random()->id,
+            'idFormaPagamento' => FormaPagamento::all()->random()->id
         ];
     }
 }

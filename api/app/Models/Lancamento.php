@@ -16,8 +16,6 @@ class Lancamento extends Model
         'descricao', //Descrição breve do lançamento
         'valor',
         'data', //Data do lançamento, sendo que é diferente das datas de operações, que são os pagamentos efetivos
-        'idBanco', 
-        'idFormaPagamento',
         'totalParcelas', //Número total de parcelas, as parcelas pagas deverão serem consideradas as pagas na tabela operacao, se parcelado
         'agendado', //Determina se está agendado ou não, S (sim) ou N (não)
         'dataAgendamento', //Data do agendamento, se houver. Matenndo a data mesmo se o lançamento não estiver mais agendado.

@@ -16,7 +16,9 @@ class Operacao extends Model
         'operacao', // 'C' para crédito, 'D' para débito.
         'valorOperacao',
         'parcelaOperacao', // número da parcela, se aplicável
-        'dataOperacao' // data da operação
+        'dataOperacao',
+        'idBanco',
+        'idFormaPagamento' // data da operação
     ];
 
     public function operacao()

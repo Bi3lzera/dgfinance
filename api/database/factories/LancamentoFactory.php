@@ -23,8 +23,6 @@ class LancamentoFactory extends Factory
             'descricao' => $this->faker->sentence(6),
             'valor' => $this->faker->randomFloat(2, 0, 10000),
             'data' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'idBanco' => Banco::all()->random()->id,
-            'idFormaPagamento' => FormaPagamento::all()->random()->id,
             'idUser' => User::all()->random()->id,
             'totalParcelas' => $this->faker->numberBetween(1, 12),
             'agendado' => $this->faker->randomElement(['S', 'N']),
