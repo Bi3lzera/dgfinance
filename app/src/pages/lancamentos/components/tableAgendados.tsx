@@ -4,14 +4,14 @@ import axios from 'axios';
 import { IoMdAddCircle } from "react-icons/io";
 import { FaTrash } from "react-icons/fa6";
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import { deleteDespesa } from '../../../services/pageServices/lancamentos.ts';
+import { deleteLancamento } from '../../../services/pageServices/lancamentos.ts';
 
 interface Props {
     dados: any[];
     onAlterar: (id: string) => void; // Função para alterar, passada como prop
 }
 
-function Tabela(props: Props) {
+function tableAgendados(props: Props) {
     const { dados } = props;
     //const [dados, setDados] = useState(props.dados); // Controla os dados da tabela
     const { onAlterar } = props;
@@ -38,7 +38,8 @@ function Tabela(props: Props) {
     };
 
     const colunas = React.useMemo(() => [
-        { Header: 'Data', accessor: 'data', className: 'text-center' },
+        { Header: 'Data Lançamento', accessor: 'data', className: 'text-center' },
+        { Header: 'Data Agendada', accessor: 'dataAgendamento', className: 'text-center' },
         { Header: 'Descrição', accessor: 'descricao', className: '' },
         {
             Header: 'Valor',
@@ -46,15 +47,7 @@ function Tabela(props: Props) {
             className: 'text-center',
             Cell: ({ value }: { value: number }) => formatarValor(value),
         },
-        {
-            Header: 'Valor Pago',
-            accessor: 'valorOperacao',
-            className: 'text-center',
-            Cell: ({ value }: { value: number }) => formatarValor(value),
-        },
-        { Header: 'Banco', accessor: 'bancoNome', className: 'text-center' },
-        { Header: 'Forma Pagamento', accessor: 'formaPagamentoNome', className: 'text-center' },
-        { Header: 'Parcela', accessor: '', className: 'text-center' },
+        { Header: 'Parcela', accessor: 'fParcela', className: 'text-center' },
         {
             Header: 'Ações',
             accessor: 'acoes',
@@ -81,7 +74,7 @@ function Tabela(props: Props) {
     });
 
     return (
-        <div className="max-h-83 overflow-auto rounded-md shadow-md" >
+        <div className="max-h-85 overflow-auto rounded-md shadow-md" >
             <table {...getTableProps()} className="min-w-full border-collapse shadow-lg">
                 <thead className='sticky top-0 bg-blue-300 rounded-tb-md'>
                     {headerGroups.map((headerGroup: {
@@ -122,4 +115,4 @@ function Tabela(props: Props) {
     )
 }
 
-export default Tabela;
+export default tableAgendados;
