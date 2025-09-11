@@ -1,4 +1,4 @@
-import Tabela from './components/table'
+import Tabela from './components/TableLancamentos.tsx'
 import { useEffect, useState } from "react";
 import { getLancamentos } from "../../services/pageServices/lancamentos.ts";
 import { IoMdAddCircle } from "react-icons/io";

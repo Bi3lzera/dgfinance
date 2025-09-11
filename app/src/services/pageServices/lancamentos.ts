@@ -1,5 +1,7 @@
 import { AuthenticationService } from "../auth/AuthService"
-import axiosInstance from "../../config/axiosConfig"
+import axiosInstance from "../../../config/axiosConfig"
+
+import { useEffect, useState } from "react";
 
 export const getLancamentos = async (mes: string, ano: number) => {
     if (AuthenticationService.getToken() == null) {
@@ -25,7 +27,7 @@ export const getLancamentosAgendados = async () => {
     const data = response.data
     return data
 }
-export const deleteDespesa = async (id: string, atualizarDados: () => void) => {
+export const deleteLancamento = async (id: string, atualizarDados: () => void) => {
     const confirmacao = window.confirm('Você tem certeza que deseja deletar este item?');
 
     if (confirmacao) {

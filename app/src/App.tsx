@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import ExtratoPage from '../../app/pages/extrato/page';
-import ReceitasPage from '../../app/pages/receitas/page';
-import HomePage from '../../app/pages/home/page';
-import SideBar from '../../app/components/SideBar/SideBar';
-import TopBar from '../../app/components/TopBar/TopBar';
-import LancamentosPage from '../../app/pages/lancamentos/page';
+import ExtratoPage from '../../app/src/pages/extrato/page';
+import ReceitasPage from '../../app/src/pages/receitas/page';
+import HomePage from '../../app/src/pages/home/page';
+import SideBar from './components/SideBar/SideBar';
+import TopBar from './components/TopBar/TopBar';
+import LancamentosPage from '../../app/src/pages/lancamentos/page';
 
 const getCurrentMonthValue = () => {
     const meses = [
         "janeiro", "fevereiro", "marco", "abril", "maio", "junho",
         "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
-    ];
+    ];  
     return meses[new Date().getMonth()];
 };
 

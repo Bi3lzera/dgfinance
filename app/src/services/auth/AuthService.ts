@@ -1,4 +1,4 @@
-import axiosInstance from "../../config/axiosConfig";
+import axiosInstance from "../../../config/axiosConfig";
 //import {LoginFormSchema} from "../pages/LoginPage.tsx";
 import {AxiosResponse} from "axios";
 import {LoginResponse, UserResponse} from "./types";
