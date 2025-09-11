@@ -1,40 +1,38 @@
-import React from "react";
+import { Column, RowData } from "./types.ts";
 
-type Column = {
-    header: string;
-    acessor: string;
-    className?: string;
-}
+type DataTableProps<T extends RowData> = {
+    columns: Column<T>[];
+    data: T[];
+};
 
-type Props<T> = {
-    data: any[];
-    columns: Column[];
-}
-
-export default function Table<T>({ data, columns }: Props<T>) {
+export default function DataTable<T extends RowData>({ columns, data }: DataTableProps<T>) {
     return (
-        <table>
-            <thead>
-                <tr>
-                    {columns.map((col, i) => (
-                        <th key={i}>
-                            {col.header}
-                        </th>
-                    ))}
-                </tr>
-            </thead>
-
-            <tbody>
-                {data.map((row, i) => (
-                    <tr key={i}>
-                        {columns.map((col, j) => (
-                            <td key={j} className={col.className}>
-                                {row.acessor}
-                            </td>
+        <div className="max-h-85 overflow-auto rounded-md shadow-md">
+            <table className="min-w-full border-collapse shadow-lg">
+                <thead className='sticky top-0 bg-blue-300 rounded-tb-md'>
+                    <tr className="rounded-md">
+                        {columns.map((col, index) => (
+                            <th key={index} className={`px-4 py-2 font-bold ${col.className ?? ""}`}>
+                                {col.header}
+                            </th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {data.map((row, rowIndex) => (
+                        <tr key={rowIndex} className='hover:bg-gray-100 h-7 border-b border-gray-100'>
+                            {columns.map((col, colIndex) => {
+                                const rawValue = row[col.accessor];
+                                return (
+                                    <td key={colIndex} className={`${col.className ?? ""}`}>
+                                        {col.cell ? col.cell(rawValue) : rawValue}
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 }

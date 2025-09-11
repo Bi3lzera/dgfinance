@@ -51,22 +51,41 @@ function Tabela(props: Props) {
     };
 
     const colunas = [
-        { header: 'Data', acessor: 'data', className: 'text-center' },
-        { header: 'Descrição', acessor: 'descricao', className: '' },
+        { header: 'Data', accessor: 'data', className: 'text-center' },
+        { header: 'Descrição', accessor: 'descricao', className: '' },
         {
             header: 'Valor',
             accessor: 'valor',
             className: 'text-center',
+            cell: (value: number) => formatarValor(value),
         },
         {
             header: 'Valor Pago',
             accessor: 'valorOperacao',
             className: 'text-center',
+            cell: (value: number) => formatarValor(value),
         },
         { header: 'Banco', accessor: 'bancoNome', className: 'text-center' },
         { header: 'Forma Pagamento', accessor: 'formaPagamentoNome', className: 'text-center' },
         { header: 'Parcela', accessor: '', className: 'text-center' },
-    ]
+        {
+            header: 'Ações',
+            accessor: 'acoes',
+            className: 'text-center',
+            cell: (row: any) => (
+                <div className="flex gap-2 justify-center">
+                    <FaTrash
+                        className="text-1xl cursor-pointer"
+                        onClick={() => handleDelete(row.original.id)} // Conecta a função de exclusão
+                    />
+                    <HiMiniPencilSquare
+                        className="text-1xl cursor-pointer"
+                        onClick={() => onAlterar(row.original.id)} // Conecta a função de alteração
+                    />
+                </div>
+            ),
+        }
+    ];
 
     /*
     const colunas = React.useMemo(() => [

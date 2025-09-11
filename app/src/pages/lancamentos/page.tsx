@@ -15,7 +15,7 @@ export default function LancamentosPage({ mes, ano }: LancamentosPageProps) {
     return (
         <div className="rounded-md w-[95vw] h-[92vh]">
             <section className="h-[46vh]">
-                <Lancamentos mes={mes} ano={ano} />
+                <Lancamentos mes={mes} ano={ano}/>
             </section>
             <section className="h-[46vh]">
                 <LancamentosAgendados />
