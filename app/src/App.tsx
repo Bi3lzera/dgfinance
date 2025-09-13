@@ -2,8 +2,8 @@ import { useState } from 'react';
 import ExtratoPage from '../../app/src/pages/extrato/page';
 import ReceitasPage from '../../app/src/pages/receitas/page';
 import HomePage from '../../app/src/pages/home/page';
-import SideBar from './components/SideBar/SideBar';
-import TopBar from './components/TopBar/TopBar';
+import SideBar from './components/sideBar/SideBar';
+import TopBar from './components/topBar/TopBar';
 import LancamentosPage from '../../app/src/pages/lancamentos/page';
 
 const getCurrentMonthValue = () => {
@@ -64,7 +64,7 @@ const App = () => {
             </div>
             <div className='flex gap-2 w-[99vw] h-[92vh] mt-2'>
                 <section className='flex w-[8vw] bg-blue-400 rounded-r-md justify-center'>
-                    <SideBar mudarPagina={mudarPagina} />
+                    <SideBar mudarPagina={mudarPagina}/>
                 </section>
                 <section className='flex rounded-md w-[91.15vw]'>
                     {renderizarPagina()}

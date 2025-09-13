@@ -79,3 +79,8 @@
 .valor-negativo {
   color: red;
 }
+
+.tipoColumn {
+    width: 30px;
+    text-align: center;
+}

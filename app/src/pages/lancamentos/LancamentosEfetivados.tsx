@@ -12,11 +12,14 @@ interface LancamentosPageProps {
 export default function Lancamentos({ mes, ano }: LancamentosPageProps) {
     const [dados, setDados] = useState([]);
     const [mostrarAddLancamento, setMostrarAddLancamento] = useState(false); // Estado para alternar telas
+    const [loading, setLoading] = useState(false);
 
     const handleClick = async () => {
+        setLoading(true);
         const response = await getLancamentos(mes, ano);
         console.log(`Response: `, response);
         setDados(response);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -44,8 +47,8 @@ export default function Lancamentos({ mes, ano }: LancamentosPageProps) {
                             />
                         </section>
                     </div>
-                    <div>
-                        <Tabela dados={dados} onAlterar={function (id: string): void {
+                    <div className='h-[36vh]'>
+                        <Tabela loading={loading} dados={dados} onAlterar={function (id: string): void {
                             throw new Error('Function not implemented.');
                         }} />
                     </div>

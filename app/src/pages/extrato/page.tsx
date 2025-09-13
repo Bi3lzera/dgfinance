@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Tabela from './components/table';
+import TabelaExtrato from './components/table';
 import { getLancamentos } from '../../services/pageServices/lancamentos';
 
 interface ExtratoPageProps {
@@ -9,15 +9,18 @@ interface ExtratoPageProps {
 
 export default function ExtratoPage({ mes, ano }: ExtratoPageProps) {
   const [dados, setDados] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log(`Ano: ${ano}, Mês: ${mes}`);
   }, [ano, mes]);
 
   const handleClick = async () => {
+    setLoading(true);
     const response = await getLancamentos(mes, ano); 
     console.log(`Response: `, response);
     setDados(response);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -26,7 +29,7 @@ export default function ExtratoPage({ mes, ano }: ExtratoPageProps) {
 
   return (
     <div className="tableContainer">
-      <Tabela dados={dados} />
+      <TabelaExtrato dados={dados} loading={loading}/>
     </div>
   )
 }
