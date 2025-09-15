@@ -1,4 +1,4 @@
-import { AuthenticationService } from "../auth/AuthService"
+import { AuthenticationService } from "../auth/authService"
 import axiosInstance from "../../../config/axiosConfig"
 
 import { useEffect, useState } from "react";
