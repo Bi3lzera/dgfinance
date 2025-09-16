@@ -1,10 +1,13 @@
 import SideBarButton from './SideBarButton';
 import HomeIcon from '../../../assets/casa.png';
-import DespesaIcon from '../../../assets/recessao.png';
-import CarteiraIcon from '../../../assets/carteira.png';
 import BilheteIcon from '../../../assets/bilhete.png';
+import financa from '../../../assets/financa.png';
+import { useState } from 'react';
+import SideBarOption from '../sideBarOption/SideBarOption'
 
 const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => {
+  const [showOptions, setShowOptions] = useState(false);
+
   return (
     <div className='justify-center items-center mt-1 justify-center'>
       <section className='flex flex-col gap-2 justify-center items-center'>
@@ -13,13 +16,21 @@ const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => 
         </div>
 
         <div onClick={() => mudarPagina('lancamento')}>
-          <SideBarButton icon={DespesaIcon} label="Lançamentos" />
+          <div onClick={() => {
+            if (showOptions) {
+              setShowOptions(false);
+            } else {
+              setShowOptions(true);
+            }
+          }}>
+            <SideBarButton icon={financa} label="Lançamentos" />
+          </div>
+          {showOptions && (
+            <div className=''>
+              <SideBarOption mudarPagina={mudarPagina} />
+            </div>
+          )}
         </div>
-
-        <div onClick={() => mudarPagina('receita')}>
-          <SideBarButton icon={CarteiraIcon} label="Receitas" />
-        </div>
-
         <div onClick={() => mudarPagina('extrato')}>
           <SideBarButton icon={BilheteIcon} label="Extrato" />
         </div>
