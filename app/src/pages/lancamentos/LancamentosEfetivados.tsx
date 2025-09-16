@@ -2,7 +2,7 @@ import Tabela from './components/TableLancamentos.tsx'
 import { useEffect, useState } from "react";
 import { getLancamentos } from "../../services/pageServices/lancamentos.ts";
 import { IoMdAddCircle } from "react-icons/io";
-import AddLancamento from './components/addLancamento.tsx'; // Importa o componente
+import AddLancamento from '../../components/lancamentoForm/lancamentoForm.tsx'; // Importa o componente
 
 interface LancamentosPageProps {
     mes: string;

@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Operacao;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +15,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             BancosSeeder::class,
             FormasPagamentoSeeder::class,
+            CategoriaSeeder::class,
             LancamentoSeeder::class,
             OperacaoSeeder::class,
         ]);

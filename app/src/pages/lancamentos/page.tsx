@@ -2,7 +2,7 @@ import LancamentosEfetivados from './LancamentosEfetivados.tsx';
 import LancamentosAgendados from './LancamentosAgendados.tsx';
 import { IoMdAddCircle } from "react-icons/io";
 import { useState } from "react";
-import AddLancamento from './components/addLancamento.tsx';
+import AddLancamento from '../../components/lancamentoForm/lancamentoForm.tsx';
 
 interface LancamentosPageProps {
     mes: string;

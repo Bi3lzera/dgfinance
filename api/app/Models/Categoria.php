@@ -2,11 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class categoria extends Model
+class Categoria extends Model
 {
-    /** @use HasFactory<\Database\Factories\CategoriaFactory> */
     use HasFactory;
+
+    protected $table = 'categorias';
+
+    protected $filltable = [
+        'nome',
+        'descricao',
+    ];
+
+    public function categoria()
+    {
+        return $this->hasMany(lancamento::class);
+    }
 }
