@@ -26,6 +26,7 @@ export const getLancamentosAgendados = async () => {
     const data = response.data
     return data
 }
+
 export const deleteLancamento = async (id: string, atualizarDados: () => void) => {
     const confirmacao = window.confirm('Você tem certeza que deseja deletar este item?');
 
@@ -43,6 +44,7 @@ export const deleteLancamento = async (id: string, atualizarDados: () => void) =
         }
     }
 };
+
 export const createLancamento = async (lancamentoData: Lancamento, onSuccess?: () => void) => {
     try {
         const response = await axiosInstance.post('/lancamentos/createLancamento', lancamentoData);

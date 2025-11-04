@@ -1,10 +1,13 @@
 <?php
 
+namespace Database\Factories;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserSeeder extends Seeder
+class UserFactory extends Factory
 {
     public function definition(): array
     {
