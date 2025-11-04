@@ -33,7 +33,7 @@ export default function Lancamentos({ mes, ano }: LancamentosPageProps) {
     return (
         <div>
             {mostrarAddLancamento ? (
-                <AddLancamento voltar={() => setMostrarAddLancamento(false)} />
+                <AddLancamento voltar={() => setMostrarAddLancamento(false)} atualizarDados={handleClick} />
             ) : (
                 <>
                     <div className="flex justify-between items-center">

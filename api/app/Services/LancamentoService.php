@@ -31,7 +31,7 @@ class LancamentoService
             ->toArray();
     }
 
-    //Função para retornar todos os lançamentos que tiveram operações no mês/ano informado, 
+    //Função para retornar todos os lançamentos que tiveram operações no mês/ano informado,
     //ou seja, lançamentos que foram efetivados naquela data.
     public function getLancamentos(string $mes, int $ano): array
     {
@@ -78,8 +78,11 @@ class LancamentoService
     //Função para criar um novo lançamento
     public function createLancamento(array $data): Response
     {
-        Lancamento::create($data);
-        return new Response(['message' => 'Lancamento criada com sucesso.'], Response::HTTP_CREATED);
+        $lancamento = Lancamento::create($data);
+        return new Response([
+            'message' => 'Lancamento criada com sucesso.',
+            'id' => $lancamento->id
+        ], Response::HTTP_CREATED);
     }
 
     public function createOperacao(array $data): Response
