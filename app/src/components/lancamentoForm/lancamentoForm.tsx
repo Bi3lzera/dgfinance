@@ -7,7 +7,7 @@ import { Lancamento } from "../../types/lancamentoModel";
 
 import { createLancamento } from "../../services/pageServices/lancamentos";
 
-export default function AddLancamento({ voltar, atualizarDados }: { voltar: () => void, atualizarDados: () => void }) {
+export default function AddLancamento({ voltar }: { voltar: () => void }) {
     const todayDate = new Date().toISOString().split('T')[0];
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,18 +15,18 @@ export default function AddLancamento({ voltar, atualizarDados }: { voltar: () =
 
         const formData = new FormData(e.currentTarget);
         const lancamentoData = {
-            idUser: 2, 
+            idUser: 2,
             valor: parseFloat(formData.get("Valor Total")?.toString().replace('R$', '').replace(' ', '').replace(/\./g, '').replace(',', '.').trim() as string),
             totalParcelas: parseInt(formData.get("Parcelas") as string, 10),
             data: formData.get("Data") as string,
             descricao: formData.get("Breve Descrição") as string,
-            tipo: 'C', 
+            tipo: 'C',
             agendado: 'N',
             idFormaPagamento: 1,
             idBanco: 1
         } as Lancamento;
 
-        createLancamento(lancamentoData, atualizarDados);
+        createLancamento(lancamentoData);
         voltar();
     };
 

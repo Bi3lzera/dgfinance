@@ -13,17 +13,24 @@ export default function LancamentosPage({ mes, ano }: LancamentosPageProps) {
     const [mostrarAddLancamento, setMostrarAddLancamento] = useState(false);
 
     return (
-        <div className="rounded-md w-[95vw] h-[92vh]">
-            <section className="h-[46vh]">
-                <LancamentosEfetivados mes={mes} ano={ano}/>
-            </section>
-            <section className="h-[46vh]">
-                <LancamentosAgendados />
-            </section>
-            <section className="flex justify-end flex-row -mt-8">
-                <IoMdAddCircle className="text-5xl cursor-pointer " onClick={() => setMostrarAddLancamento(true)}
-                />
-            </section>
-        </div>
+        <>
+            {mostrarAddLancamento ? (
+                <AddLancamento voltar={() => setMostrarAddLancamento(false)} />
+            ) : (<div className="rounded-md w-full h-full max-h-full p-1 flex-row justify-evenly grid grid-rows-2">
+                <section className="w-full">
+                    <LancamentosEfetivados mes={mes} ano={ano} />
+                </section>
+                <section className="w-full">
+                    <LancamentosAgendados />
+                </section>
+                <section className="flex justify-end flex-row ">
+                    <IoMdAddCircle
+                        className="text-5xl cursor-pointer "
+                        onClick={() => setMostrarAddLancamento(true)}
+                    />
+                </section>
+            </div>)}
+        </>
+
     );
 }

@@ -23,26 +23,10 @@ function tableAgendados(props: Props) {
             header: 'Valor',
             accessor: 'valor',
             className: 'text-center',
-            cell: ( { value }: { value: number } ) => formatarValor(value),
+            cell: ({ value }: { value: number }) => formatarValor(value),
         },
         { header: 'Parcela', accessor: 'fParcela', className: 'text-center' },
-        {
-            header: 'Ações',
-            accessor: 'acoes',
-            className: 'text-center',
-            cell: () => (
-                <div className="flex gap-2 justify-center">
-                    <FaTrash
-                        className="text-1xl cursor-pointer"
-                        onClick={() => "handleDelete(row.original.id)"} // Conecta a função de exclusão
-                    />
-                    <HiMiniPencilSquare
-                        className="text-1xl cursor-pointer"
-                        onClick={() => "onAlterar(row.original.id)}"} // Conecta a função de alteração
-                    />
-                </div>
-            ),
-        },
+
     ], [onAlterar]);
 
     return (

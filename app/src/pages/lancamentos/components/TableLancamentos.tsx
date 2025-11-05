@@ -31,23 +31,6 @@ function Tabela(props: Props) {
         { header: 'Banco', accessor: 'bancoNome', className: 'text-center' },
         { header: 'Forma Pagamento', accessor: 'formaPagamentoNome', className: 'text-center' },
         { header: 'Parcela', accessor: '', className: 'text-center' },
-        {
-            header: 'Ações',
-            accessor: 'acoes',
-            className: 'text-center',
-            cell: (row: any) => (
-                <div className="flex gap-2 justify-center">
-                    <FaTrash
-                        className="text-1xl cursor-pointer"
-                        onClick={() => "handleDelete(row.original.id)"} // Conecta a função de exclusão
-                    />
-                    <HiMiniPencilSquare
-                        className="text-1xl cursor-pointer"
-                        onClick={() => onAlterar(row.original.id)} // Conecta a função de alteração
-                    />
-                </div>
-            ),
-        }
     ];
 
     return (
