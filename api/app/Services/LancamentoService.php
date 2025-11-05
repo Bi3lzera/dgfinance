@@ -55,6 +55,35 @@ class LancamentoService
             ->toArray();
     }
 
+    public function getLancamentoById(int $id)
+    {
+        return Lancamento::where('idUser', Auth::user()->id)
+            ->where('lancamentos.id', $id)
+            ->select(
+                'lancamentos.*'
+            )
+            ->orderBy('data', 'asc')
+            ->get()
+            ->toArray();
+    }
+
+    public function getOperacoesByLancamentoId(int $id)
+    {
+        return Operacao::where('operacoes.idLancamento', $id)
+            ->leftJoin('lancamentos', 'operacoes.idLancamento', 'lancamentos.id')
+            ->where('lancamentos.idUser', Auth::user()->id)
+            ->leftJoin('bancos', 'operacoes.idBanco', '=', 'bancos.id')
+            ->leftJoin('forma_pagamentos', 'operacoes.idFormaPagamento', '=', 'forma_pagamentos.id')
+            ->select(
+                'operacoes.*',
+                'bancos.nome as bancoNome',
+                'forma_pagamentos.nome as formaPagamentoNome',
+            )
+            ->orderBy('dataOperacao', 'asc')
+            ->get()
+            ->toArray();
+    }
+
     //Função para retornar todos os lançamentos que estão agendados para o futuro.
     //TODO: Implementar filtro por data.
     public function getLancamentosAgendado(): array

@@ -1,6 +1,7 @@
 import { AuthenticationService } from "../auth/authService"
 import axiosInstance from "../../../config/axiosConfig"
 import { Lancamento, Operacao } from "../../types/lancamentoModel"
+import { lancamentoDetailsModel, operacaoDetailsModel } from "../../types/lancamentoDetailsModel"
 
 export const getLancamentos = async (mes: string, ano: number) => {
     if (AuthenticationService.getToken() == null) {
@@ -24,7 +25,35 @@ export const getLancamentosAgendados = async () => {
 
     const response = await axiosInstance.get('lancamentos/agendado')
     const data = response.data
-    return data
+
+    return data;
+}
+
+export const getLancamentosById = async (id: number) => {
+    if (AuthenticationService.getToken() == null) {
+        AuthenticationService.doDevLogin()
+    }
+
+    const response = await axiosInstance.get('lancamentos/lancamentoById', {
+        params:{
+            id
+        }
+    });
+    const data = response.data;
+
+        const lancamentosDetailData: lancamentoDetailsModel = {
+        id: data.id,
+        descricao: data.descricao,
+        valor: data.valor,
+        data: data.data,
+        totalParcelas: data.totalParcelas,
+        agendado: data.agendado,
+        dataAgendamento: data.dataAgendamento,
+        tipo: data.tipo,
+        operacoes: []
+    }
+
+    return lancamentosDetailData;
 }
 
 export const deleteLancamento = async (id: string, atualizarDados: () => void) => {
@@ -75,7 +104,7 @@ export const createLancamento = async (lancamentoData: Lancamento, onSuccess?: (
         
         if (lancamentoData.agendado === 'N') {
             const operacaoData: Operacao = {
-                idLancamento: lancamentoId, // Usando o ID extraído corretamente
+                idLancamento: lancamentoId,
                 operacao: lancamentoData.tipo,
                 valorOperacao: parseFloat(lancamentoData.valor.toString()),
                 parcelaOperacao: 1,
@@ -89,7 +118,6 @@ export const createLancamento = async (lancamentoData: Lancamento, onSuccess?: (
             console.log('Operação criada com sucesso!');
         }
 
-        // Chama o callback de sucesso se ele foi fornecido
         if (onSuccess) {
             onSuccess();
         }
@@ -97,6 +125,7 @@ export const createLancamento = async (lancamentoData: Lancamento, onSuccess?: (
         console.error('Erro ao criar o lançamento/operação:', error);
     }
 }
+
 export const createOperacao = async (operacaoData: Operacao) => {
     try {
         await axiosInstance.post('/lancamentos/createOperacao', operacaoData);
