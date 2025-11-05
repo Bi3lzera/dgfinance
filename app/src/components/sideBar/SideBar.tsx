@@ -30,11 +30,6 @@ const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => 
           }}>
             <SideBarButton icon={financa} label="Lançamentos" />
           </div>
-          {showOptions && (
-            <div className='absolute bottom-20'>
-              <SideBarOption mudarPagina={handleMudarPagina} />
-            </div>
-          )}
         </div>
         <div onClick={() => mudarPagina('extrato')}>
           <SideBarButton icon={BilheteIcon} label="Extrato" />

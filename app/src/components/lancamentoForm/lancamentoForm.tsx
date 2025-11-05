@@ -1,9 +1,10 @@
 import BancoLista from "../lancamentoForm/bankList";
 import CategoriaLista from "../lancamentoForm/categoryList";
 import FormaPagamentoLista from "../lancamentoForm/paymentList";
-import InputField from "../lancamentoForm/inputField";
+import InputField from "../inputs/inputField";
 import "./styles/lancamentoFormStyle.css";
 import { Lancamento } from "../../types/lancamentoModel";
+import TextArea from "../inputs/textArea";
 
 import { createLancamento } from "../../services/pageServices/lancamentos";
 
@@ -69,7 +70,7 @@ export default function AddLancamento({ voltar }: { voltar: () => void }) {
                     </section>
                     <section>
                         <label htmlFor="textarea" className="block text-sm font-small text-black"> Descrição Detalhada </label>
-                        <textarea id="textarea" name="textarea" maxLength={250} className="border border-gray-300 w-full max-w-full max-h-25 min-h-25 h-24 p-2 rounded-md"></textarea>
+                        <TextArea id="textarea" name="textarea" maxLength={250} className="border border-gray-300 w-full max-w-full max-h-25 min-h-25 h-24 p-2 rounded-md"></TextArea>
                     </section>
                 </div>
                 <label htmlFor="dados-transacao-container" className="text-md font-medium text-black w-[80%] justify-center flex">DADOS COMPLEMENTARES</label>

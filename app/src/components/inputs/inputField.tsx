@@ -9,9 +9,10 @@ interface InputFieldProps {
     required?: boolean;
     className?: string;
     defaultValue?: number | string;
+    disabled?: boolean | false;
 }
 
-export default function InputField({ type, name, value, currency, required, className, defaultValue }: InputFieldProps) {
+export default function InputField({ type, name, value, currency, required, className, defaultValue, disabled }: InputFieldProps) {
     const [inputValue, setInputValue] = useState(value);
     const [isRequired] = useState(required || false);
 
@@ -46,6 +47,7 @@ export default function InputField({ type, name, value, currency, required, clas
                     onBlur={handleBlurChange}
                     onChange={handleChange}
                     defaultValue={defaultValue}
+                    disabled={disabled}
                 />
                 <label
                     htmlFor={name}

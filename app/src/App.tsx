@@ -4,7 +4,7 @@ import ReceitasPage from '../../app/src/pages/receitas/page';
 import HomePage from '../../app/src/pages/home/page';
 import SideBar from './components/sideBar/SideBar';
 import TopBar from './components/topBar/TopBar';
-import LancamentosPage from '../../app/src/pages/lancamentos/page';
+import LancamentosPage from './pages/lancamentos/LancamentoPage';
 
 const getCurrentMonthValue = () => {
     const meses = [

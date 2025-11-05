@@ -1,10 +1,9 @@
 import React from 'react';
-import { FaTrash } from "react-icons/fa6";
-import { HiMiniPencilSquare } from "react-icons/hi2";
 import Tabela from '../../../components/table/Table.tsx';
 import { formatarValorBRL as formatarValor } from '../../../utils/formatacoes.ts';
 
 interface Props {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dados: any[];
     onAlterar?: (id: string) => void; // Função para alterar, passada como prop
     loading?: boolean;
@@ -15,6 +14,7 @@ function tableAgendados(props: Props) {
     //const [dados, setDados] = useState(props.dados); // Controla os dados da tabela
     const { onAlterar } = props;
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const colunas = React.useMemo(() => [
         { header: 'Data Lançamento', accessor: 'data', className: 'text-center' },
         { header: 'Data Agendada', accessor: 'dataAgendamento', className: 'text-center' },
@@ -27,6 +27,7 @@ function tableAgendados(props: Props) {
         },
         { header: 'Parcela', accessor: 'fParcela', className: 'text-center' },
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ], [onAlterar]);
 
     return (
