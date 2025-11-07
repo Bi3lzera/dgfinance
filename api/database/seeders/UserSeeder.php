@@ -17,9 +17,6 @@ class UserSeeder extends Seeder
             'email' => 'insomnia@teste.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
-        ])->Userbank()->create([
-            'idBanco' => 1,
-            'accountNumber' => '1234567890',
         ]);
 
         \App\Models\User::create([

@@ -1,7 +1,7 @@
 import { AuthenticationService } from "../auth/authService"
 import axiosInstance from "../../../config/axiosConfig"
 import { Lancamento, Operacao } from "../../types/lancamentoModel"
-import { lancamentoDetailsModel, operacaoDetailsModel } from "../../types/lancamentoDetailsModel"
+import { lancamentoDetailsModel } from "../../types/lancamentoDetailsModel"
 
 export const getLancamentos = async (mes: string, ano: number) => {
     if (AuthenticationService.getToken() == null) {
@@ -35,13 +35,15 @@ export const getLancamentosById = async (id: number) => {
     }
 
     const response = await axiosInstance.get('lancamentos/lancamentoById', {
-        params:{
+        params: {
             id
         }
     });
-    const data = response.data;
+    const data = response.data[0];
 
-        const lancamentosDetailData: lancamentoDetailsModel = {
+    console.log("Service data: ", data);
+
+    const lancamentosDetailData: lancamentoDetailsModel = {
         id: data.id,
         descricao: data.descricao,
         valor: data.valor,
@@ -77,7 +79,7 @@ export const deleteLancamento = async (id: string, atualizarDados: () => void) =
 export const createLancamento = async (lancamentoData: Lancamento, onSuccess?: () => void) => {
     try {
         const response = await axiosInstance.post('/lancamentos/createLancamento', lancamentoData);
-        
+
         if (!response || !response.data) {
             throw new Error('Resposta inválida da API');
         }
@@ -95,13 +97,13 @@ export const createLancamento = async (lancamentoData: Lancamento, onSuccess?: (
         }
 
         console.log('Dados processados:', responseData);
-        
+
         const lancamentoId = responseData.id;
-        
+
         if (!lancamentoId) {
             throw new Error('ID do lançamento não encontrado na resposta');
         }
-        
+
         if (lancamentoData.agendado === 'N') {
             const operacaoData: Operacao = {
                 idLancamento: lancamentoId,
@@ -130,7 +132,7 @@ export const createOperacao = async (operacaoData: Operacao) => {
     try {
         await axiosInstance.post('/lancamentos/createOperacao', operacaoData);
         console.log('Operação criada com sucesso!');
-    }catch (error){
+    } catch (error) {
         console.error('Erro ao criar a operação:', error);
     }
 }

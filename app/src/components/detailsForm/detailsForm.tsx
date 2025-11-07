@@ -30,16 +30,16 @@ export default function DetailsForm( props: DetailsFormProps ) {
                     </TextArea>
                 </section>
                 <section className='flex flex-row justify-evenly w-full gap-4'>
-                    <InputField value={props.dados.valor?.toString()} type="text" name="Valor Total" defaultValue="R$ 0,00" currency={true} required={true} />
+                    <InputField value={props.dados.valor?.toString()} type="text" name="Valor Total" currency={true} required={true} />
                     <InputField type="text" name="Valor Pago" defaultValue="R$ 0,00" currency={true} required={true} />
-                    <InputField value={props.dados.operacoes?.length.toString()} type="text" name="Parcela" defaultValue="5" required={true} className="text-center" />
-                    <InputField value={props.dados.totalParcelas?.toString()} type="text" name="Parcelas Restantes" defaultValue="" required={true} className="text-center" />
+                    <InputField value={props.dados.operacoes?.length.toString()} type="text" name="Parcela" required={true} className="text-center" />
+                    <InputField value={props.dados.totalParcelas?.toString()} type="text" name="Parcelas Restantes" required={true} className="text-center" />
                 </section>
                 <section className='flex flex-row justify-between w-full gap-4'>
-                    <span className='w-40'><InputField type="text" name="Banco" defaultValue="" required={true} /></span>
-                    <span className='w-30'><InputField type="text" name="Conta Nº" defaultValue="N/A" required={true} disabled={true} /></span>
-                    <span className='w-50'><InputField type="text" name="Forma de Pagamento" defaultValue="" required={true} /></span>
-                    <span className='w-50'><InputField type="date" name="Data do Pagamento" defaultValue="" required={true} /></span>
+                    <span className='w-40'><InputField type="text" name="Banco" defaultValue="" required={true}/></span>
+                    <span className='w-30'><InputField type="text" name="Conta Nº" defaultValue="N/A" required={true} disabled={true}/></span>
+                    <span className='w-50'><InputField type="text" name="Forma de Pagamento" defaultValue="" required={true}/></span>
+                    <span className='w-50'><InputField type="date" name="Data do Pagamento" defaultValue="" required={true}/></span>
                 </section>
                 <button onClick={props.voltar} className="bg-blue-500 text-white px-4 py-2 rounded-md">Voltar</button>
             </div>

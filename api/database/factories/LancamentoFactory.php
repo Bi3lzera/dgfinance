@@ -21,8 +21,9 @@ class LancamentoFactory extends Factory
     {
         return [
             'descricao' => $this->faker->sentence(6),
+            'descricaoDetalhada' => $this->faker->sentence(10),
             'valor' => $this->faker->randomFloat(2, 0, 10000),
-            'data' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'dataLancamento' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'idUser' => User::all()->random()->id,
             'totalParcelas' => $this->faker->numberBetween(1, 12),
             'agendado' => $this->faker->randomElement(['S', 'N']),
