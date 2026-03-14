@@ -21,20 +21,50 @@ class LancamentoController extends Controller
         public LancamentoService $service
     ) {}
 
+    //
+    //Get data section
+    //Search, find and bring data functions of many parts.
+    //
+
     public function index(Request $request): JsonResponse
     {
-        return response()->json($this->service->getAllData($request->query('mes'), $request->query('ano')));
+        return response()->json(
+            $this->service->getAllData($request->query('mes'), $request->query('ano'))
+        );
     }
 
     public function lancamentoAgendado(Request $request)
     {
-        return response()->json($this->service->getLancamentosAgendado());
+        return response()->json(
+            $this->service->getLancamentosAgendado()
+        );
     }
 
     public function lancamentoEfetivado(Request $request): JsonResponse
     {
-        return response()->json($this->service->getLancamentos($request->query('mes'), $request->query('ano')));
+        return response()->json(
+            $this->service->getLancamentos($request->query('mes'), $request->query('ano'))
+        );
     }
+
+    public function lancamentoById(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->service->getLancamentoById($request->query('id'))
+        );
+    }
+
+    public function operacoesByLancamentoId(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->service->getOperacoesByLancamentoId($request->query('lancamentoId'))
+        );
+    }
+
+    //
+    //Create section
+    //Store the create functions of many parts.
+    //
 
     public function createLancamento(CreateLancamentoRequest $request): Response
     {
@@ -45,11 +75,11 @@ class LancamentoController extends Controller
     {
         return new Response($this->service->createOperacao($request->all()), Response::HTTP_CREATED);
     }
-    
+
     /*
     public function update(Request $request): Response
     {
-        return new Response($this->service->updateDespesa($request->all(), $request->query('id')), Response::HTTP_OK); 
+        return new Response($this->service->updateDespesa($request->all(), $request->query('id')), Response::HTTP_OK);
     }
 
     public function destroy(Request $request): Response

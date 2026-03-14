@@ -8,9 +8,14 @@ import SideBarOption from '../sideBarOption/SideBarOption'
 const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => {
   const [showOptions, setShowOptions] = useState(false);
 
+  const handleMudarPagina = (pagina: string) => {
+    mudarPagina(pagina);
+    setShowOptions(false);
+  }
+
   return (
-    <div className='justify-center items-center mt-1 justify-center'>
-      <section className='flex flex-col gap-2 justify-center items-center'>
+    <div className='justify-center items-center mt-1 flex flex-row'>
+      <section className='flex flex-row gap-2 justify-center items-center'>
         <div onClick={() => mudarPagina('home')}>
           <SideBarButton icon={HomeIcon} label="Home" />
         </div>
@@ -25,11 +30,6 @@ const SideBar = ({ mudarPagina }: { mudarPagina: (pagina: string) => void }) => 
           }}>
             <SideBarButton icon={financa} label="Lançamentos" />
           </div>
-          {showOptions && (
-            <div className=''>
-              <SideBarOption mudarPagina={mudarPagina} />
-            </div>
-          )}
         </div>
         <div onClick={() => mudarPagina('extrato')}>
           <SideBarButton icon={BilheteIcon} label="Extrato" />

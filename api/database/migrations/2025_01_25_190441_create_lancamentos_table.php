@@ -16,8 +16,9 @@ return new class extends Migration
             $table->id(); //id gerada automaticamente
             $table->integer('idUser'); //id do usuário a quem pertence a despesa
             $table->string('descricao')->limit(45); //descrição da despesa, limitada a 100 caracteres
+            $table->string('descricaoDetalhada')->limit(250)->nullable(); //descrição detalhada da despesa
             $table->double('valor'); //valor da despesa ou da parcela daquele mês
-            $table->date('data'); //Data da despesa; Caso a seja uma despesa agendada, este campo poderá ficar em branco.
+            $table->date('dataLancamento'); //Data da despesa; Caso a seja uma despesa agendada, este campo poderá ficar em branco.
             $table->integer('totalParcelas')->default(1); //Total de parcela
             $table->char('agendado')->nullable(); //Identifica se é uma despesa agendada ou não, a classificação se dará: 'S' para Sim, 'N' para Não
             $table->date('dataAgendamento')->nullable(); //Se for uma despesa agendada deverá haver a data estimada para o pagamento

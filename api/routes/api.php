@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LancamentoController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\UserbanksController;
 
 Route::post('login', [AuthenticationController::class, 'login']);
 
@@ -21,6 +22,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             ->where('ano', '[0-9]+');
         Route::post('createLancamento', [LancamentoController::class, 'createLancamento']);
         Route::post('createOperacao', [LancamentoController::class, 'createOperacao']);
+        Route::get('lancamentoById', [LancamentoController::class, 'lancamentoById'])
+            ->where('id', '[0-9]');
+        Route::get('operacoesByLancamentoId', [LancamentoController::class, 'operacoesByLancamentoId'])
+            ->where('lancamentoId', '[0-9]');
 
         //
         //
@@ -30,8 +35,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         //
     });
 
-    Route::group(['prefix' => 'categorias'], function (){
+    Route::group(['prefix' => 'categorias'], function () {
         Route::get('index', [CategoriaController::class, 'index']);
     });
 
+    Route::group(['prefix' => 'userbanks'], function () {
+        Route::get('index', [UserbanksController::class, 'index']);
+    });
 })->middleware('auth:sanctum');

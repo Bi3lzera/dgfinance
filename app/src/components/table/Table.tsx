@@ -5,9 +5,10 @@ type DataTableProps<T extends RowData> = {
     columns: Column<T>[];
     data: T[];
     loading?: boolean;
+    onRowDoubleClick?: (row: T) => void;
 };
 
-export default function DataTable<T extends RowData>({ columns, data, loading }: DataTableProps<T>) {
+export default function DataTable<T extends RowData>({ columns, data, loading, onRowDoubleClick }: DataTableProps<T>) {
     if (loading) {
         return (<div className="card">
             <div className="card__skeleton card__title"></div>
@@ -33,7 +34,7 @@ export default function DataTable<T extends RowData>({ columns, data, loading }:
                             {columns.map((col, colIndex) => {
                                 const rawValue = row[col.accessor];
                                 return (
-                                    <td key={colIndex} className={`${col.className ?? ""}`}>
+                                    <td key={colIndex} className={`${col.className ?? ""}`} onDoubleClick={() => onRowDoubleClick?.(row.id)}>
                                         {col.cell ? col.cell({ value: rawValue, row: { ...row } }) : rawValue}
                                     </td>
                                 );

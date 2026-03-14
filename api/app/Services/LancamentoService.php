@@ -31,7 +31,7 @@ class LancamentoService
             ->toArray();
     }
 
-    //Função para retornar todos os lançamentos que tiveram operações no mês/ano informado, 
+    //Função para retornar todos os lançamentos que tiveram operações no mês/ano informado,
     //ou seja, lançamentos que foram efetivados naquela data.
     public function getLancamentos(string $mes, int $ano): array
     {
@@ -51,6 +51,35 @@ class LancamentoService
                 'operacoes.dataOperacao'
             )
             ->orderBy('data', 'asc')
+            ->get()
+            ->toArray();
+    }
+
+    public function getLancamentoById(int $id)
+    {
+        return Lancamento::where('idUser', Auth::user()->id)
+            ->where('lancamentos.id', $id)
+            ->select(
+                'lancamentos.*'
+            )
+            ->orderBy('data', 'asc')
+            ->get()
+            ->toArray();
+    }
+
+    public function getOperacoesByLancamentoId(int $id)
+    {
+        return Operacao::where('operacoes.idLancamento', $id)
+            ->leftJoin('lancamentos', 'operacoes.idLancamento', 'lancamentos.id')
+            ->where('lancamentos.idUser', Auth::user()->id)
+            ->leftJoin('bancos', 'operacoes.idBanco', '=', 'bancos.id')
+            ->leftJoin('forma_pagamentos', 'operacoes.idFormaPagamento', '=', 'forma_pagamentos.id')
+            ->select(
+                'operacoes.*',
+                'bancos.nome as bancoNome',
+                'forma_pagamentos.nome as formaPagamentoNome',
+            )
+            ->orderBy('dataOperacao', 'asc')
             ->get()
             ->toArray();
     }
@@ -78,8 +107,11 @@ class LancamentoService
     //Função para criar um novo lançamento
     public function createLancamento(array $data): Response
     {
-        Lancamento::create($data);
-        return new Response(['message' => 'Lancamento criada com sucesso.'], Response::HTTP_CREATED);
+        $lancamento = Lancamento::create($data);
+        return new Response([
+            'message' => 'Lancamento criada com sucesso.',
+            'id' => $lancamento->id
+        ], Response::HTTP_CREATED);
     }
 
     public function createOperacao(array $data): Response

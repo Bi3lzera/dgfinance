@@ -1,72 +1,89 @@
+import BancoLista from "../lancamentoForm/bankList";
+import CategoriaLista from "../lancamentoForm/categoryList";
+import FormaPagamentoLista from "../lancamentoForm/paymentList";
+import InputField from "../inputs/inputField";
+import "./styles/lancamentoFormStyle.css";
+import { Lancamento } from "../../types/lancamentoModel";
+import TextArea from "../inputs/textArea";
+
+import { createLancamento } from "../../services/pageServices/lancamentos";
+
 export default function AddLancamento({ voltar }: { voltar: () => void }) {
-    const BancoLista = () => {
-        return (
-            <div className="flex justify-start rounded-md">
-                <select isSearchable id="months" name="bancoList" className="text-center block rounded-md shadow-sm focus:bg-white-300 focus:outline-gray-300 focus:ring-indigo-900 focus:border-indigo-500">
-                    <option value="bb">Banco do Brasil</option>
-                    <option value="nubank">NuBank</option>
-                    <option value="sofisa">Sofisa</option>
-                </select>
-            </div>
-        )
-    };
-
-    const FormaPagamentoLista = () => {
-        return (
-            <div className="flex justify-start rounded-md">
-                <select isSearchable id="months" name="formaPagamentoList" className="text-center block rounded-md shadow-sm focus:bg-white-300 focus:outline-gray-300 focus:ring-indigo-900 focus:border-indigo-500">
-                    <option value="dinheiro">Dinheiro</option>
-                    <option value="cc">Cartão de Crédito</option>
-                    <option value="cd">Cartão de Débito</option>
-                </select>
-            </div>
-        )
-    };
-
-    const CategoriaLista = () => {
-        return (
-            <div className="flex justify-start rounded-md">
-                <select isSearchable id="months" name="formaPagamentoList" className="text-center block rounded-md shadow-sm focus:bg-white-300 focus:outline-gray-300 focus:ring-indigo-900 focus:border-indigo-500">
-                    <option value="restaurante">Restaurante</option>
-                    <option value="combustivel">Combustível</option>
-                    <option value="Outros">Outros</option>
-                </select>
-            </div>
-        )
-    };
-
     const todayDate = new Date().toISOString().split('T')[0];
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+        const lancamentoData = {
+            idUser: 2,
+            valor: parseFloat(formData.get("Valor Total")?.toString().replace('R$', '').replace(' ', '').replace(/\./g, '').replace(',', '.').trim() as string),
+            totalParcelas: parseInt(formData.get("Parcelas") as string, 10),
+            data: formData.get("Data") as string,
+            descricao: formData.get("Breve Descrição") as string,
+            tipo: 'C',
+            agendado: 'N',
+            idFormaPagamento: 1,
+            idBanco: 1
+        } as Lancamento;
+
+        createLancamento(lancamentoData);
+        voltar();
+    };
 
     return (
         <div className="add-despesa bg-opacity-50 backdrop-blur-sm border fixed inset-0 z-50 flex flex-col justify-center items-center">
             <h2 className="font-bold text-2xl">REGISTRAR LANÇAMENTO</h2>
 
-            <form className="bg-white border w-250 h-120 gap-2 rounded-md flex flex-col justify-center items-center">
-                <div className="flex flex-col gap-3">
-                    <section className="flex-row flex">
-                        <p>Valor</p>
-                        <input type="text" placeholder="Valor R$" className="border-b-1 border-gray-600 focus:outline-none focus:border-blue-500 transition-all duration-200 text-center w-[5vw] h-[3vh]" />
-                        <p>Qtd. Parcelas</p>
-                        <input type="text" placeholder="10" value="1" className="border-b-1 border-gray-600 focus:outline-none focus:border-blue-500 transition-all duration-200   text-center w-[3vw] h-[3vh]" />
-                        <p>Data</p>
-                        <input type="date" value={todayDate} className="border-b-1 border-gray-600 focus:outline-none focus:border-blue-500 transition-all duration-200 text-center w-[13vh] h-[3vh]" />
+            <form onSubmit={handleSubmit} className="bg-white border w-150 h-120 rounded-md flex flex-col justify-evenly items-center">
+                <label htmlFor="dados-transacao-container" className="text-md font-medium text-black w-[80%] justify-center flex">DADOS DA TRANSAÇÃO</label>
+                <div id="dados-transacao-container" className="flex flex-col gap-4 w-full mx-h-60 px-15">
+                    <section className="flex-row flex justify-center gap-10 w-full">
+                        <InputField
+                            type="text"
+                            name="Valor Total"
+                            currency={true}
+                            required={true}
+                            className="!w-30"
+                            defaultValue="R$ 0,00"
+                        />
+                        <InputField
+                            type="text"
+                            name="Parcelas"
+                            value="1"
+                            required={true}
+                            className="text-center !w-15"
+                        />
+                        <InputField
+                            type="date"
+                            name="Data"
+                            value={todayDate}
+                            required={true}
+                        />
                     </section>
-                    <p>Descrição</p>
-                    <input type="text" placeholder="Descrição do lançamento" className="border-b-1 border-gray-600 focus:outline-none focus:border-blue-500 transition-all duration-200 w-[50vh] h-[3vh]" />
+                    <section className="flex-row flex justify-center gap-10 w-full">
+                        <InputField
+                            type="text"
+                            name="Breve Descrição"
+                            required={true}
+                        />
+                    </section>
+                    <section>
+                        <label htmlFor="textarea" className="block text-sm font-small text-black"> Descrição Detalhada </label>
+                        <TextArea id="textarea" name="textarea" maxLength={250} className="border border-gray-300 w-full max-w-full max-h-25 min-h-25 h-24 p-2 rounded-md"></TextArea>
+                    </section>
                 </div>
+                <label htmlFor="dados-transacao-container" className="text-md font-medium text-black w-[80%] justify-center flex">DADOS COMPLEMENTARES</label>
                 <div className="flex flex-row gap-3">
-                    <p>Categoria</p>
                     <CategoriaLista />
-                    <p>Forma de Pagamento</p>
                     <FormaPagamentoLista />
-                    <p>Banco</p>
                     <BancoLista />
                 </div>
                 <div className="flex flex-row gap-2 mt-4 justify-end w-full mr-5">
                     <button onClick={voltar} className="bg-red-500 text-white px-4 py-2 rounded">
                         Cancelar
                     </button>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded">
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
                         Salvar
                     </button>
                 </div>
