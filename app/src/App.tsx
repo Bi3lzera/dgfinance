@@ -1,25 +1,10 @@
 import { useState } from 'react';
-import ExtratoPage from '../../app/src/pages/extrato/page';
-import ReceitasPage from '../../app/src/pages/receitas/page';
-import HomePage from '../../app/src/pages/home/page';
-import SideBar from './components/sideBar/SideBar';
-import TopBar from './components/topBar/TopBar';
-import LancamentosPage from './pages/lancamentos/LancamentoPage';
-
-const getCurrentMonthValue = () => {
-    const meses = [
-        "janeiro", "fevereiro", "marco", "abril", "maio", "junho",
-        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
-    ];
-    return meses[new Date().getMonth()];
-};
-
-const getYear = () => new Date().getFullYear();
+import SideBar from './components/menuBar/MenuBar';
+import Dashboard from './pages/dashboard/dashboard';
+import Extrato from './pages/extrato/extrato';
 
 const App = () => {
     const [paginaAtual, setPaginaAtual] = useState('HomePage');
-    const [mes, setMes] = useState(getCurrentMonthValue());
-    const [ano, setAno] = useState(getYear());
 
     const mudarPagina = (pagina: string) => {
         setPaginaAtual(pagina);
@@ -27,49 +12,23 @@ const App = () => {
 
     const renderizarPagina = () => {
         switch (paginaAtual) {
+            case 'dashboard':
+                return <Dashboard />;
             case 'extrato':
-                return <ExtratoPage mes={mes} ano={ano} />;
-            case 'lancamento':
-                return <LancamentosPage mes={mes} ano={ano} />;
-            case 'receita':
-                return <ReceitasPage />;
+                return <Extrato />;
             default:
-                return <HomePage />;
-        }
-    };
-
-    const descPagina = () => {
-        switch (paginaAtual) {
-            case 'extrato':
-                return "Extrato";
-            case 'lancamento':
-                return "Lançamento de Despesas e Receitas";
-            case 'receita':
-                return "Receitas";
-            default:
-                return "Página Inicial";
+                return <Dashboard />;
         }
     };
 
     return (
-        <div className='w-full max-h-screen overflow-auto'>
-            <header className="fixed w-full top-0 z-1000 bg-gray-700 text-white rounded-b-sm h-10">
-                <TopBar
-                    pageDescription={descPagina()}
-                    mes={mes}
-                    setMes={setMes}
-                    ano={ano}
-                    setAno={setAno}
-                />
-            </header>
-
-            <main className='flex-grow mt-10 mb-20 rounded-md'>
+        <div className='flex w-full min-h-screen bg-[#fbfbfe]'>
+            <aside className='fixed h-full top-0 left-0 z-50 w-[13vw] bg-white border-r border-gray-200'>
+                <SideBar mudarPagina={mudarPagina} />
+            </aside>
+            <main className='ml-[13vw] flex-1 w-[87vw]'>
                 {renderizarPagina()}
             </main>
-
-            <footer className='fixed flex-grow h-20 bottom-0 left-0 z-1000 w-full bg-blue-400 rounded-r-md justify-center border'>
-                <SideBar mudarPagina={mudarPagina} />
-            </footer>
         </div>
     );
 };
