@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUp, ArrowDown, Wallet } from 'lucide-react';
+import { formatCurrencyToBRL } from '../../../utils/formats';
 
 export type SummaryType = 'income' | 'expense' | 'balance';
 
@@ -9,12 +10,7 @@ interface SummaryCardProps {
     type: SummaryType;
 }
 
-const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(value);
-};
+const formatCurrency = (value: number) => formatCurrencyToBRL(value);
 
 const SummaryCard: React.FC<SummaryCardProps> = ({ title, amount, type }) => {
     let Icon = ArrowUp;

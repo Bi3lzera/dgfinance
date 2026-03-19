@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUp, ArrowDown, Calendar, CreditCard, Wallet } from 'lucide-react';
+import { formatCurrencyToBRL } from '../../../utils/formats';
 
 export type TransactionType = 'income' | 'expense';
 
@@ -17,12 +18,7 @@ interface TransactionCardProps {
     transaction: Transaction;
 }
 
-const formatCurrencyString = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(value);
-};
+const formatCurrencyString = (value: number) => formatCurrencyToBRL(value);
 
 const TransactionCard: React.FC<TransactionCardProps> = ({ transaction }) => {
     const isIncome = transaction.type === 'income';

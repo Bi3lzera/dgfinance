@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Search, Filter, Plus } from 'lucide-react';
+import NewTransaction from '../../pages/newTransaction/NewTransaction';
 
 type TopBarProps = {
     pageDescription: string;
@@ -36,6 +37,7 @@ const mesesArr = [
 
 const TopBar: React.FC<TopBarProps> = ({ mes, setMes, ano, setAno }) => {
     const [isPickerOpen, setIsPickerOpen] = useState(false);
+    const [isNewTransactionOpen, setIsNewTransactionOpen] = useState(false);
     const [pickerYear, setPickerYear] = useState(ano);
     const pickerRef = useRef<HTMLDivElement>(null);
 
@@ -83,7 +85,8 @@ const TopBar: React.FC<TopBarProps> = ({ mes, setMes, ano, setAno }) => {
     };
 
     return (
-        <div className="w-full max-w-[87vw] bg-white px-8 py-4 flex items-center justify-between shadow-sm border-b border-gray-100 relative z-50">
+        <>
+            <div className="w-full max-w-[86vw] bg-white px-8 py-2 flex items-center justify-between shadow-sm border-b border-gray-100 z-50">
             {/* Seleção de Mês/Ano */}
             <div className="relative" ref={pickerRef}>
                 <div className="flex items-center bg-slate-50/70 rounded-2xl px-3 py-2 text-sm gap-8 border border-slate-100/50">
@@ -170,12 +173,18 @@ const TopBar: React.FC<TopBarProps> = ({ mes, setMes, ano, setAno }) => {
                 </button>
 
                 {/* Botão Novo Lançamento */}
-                <button className="flex items-center gap-2 bg-[#3f64f7] hover:bg-[#3251c8] text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-md shadow-blue-500/20">
+                <button
+                    onClick={() => setIsNewTransactionOpen(true)}
+                    className="flex items-center gap-2 bg-[#3f64f7] hover:bg-[#3251c8] text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-md shadow-blue-500/20"
+                >
                     <Plus size={18} strokeWidth={2.5} />
                     Novo Lançamento
                 </button>
             </div>
         </div>
+
+            <NewTransaction isOpen={isNewTransactionOpen} onClose={() => setIsNewTransactionOpen(false)} />
+        </>
     );
 };
 

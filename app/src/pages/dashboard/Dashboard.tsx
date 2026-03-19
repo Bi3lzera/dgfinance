@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { History } from 'lucide-react';
-import SummaryCard from '../../components/summaryCard/SummaryCard';
-import TransactionCard, { Transaction } from '../../components/transactionCard/TransactionCard';
-import TopBar from '../../components/topBar/TopBar';
+import SummaryCard from './components/SummaryCard';
+import TransactionCard, { Transaction } from './components/TransactionCard';
 
 const mockSummary = {
     income: 11826.64,
     expense: 5112.85,
+    scheduled: 1245.90,
     balance: 6713.79
 };
 
@@ -68,26 +68,23 @@ const mockTransactions: Transaction[] = [
 ];
 
 const Dashboard: React.FC = () => {
-    const [mes, setMes] = useState('marco');
-    const [ano, setAno] = useState(2026);
     const [activeTab, setActiveTab] = useState('Lançamentos');
 
     return (
-        <div className="flex-1 bg-[#fbfbfe] min-h-screen">
-            <TopBar pageDescription="Dashboard" mes={mes} setMes={setMes} ano={ano} setAno={setAno} />
-
-            <div className="max-w-[80vw] mx-auto py-8">
+        <div className="h-full flex flex-col bg-[#fbfbfe] overflow-hidden">
+            <div className="flex flex-col flex-1 min-h-0 max-w-[80vw] mx-auto w-full py-8">
                 {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <SummaryCard title="Receitas do Mês" amount={mockSummary.income} type="income" />
                     <SummaryCard title="Despesas do Mês" amount={mockSummary.expense} type="expense" />
+                    <SummaryCard title="Agendamentos do Mês" amount={mockSummary.scheduled} type="scheduled" />
                     <SummaryCard title="Saldo Previsto" amount={mockSummary.balance} type="balance" />
                 </div>
 
                 {/* Tabs & Filters */}
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex-shrink-0 flex items-center justify-between mb-8">
                     <div className="flex items-center gap-2 bg-gray-100/50 p-1.5 rounded-xl border border-gray-100">
-                        {['Lançamentos', 'Agendados', 'Insights AI'].map(tab => (
+                        {['Lançamentos', 'Agendados'].map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
@@ -106,13 +103,13 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 {/* List Title */}
-                <div className="flex items-center gap-2 mb-6">
+                <div className="flex-shrink-0 flex items-center gap-2 mb-6">
                     <History className="text-blue-600" size={20} strokeWidth={2.5} />
                     <h2 className="text-xl font-bold text-gray-800 tracking-tight">Fluxo de Caixa Mensal</h2>
                 </div>
 
-                {/* Transaction List */}
-                <div className="flex flex-col gap-3">
+                {/* Transaction List — scrollable */}
+                <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-3 pb-4">
                     {mockTransactions.map(transaction => (
                         <TransactionCard key={transaction.id} transaction={transaction} />
                     ))}
