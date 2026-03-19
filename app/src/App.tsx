@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import ExtratoPage from '../../app/src/pages/extrato/page';
-import ReceitasPage from '../../app/src/pages/receitas/page';
-import HomePage from '../../app/src/pages/home/page';
-import SideBar from './components/sideBar/SideBar';
+import SideBar from './components/menuBar/MenuBar';
+import Dashboard from './pages/dashboard/Dashboard';
+import Extrato from './pages/extrato/Extrato';
 import TopBar from './components/topBar/TopBar';
-import LancamentosPage from './pages/lancamentos/LancamentoPage';
 
 const getCurrentMonthValue = () => {
     const meses = [
@@ -27,49 +25,26 @@ const App = () => {
 
     const renderizarPagina = () => {
         switch (paginaAtual) {
+            case 'dashboard':
+                return <Dashboard />;
             case 'extrato':
-                return <ExtratoPage mes={mes} ano={ano} />;
-            case 'lancamento':
-                return <LancamentosPage mes={mes} ano={ano} />;
-            case 'receita':
-                return <ReceitasPage />;
+                return <Extrato />;
             default:
-                return <HomePage />;
-        }
-    };
-
-    const descPagina = () => {
-        switch (paginaAtual) {
-            case 'extrato':
-                return "Extrato";
-            case 'lancamento':
-                return "Lançamento de Despesas e Receitas";
-            case 'receita':
-                return "Receitas";
-            default:
-                return "Página Inicial";
+                return <Dashboard />;
         }
     };
 
     return (
-        <div className='w-full max-h-screen overflow-auto'>
-            <header className="fixed w-full top-0 z-1000 bg-gray-700 text-white rounded-b-sm h-10">
-                <TopBar
-                    pageDescription={descPagina()}
-                    mes={mes}
-                    setMes={setMes}
-                    ano={ano}
-                    setAno={setAno}
-                />
+        <div className='h-screen bg-[#fbfbfe] overflow-hidden'>
+            <header className='ml-[13vw] w-[86vw] fixed z-1000'>
+                <TopBar pageDescription={paginaAtual} mes={mes} setMes={setMes} ano={ano} setAno={setAno} />
             </header>
-
-            <main className='flex-grow mt-10 mb-20 rounded-md'>
+            <aside className='fixed h-full top-0 left-0 z-50 w-[13vw] bg-white border-r border-gray-200'>
+                <SideBar mudarPagina={mudarPagina} />
+            </aside>
+            <main className='ml-[13vw] pt-16 w-[86vw] h-full overflow-hidden flex flex-col'>
                 {renderizarPagina()}
             </main>
-
-            <footer className='fixed flex-grow h-20 bottom-0 left-0 z-1000 w-full bg-blue-400 rounded-r-md justify-center border'>
-                <SideBar mudarPagina={mudarPagina} />
-            </footer>
         </div>
     );
 };
