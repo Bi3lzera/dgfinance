@@ -76,6 +76,11 @@ class LancamentoController extends Controller
         return new Response($this->service->createOperacao($request->all()), Response::HTTP_CREATED);
     }
 
+    public function createLancamentoNOperacao(CreateLancamentoNOperacaoRequest $request): Response
+    {
+        return new Response($this->service->createLancamentoNOperacao($request->all()), Response::HTTP_CREATED);
+    }
+
     /*
     public function update(Request $request): Response
     {

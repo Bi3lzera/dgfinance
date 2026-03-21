@@ -120,6 +120,17 @@ class LancamentoService
         return new Response(['message' => 'Operação criada com sucesso.'], Response::HTTP_CREATED);
     }
 
+    public function createLancamentoNOperacao(array $data): Response
+    {
+        $lancamento = Lancamento::create($data);
+        $data['idLancamento'] = $lancamento->id;
+        $data['dataOperacao'] = $data['data'];
+        Operacao::create($data);
+        return new Response([
+            'message' => 'Lancamento criada com sucesso.',
+        ], Response::HTTP_CREATED);
+    }
+
     public function monthId(string $mes): int
     {
         $months = [

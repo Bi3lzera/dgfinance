@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             ->where('ano', '[0-9]+');
         Route::post('createLancamento', [LancamentoController::class, 'createLancamento']);
         Route::post('createOperacao', [LancamentoController::class, 'createOperacao']);
+        Route::post('createLancamentoNOperacao', [LancamentoController::class, 'createLancamentoNOperacao']);
         Route::get('lancamentoById', [LancamentoController::class, 'lancamentoById'])
             ->where('id', '[0-9]');
         Route::get('operacoesByLancamentoId', [LancamentoController::class, 'operacoesByLancamentoId'])

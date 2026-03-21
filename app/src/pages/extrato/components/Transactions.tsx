@@ -1,140 +1,11 @@
 import { Edit2, Paperclip } from "lucide-react";
+import { ExtratoModel } from "../../../types/extratoModel";
 
-const mockExtratoData = [
-    {
-        id: '1',
-        day: '24 Mar',
-        year: '2026',
-        title: 'Assinatura Adobe Creative Cloud',
-        tag: 'SOFTWARE & FERRAMENTAS',
-        institution: 'Nubank Platinum',
-        institutionDot: 'bg-blue-300',
-        amount: '- R$ 124,90',
-        type: 'DÉBITO',
-        isExpense: true,
-        status: 'Efetivado',
-    },
-    {
-        id: '2',
-        day: '23 Mar',
-        year: '2026',
-        title: 'Projeto Freelance - Mobile App UI',
-        tag: 'SERVIÇOS PRESTADOS',
-        institution: 'Itaú Personalité',
-        institutionDot: 'bg-gray-300',
-        amount: '+ R$ 4.500,00',
-        type: 'CRÉDITO',
-        isExpense: false,
-        status: 'Efetivado',
-    },
-    {
-        id: '3',
-        day: '22 Mar',
-        year: '2026',
-        title: 'Supermercado Pão de Açúcar',
-        tag: 'ALIMENTAÇÃO',
-        institution: 'Nubank Platinum',
-        institutionDot: 'bg-blue-300',
-        amount: '- R$ 642,15',
-        type: 'DÉBITO',
-        isExpense: true,
-        status: 'Efetivado',
-    },
-    {
-        id: '4',
-        day: '21 Mar',
-        year: '2026',
-        title: 'Conta de Energia Light',
-        tag: 'MORADIA',
-        institution: 'Itaú Personalité',
-        institutionDot: 'bg-gray-300',
-        amount: '- R$ 320,50',
-        type: 'DÉBITO',
-        isExpense: true,
-        status: 'Agendado',
-    },
-    {
-        id: '5',
-        day: '20 Mar',
-        year: '2026',
-        title: 'Rendimentos CDB Diário',
-        tag: 'INVESTIMENTOS',
-        institution: 'XP Investimentos',
-        institutionDot: 'bg-indigo-400',
-        amount: '+ R$ 85,30',
-        type: 'CRÉDITO',
-        isExpense: false,
-        status: 'Efetivado',
-    },
-    {
-        id: '6',
-        day: '19 Mar',
-        year: '2026',
-        title: 'Jantar Restaurante Coco Bambu',
-        tag: 'LAZER & ENTRETENIMENTO',
-        institution: 'Nubank Platinum',
-        institutionDot: 'bg-blue-300',
-        amount: '- R$ 280,00',
-        type: 'DÉBITO',
-        isExpense: true,
-        status: 'Efetivado',
-    },
-    {
-        id: '7',
-        day: '18 Mar',
-        year: '2026',
-        title: 'Parcela Seguro Carro Porto Seguro',
-        tag: 'TRANSPORTE',
-        institution: 'Itaú Personalité',
-        institutionDot: 'bg-gray-300',
-        amount: '- R$ 450,00',
-        type: 'DÉBITO',
-        isExpense: true,
-        status: 'Efetivado',
-    },
-    // Duplicate the same objects to simulate infinite list and force scroll
-    {
-        id: '8',
-        day: '17 Mar',
-        year: '2026',
-        title: 'Mensalidade Academia SmartFit',
-        tag: 'SAÚDE & BEM ESTAR',
-        institution: 'Nubank Platinum',
-        institutionDot: 'bg-blue-300',
-        amount: '- R$ 120,00',
-        type: 'DÉBITO',
-        isExpense: true,
-        status: 'Efetivado',
-    },
-    {
-        id: '9',
-        day: '16 Mar',
-        year: '2026',
-        title: 'Uber Viagens',
-        tag: 'TRANSPORTE',
-        institution: 'Itaú Personalité',
-        institutionDot: 'bg-gray-300',
-        amount: '- R$ 45,50',
-        type: 'DÉBITO',
-        isExpense: true,
-        status: 'Efetivado',
-    },
-    {
-        id: '10',
-        day: '15 Mar',
-        year: '2026',
-        title: 'Venda de Notebook Usado',
-        tag: 'RENDA EXTRA',
-        institution: 'Mercado Pago',
-        institutionDot: 'bg-blue-500',
-        amount: '+ R$ 2.100,00',
-        type: 'CRÉDITO',
-        isExpense: false,
-        status: 'Efetivado',
-    }
-];
+interface TransactionsProps {
+    extrato: ExtratoModel[];
+}
 
-const Transactions = () => {
+const Transactions = ({ extrato }: TransactionsProps) => {
     return (
         <div className="flex-1 h-full bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden flex flex-col relative">
             {/* List Header */}
@@ -149,7 +20,7 @@ const Transactions = () => {
 
             {/* List Body (Scrollable) */}
             <div className="flex-1 overflow-y-auto">
-                {mockExtratoData.map((item, id) => (
+                {extrato.map((item, id) => (
                     <div key={item.id + id} className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer">
                         {/* Data */}
                         <div className="flex flex-col gap-0.5">
@@ -180,7 +51,7 @@ const Transactions = () => {
                                 {item.amount}
                             </span>
                             <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-0.5">
-                                {item.type}
+                                {item.paymentType}
                             </span>
                         </div>
 
