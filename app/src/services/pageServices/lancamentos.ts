@@ -1,4 +1,4 @@
-import { AuthenticationService } from "../auth/authService"
+import { AuthenticationService } from "../authentication/authService"
 import axiosInstance from "../../../config/axiosConfig"
 import { Lancamento, Operacao } from "../../types/lancamentoModel"
 import { lancamentoDetailsModel } from "../../types/lancamentoDetailsModel"
