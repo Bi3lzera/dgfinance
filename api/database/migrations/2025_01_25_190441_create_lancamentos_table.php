@@ -14,7 +14,8 @@ return new class extends Migration
         //Cria a tabela despesas que armazenará todas as despesas de todos os usuários.
         Schema::create('lancamentos', function (Blueprint $table) {
             $table->id(); //id gerada automaticamente
-            $table->integer('idUser'); //id do usuário a quem pertence a despesa
+            $table->unsignedBigInteger('idUser'); //id do usuário a quem pertence a despesa
+            $table->foreign('idUser')->references('id')->on('users');
             $table->string('descricao')->limit(45); //descrição da despesa, limitada a 100 caracteres
             $table->string('descricaoDetalhada')->limit(250)->nullable(); //descrição detalhada da despesa
             $table->double('valor'); //valor da despesa ou da parcela daquele mês

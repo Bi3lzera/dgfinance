@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('userbanks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idUser');
-            $table->unsignedBigInteger('idBanco');
+            $table->unsignedBigInteger('idUser')->foreignId('users.id');
+            $table->unsignedBigInteger('idBanco')->foreignId('bancos.id');
             $table->string('accountNumber')->nullable();
             $table->timestamps();
         });

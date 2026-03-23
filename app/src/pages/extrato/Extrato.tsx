@@ -6,17 +6,16 @@ import Filters from './components/Filters';
 import { getExtrato } from '../../services/pageServices/extrato';
 import { ExtratoModel } from '../../types/extratoModel';
 import { DateContext } from '../../contexts/DateContext';
-import { mesStringToNumber } from '../../utils/formats';
 
 
 const Extrato: React.FC = () => {
     const [extrato, setExtrato] = useState<ExtratoModel[]>([]);
-    const { mes, setMes, ano, setAno } = useContext(DateContext);
+    const { mes, ano } = useContext(DateContext);
 
     useEffect(() => {
         const fetchExtrato = async () => {
             try {
-                const data = await getExtrato(mesStringToNumber(mes), ano);
+                const data = await getExtrato(mes, ano);
                 setExtrato(data);
             } catch (error) {
                 console.error("Failed to fetch extrato:", error);

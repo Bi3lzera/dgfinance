@@ -19,6 +19,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             ->where('mes', '[a-zA-Z]+')
             ->where('ano', '[0-9]+');
         Route::get('efetivado', [LancamentoController::class, 'lancamentoEfetivado'])
+            ->where('mes', '[a-zA-Z]+')
             ->where('ano', '[0-9]+');
         Route::post('createLancamento', [LancamentoController::class, 'createLancamento']);
         Route::post('createOperacao', [LancamentoController::class, 'createOperacao']);

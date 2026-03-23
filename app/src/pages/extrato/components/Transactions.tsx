@@ -29,8 +29,8 @@ const Transactions = ({ extrato }: TransactionsProps) => {
                         </div>
 
                         {/* Descrição & Tag */}
-                        <div className="flex flex-col gap-1.5 justify-center">
-                            <span className="font-bold text-sm text-gray-900 truncate">{item.title}</span>
+                        <div className="flex flex-col gap-1.5 justify-center max-w-[18vw]">
+                            <span className="font-bold text-sm text-gray-900 break-words whitespace-normal">{item.title}</span>
                             <div className="flex items-center gap-2">
                                 <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100/50 whitespace-nowrap">
                                     {item.tag}

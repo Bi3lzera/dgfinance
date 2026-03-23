@@ -38,8 +38,8 @@ class LancamentoService
         $mes = $this->monthId($mes);
 
         return Lancamento::where('idUser', Auth::user()->id)
-            ->whereMonth('data', $mes)
-            ->whereYear('data', $ano)
+            ->whereMonth('dataLancamento', $mes)
+            ->whereYear('dataLancamento', $ano)
             ->rightJoin('operacoes', 'lancamentos.id', '=', 'operacoes.idLancamento')
             ->leftJoin('bancos', 'operacoes.idBanco', '=', 'bancos.id')
             ->leftJoin('forma_pagamentos', 'operacoes.idFormaPagamento', '=', 'forma_pagamentos.id')
@@ -50,7 +50,7 @@ class LancamentoService
                 'operacoes.valorOperacao',
                 'operacoes.dataOperacao'
             )
-            ->orderBy('data', 'asc')
+            ->orderBy('dataLancamento', 'asc')
             ->get()
             ->toArray();
     }
