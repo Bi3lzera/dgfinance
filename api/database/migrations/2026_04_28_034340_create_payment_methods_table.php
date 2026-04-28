@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('userbanks', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('idUser')->foreignId('users.id');
-            $table->unsignedBigInteger('idBanco')->foreignId('bancos.id');
-            $table->string('accountNumber')->nullable();
+        Schema::create('payment_methods', function (Blueprint $table) {
+            $table->id('idPayMethod');
+            $table->string('title');
+            $table->unsignedBigInteger('idUser')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('userbanks');
+        Schema::dropIfExists('payment_methods');
     }
 };

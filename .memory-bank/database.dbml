@@ -1,0 +1,160 @@
+Table transaction [headercolor: #175e7a] {
+	idTransaction integer [ pk, increment, not null ]
+	idInstallment integer
+	transactionDescription varchar
+	value decimal [ not null ]
+	date date [ not null ]
+	type varchar [ not null ]
+	idBankAccount integer [ not null ]
+	idPaymentMethod integer [ not null ]
+	idPaymentCard integer
+	idUser integer [ not null ]
+}
+
+Table users [headercolor: #175e7a] {
+	idUser integer [ pk, increment, not null ]
+	name varchar
+	email varchar
+	cpf varchar
+	password varchar
+}
+
+Table users_bank_accounts [headercolor: #175e7a] {
+	idAccount integer [ pk, increment, not null ]
+	idUser integer [ not null ]
+	idBank integer [ not null ]
+	agencyNumber integer
+	accountNumber integer
+	accountAlias varchar
+	accountType varchar
+	initialValue decimal
+}
+
+Table users_cards [headercolor: #175e7a] {
+	idCard integer [ pk, increment, not null ]
+	idUser integer [ not null ]
+	idBank integer
+	idAccount integer
+	finalCardNumber integer
+	cardAlias varchar
+	expirationDate date
+	defaultPaymentMethod integer
+}
+
+Table banks [headercolor: #175e7a] {
+	idBank integer [ pk, increment, not null ]
+	name varchar
+	codeCOMPE varchar
+}
+
+Table categories [headercolor: #175e7a] {
+	idCategory integer [ pk, increment, not null ]
+	title varchar
+	type varchar
+	idUser integer
+}
+
+Table payment_methods [headercolor: #175e7a] {
+	idPayMethod integer [ pk, increment, not null ]
+	title varchar [ not null ]
+	idUser integer
+}
+
+Table movements [headercolor: #175e7a] {
+	idMovement integer [ pk, increment, not null ]
+	idUser integer [ not null ]
+	title varchar [ not null ]
+	description varchar [ not null ]
+	initialValue decimal [ not null ]
+	type varchar [ not null ]
+	totalPaymentCount integer
+	idCategory integer
+	date date [ not null ]
+}
+
+Table installments [headercolor: #175e7a] {
+	idInstallment integer [ pk, increment, not null ]
+	idMovement integer
+	plannedDate date
+	expectedValue decimal
+	installmentNumber integer
+	status varchar
+}
+
+Table transfers [headercolor: #175e7a] {
+	idTransfer integer [ pk, increment, not null ]
+	idUser integer
+	idDebtAcc integer [ not null ]
+	idCreditAcc integer [ not null ]
+	value decimal [ not null ]
+	description varchar
+	date date [ not null ]
+}
+
+Ref fk_Users_idUser_Transaction {
+	users.idUser < transaction.idUser [ delete: no action, update: no action ]
+}
+
+Ref fk_Users_idUser_UsersBankAccounts {
+	users.idUser < users_bank_accounts.idUser [ delete: no action, update: no action ]
+}
+
+Ref fk_Users_idUser_PaymentMethods {
+	users.idUser < payment_methods.idUser [ delete: no action, update: no action ]
+}
+
+Ref fk_Users_idUser_UsersCards {
+	users.idUser < users_cards.idUser [ delete: no action, update: no action ]
+}
+
+Ref fk_Categories_idUser_Users {
+	categories.idUser > users.idUser [ delete: no action, update: no action ]
+}
+
+Ref fk_Categories_idCategory_Movement {
+	categories.idCategory < movements.idCategory [ delete: no action, update: no action ]
+}
+
+Ref fk_Banks_idBank_UsersBankAccounts {
+	banks.idBank < users_bank_accounts.idBank [ delete: no action, update: no action ]
+}
+
+Ref fk_UsersCards_idBank_Banks {
+	users_cards.idBank > banks.idBank [ delete: no action, update: no action ]
+}
+
+Ref fk_UsersCards_idAccount_UsersBankAccounts {
+	users_cards.idAccount > users_bank_accounts.idAccount [ delete: no action, update: no action ]
+}
+
+Ref fk_Transaction_idPaymentCard_UsersCards {
+	transaction.idPaymentCard > users_cards.idCard [ delete: no action, update: no action ]
+}
+
+Ref fk_Transaction_idPaymentMethod_PaymentMethods {
+	transaction.idPaymentMethod > payment_methods.idPayMethod [ delete: no action, update: no action ]
+}
+
+Ref fk_Transaction_idBankAccount_UsersBankAccounts {
+	transaction.idBankAccount > users_bank_accounts.idAccount [ delete: no action, update: no action ]
+}
+
+Ref fk_Installments_idMovement_Movement {
+	installments.idMovement > movements.idMovement [ delete: no action, update: no action ]
+}
+
+Ref fk_Users_idUser_Movement {
+	users.idUser < movements.idUser [ delete: no action, update: no action ]
+}
+
+Ref fk_Transaction_idInstallment_Installments {
+	transaction.idInstallment > installments.idInstallment [ delete: no action, update: no action ]
+}
+
+Ref fk_Transfers_idDebtAcc_UsersBankAccounts {
+	transfers.idDebtAcc > users_bank_accounts.idAccount [ delete: no action, update: no action ]
+}
+
+Ref fk_Transfers_idCreditAcc_UsersBankAccounts {
+	transfers.idCreditAcc > users_bank_accounts.idAccount [ delete: no action, update: no action ]
+}
