@@ -5,6 +5,25 @@ interface TransactionsProps {
     extrato: ExtratoModel[];
 }
 
+const formatDate = (dateString: string) => {
+    if (!dateString) return { dayMonth: '', year: '' };
+
+    // Safety against time parts like '2025-09-02T10:00:00Z' or "2025-09-02 10:00"
+    const rawDate = dateString.split('T')[0].split(' ')[0];
+    const parts = rawDate.split('-');
+
+    if (parts.length !== 3) return { dayMonth: rawDate, year: '' };
+
+    const [year, month, day] = parts;
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const monthName = months[parseInt(month, 10) - 1] || '';
+
+    return {
+        dayMonth: `${day} ${monthName}`,
+        year: year
+    };
+};
+
 const Transactions = ({ extrato }: TransactionsProps) => {
     return (
         <div className="flex-1 h-full bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden flex flex-col relative">
@@ -20,56 +39,60 @@ const Transactions = ({ extrato }: TransactionsProps) => {
 
             {/* List Body (Scrollable) */}
             <div className="flex-1 overflow-y-auto">
-                {extrato.map((item, id) => (
-                    <div key={item.id + id} className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer">
-                        {/* Data */}
-                        <div className="flex flex-col gap-0.5">
-                            <span className="font-bold text-sm text-gray-900">{item.day}</span>
-                            <span className="text-[11px] text-gray-400 font-medium">{item.year}</span>
-                        </div>
+                {extrato.map((item, id) => {
+                    const formattedDate = formatDate(item.data);
 
-                        {/* Descrição & Tag */}
-                        <div className="flex flex-col gap-1.5 justify-center max-w-[18vw]">
-                            <span className="font-bold text-sm text-gray-900 break-words whitespace-normal">{item.title}</span>
+                    return (
+                        <div key={item.id + id} className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer">
+                            {/* Data */}
+                            <div className="flex flex-col gap-0.5">
+                                <span className="font-bold text-sm text-gray-900">{formattedDate.dayMonth}</span>
+                                <span className="text-[11px] text-gray-400 font-medium">{formattedDate.year}</span>
+                            </div>
+
+                            {/* Descrição & Tag */}
+                            <div className="flex flex-col gap-1.5 justify-center max-w-[18vw]">
+                                <span className="font-bold text-sm text-gray-900 break-words whitespace-normal">{item.title}</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100/50 whitespace-nowrap">
+                                        {item.tag}
+                                    </span>
+                                    <Paperclip size={12} strokeWidth={2.5} className="text-gray-400" />
+                                </div>
+                            </div>
+
+                            {/* Instituição */}
                             <div className="flex items-center gap-2">
-                                <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100/50 whitespace-nowrap">
-                                    {item.tag}
+                                <div className={`w-1.5 h-1.5 rounded-full ${item.institutionDot}`}></div>
+                                <span className="text-xs font-semibold text-gray-500 truncate">{item.institution}</span>
+                            </div>
+
+                            {/* Valor Líquido */}
+                            <div className="flex flex-col justify-center">
+                                <span className={`font-bold text-[15px] whitespace-nowrap ${item.isExpense ? 'text-red-600' : 'text-gray-900'}`}>
+                                    {item.amount}
                                 </span>
-                                <Paperclip size={12} strokeWidth={2.5} className="text-gray-400" />
+                                <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-0.5">
+                                    {item.paymentType}
+                                </span>
+                            </div>
+
+                            {/* Status */}
+                            <div className="flex justify-center">
+                                <span className="inline-flex items-center justify-center px-3 py-1 rounded-full border border-gray-200 text-[11px] font-bold text-gray-800 bg-white whitespace-nowrap shadow-sm">
+                                    {item.status}
+                                </span>
+                            </div>
+
+                            {/* Ações */}
+                            <div className="flex items-center justify-end">
+                                <button className="text-gray-400 hover:text-gray-700 transition p-1">
+                                    <Edit2 size={16} strokeWidth={2} />
+                                </button>
                             </div>
                         </div>
-
-                        {/* Instituição */}
-                        <div className="flex items-center gap-2">
-                            <div className={`w-1.5 h-1.5 rounded-full ${item.institutionDot}`}></div>
-                            <span className="text-xs font-semibold text-gray-500 truncate">{item.institution}</span>
-                        </div>
-
-                        {/* Valor Líquido */}
-                        <div className="flex flex-col justify-center">
-                            <span className={`font-bold text-[15px] whitespace-nowrap ${item.isExpense ? 'text-red-600' : 'text-gray-900'}`}>
-                                {item.amount}
-                            </span>
-                            <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-0.5">
-                                {item.paymentType}
-                            </span>
-                        </div>
-
-                        {/* Status */}
-                        <div className="flex justify-center">
-                            <span className="inline-flex items-center justify-center px-3 py-1 rounded-full border border-gray-200 text-[11px] font-bold text-gray-800 bg-white whitespace-nowrap shadow-sm">
-                                {item.status}
-                            </span>
-                        </div>
-
-                        {/* Ações */}
-                        <div className="flex items-center justify-end">
-                            <button className="text-gray-400 hover:text-gray-700 transition p-1">
-                                <Edit2 size={16} strokeWidth={2} />
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    )
+                })}
                 {/* Loading state indicator for infinite scroll simulation */}
                 <div className="py-6 flex justify-center items-center text-xs font-semibold text-gray-400">
                     Carregando mais transações...

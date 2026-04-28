@@ -4,6 +4,10 @@ import {
     CreditCard, Hash, FileText, Upload,
     Copy, Clock, Archive, HelpCircle, Save
 } from 'lucide-react';
+import { getCategories } from '../../services/pageServices/miscelaneous';
+import { CategoryModel } from '../../types/miscelaneousModels';
+import { createTransaction } from '../../services/pageServices/transactionActions';
+import { Lancamento } from '../../types/lancamentoModel';
 
 type TransactionType = 'receita' | 'despesa';
 
@@ -11,12 +15,6 @@ interface NewTransactionProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-const categorias = [
-    'Alimentação', 'Moradia', 'Transporte', 'Saúde & Bem Estar',
-    'Lazer & Entretenimento', 'Infraestrutura/Software', 'Renda', 'Renda Extra',
-    'Investimentos', 'Serviços Prestados', 'Outros'
-];
 
 const contas = [
     'Nubank Platinum', 'Nubank Business', 'Itaú Personalité',
@@ -37,9 +35,11 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
     const [formaPagamento, setFormaPagamento] = useState('');
     const [parcelas, setParcelas] = useState('1/1');
     const [repetir, setRepetir] = useState(false);
+    const [agendado, setAgendado] = useState(false);
     const [notas, setNotas] = useState('');
     const [arquivo, setArquivo] = useState<File | null>(null);
     const [isDragging, setIsDragging] = useState(false);
+    const [categorias, setCategorias] = useState<CategoryModel[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -66,6 +66,18 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
     };
 
     useEffect(() => {
+        const fetchCategorias = async () => {
+            try {
+                const response = await getCategories();
+                setCategorias(response);
+            } catch (error) {
+                console.error("Erro ao carregar categorias: ", error);
+            }
+        };
+        fetchCategorias();
+    }, []);
+
+    useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose();
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -76,6 +88,76 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
         if (isOpen) document.addEventListener('keydown', handleKey);
         return () => document.removeEventListener('keydown', handleKey);
     }, [isOpen, onClose]);
+
+    useEffect(() => {
+        if (!data) return;
+        // Adjust for local timezone by creating a date at local midnight
+        const now = new Date();
+        const today = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+        if (data > today) {
+            setAgendado(true);
+        } else {
+            setAgendado(false);
+        }
+    }, [data]);
+
+    const resetForm = () => {
+        setTipo('despesa');
+        setDescricao('');
+        setValor('');
+        setData(new Date().toISOString().split('T')[0]);
+        setCategoria('');
+        setConta('');
+        setFormaPagamento('');
+        setParcelas('1/1');
+        setRepetir(false);
+        setAgendado(false);
+        setNotas('');
+        setArquivo(null);
+    };
+
+    const buildLancamentoPayload = (): Lancamento => {
+        const parsedValor = parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
+        return {
+            idUser: 1, // Assumindo 1 como default se não houver contexto de usuário disponível aqui
+            valor: parsedValor,
+            totalParcelas: parseInt(parcelas.split('/')[0]) || 1,
+            data: data,
+            descricao: descricao,
+            tipo: tipo === 'receita' ? 'C' : 'D',
+            agendado: agendado ? 'S' : 'N',
+            idLancamento: 0,
+            operacao: tipo === 'receita' ? 'C' : 'D',
+            valorOperacao: parsedValor,
+            parcelaOperacao: 1,
+            dataOperacao: data,
+            idFormaPagamento: 1, // Fallback se os selects possuírem apenas strings textuais ao invés de ids reais
+            idBanco: 1
+        };
+    };
+
+    const handleSaveAndNew = async () => {
+        if (!descricao || !valor) {
+            alert('Preencha a descrição e o valor.');
+            return;
+        }
+        const payload = buildLancamentoPayload();
+        await createTransaction(payload, () => {
+            resetForm();
+        });
+    };
+
+    const handleSaveAndClose = async () => {
+        if (!descricao || !valor) {
+            alert('Preencha a descrição e o valor.');
+            return;
+        }
+        const payload = buildLancamentoPayload();
+        await createTransaction(payload, () => {
+            resetForm();
+            onClose();
+        });
+    };
 
     if (!isOpen) return null;
 
@@ -186,7 +268,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
                                                 className="w-full appearance-none bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                                             >
                                                 <option value="">Selecionar...</option>
-                                                {categorias.map(c => <option key={c}>{c}</option>)}
+                                                {categorias.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
                                             </select>
                                         </div>
                                     </div>
@@ -215,7 +297,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
                                 <span className="text-[10px] font-bold tracking-widest text-blue-500 uppercase">Detalhes de Pagamento</span>
                             </div>
                             <div className="bg-gray-50/60 rounded-xl border border-gray-100 p-4 flex flex-col gap-4">
-                                <div className="grid grid-cols-[1fr_120px_1fr] gap-4 items-end">
+                                <div className="grid grid-cols-[1.3fr_100px_1.2fr_1.2fr] gap-4 items-end">
                                     <div className="flex flex-col gap-1">
                                         <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Forma de Pagamento</label>
                                         <div className="relative">
@@ -256,6 +338,23 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
                                         <div>
                                             <div className="text-sm font-bold leading-tight">Repetir Mensalmente</div>
                                             <div className="text-[10px] font-medium text-gray-400 leading-tight">Agendar lançamento fixo</div>
+                                        </div>
+                                    </button>
+
+                                    {/* Agendado toggle */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setAgendado(a => !a)}
+                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border transition text-sm font-semibold text-left ${agendado
+                                            ? 'bg-amber-50 border-amber-200 text-amber-700'
+                                            : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                                    >
+                                        <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${agendado ? 'bg-amber-600' : 'bg-white border-2 border-gray-300'}`}>
+                                            {agendado && <Check size={10} strokeWidth={3} className="text-white" />}
+                                        </div>
+                                        <div>
+                                            <div className="text-sm font-bold leading-tight">Agendado</div>
+                                            <div className="text-[10px] font-medium text-gray-400 leading-tight">Transação futura</div>
                                         </div>
                                     </button>
                                 </div>
@@ -338,10 +437,10 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
                             Cancelar Edição
                         </button>
                         <div className="flex items-center gap-3">
-                            <button className="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition shadow-sm">
+                            <button onClick={handleSaveAndNew} className="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition shadow-sm">
                                 Salvar e Novo
                             </button>
-                            <button className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-white bg-[#3f64f7] hover:bg-[#3251c8] rounded-xl transition shadow-md shadow-blue-500/20">
+                            <button onClick={handleSaveAndClose} className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-white bg-[#3f64f7] hover:bg-[#3251c8] rounded-xl transition shadow-md shadow-blue-500/20">
                                 <Check size={15} strokeWidth={3} />
                                 Salvar Lançamento
                             </button>

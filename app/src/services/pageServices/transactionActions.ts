@@ -3,6 +3,50 @@ import axiosInstance from "../../../config/axiosConfig"
 import { Lancamento, Operacao } from "../../types/lancamentoModel"
 import { lancamentoDetailsModel } from "../../types/lancamentoDetailsModel"
 
+
+export const createTransaction = async (lancamentoData: Lancamento, onSuccess?: () => void) => {
+    try {
+        const endpoint = lancamentoData.agendado === 'S'
+            ? '/lancamentos/createLancamento'
+            : '/lancamentos/createLancamentoNOperacao';
+
+        const response = await axiosInstance.post(endpoint, lancamentoData);
+
+        if (!response || !response.data) {
+            throw new Error('Resposta inválida da API');
+        }
+
+        let responseData = response.data;
+        if (typeof responseData === 'string' && responseData.includes('HTTP/1.0')) {
+            const jsonStart = responseData.indexOf('{');
+            if (jsonStart !== -1) {
+                try {
+                    responseData = JSON.parse(responseData.substring(jsonStart));
+                } catch (e) {
+                    console.error('Erro ao fazer parse do JSON:', e);
+                }
+            }
+        }
+
+        console.log('Dados processados:', responseData);
+
+        const lancamentoId = responseData.id;
+
+        if (!lancamentoId) {
+            throw new Error('ID do lançamento não encontrado na resposta');
+        }
+
+        if (onSuccess) {
+            onSuccess();
+        }
+    } catch (error) {
+        console.error('Erro ao criar o lançamento/operação:', error);
+    }
+}
+
+
+
+////OLD//////
 export const getLancamentos = async (mes: string, ano: number) => {
     if (AuthenticationService.getToken() == null) {
         AuthenticationService.doDevLogin()
@@ -76,7 +120,7 @@ export const deleteLancamento = async (id: string, atualizarDados: () => void) =
     }
 };
 
-export const createLancamento = async (lancamentoData: Lancamento, onSuccess?: () => void) => {
+export const createLancamentoOLD = async (lancamentoData: Lancamento, onSuccess?: () => void) => {
     try {
         const response = await axiosInstance.post('/lancamentos/createLancamento', lancamentoData);
 

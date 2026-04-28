@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lancamento;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\LancamentoService;
-use App\Http\Requests\CreateLancamentoRequest;
+use App\Http\Requests\CreateTransactionRequest;
 use App\Http\Requests\CreateOperacaoRequest;
+use App\Http\Requests\CreateTransactionNOperacaoRequest;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -66,7 +67,7 @@ class LancamentoController extends Controller
     //Store the create functions of many parts.
     //
 
-    public function createLancamento(CreateLancamentoRequest $request): Response
+    public function createLancamento(CreateTransactionRequest $request): Response
     {
         return new Response($this->service->createLancamento($request->all()), Response::HTTP_CREATED);
     }

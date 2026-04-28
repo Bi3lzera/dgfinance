@@ -6,8 +6,7 @@ export const getExtrato = async (mes: string, ano: number) => {
     const extrato = response.data.map((item: any) => {
         return {
             id: item.id,
-            day: item.data,
-            year: item.data,
+            data: item.dataOperacao,
             title: item.descricao,
             tag: item.tag,
             institution: item.bancoNome,

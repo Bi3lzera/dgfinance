@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Lancamento;
+use App\Models\Transaction;
 use App\Models\Operacao;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +15,7 @@ class LancamentoService
     {
         $mes = $this->monthId($mes);
 
-        return Lancamento::where('idUser', Auth::user()->id)
+        return Transaction::where('idUser', Auth::user()->id)
             ->whereMonth('data', $mes)
             ->whereYear('data', $ano)
             ->leftJoin('operacoes', 'lancamentos.id', '=', 'operacoes.idLancamento')
@@ -37,7 +37,7 @@ class LancamentoService
     {
         $mes = $this->monthId($mes);
 
-        return Lancamento::where('idUser', Auth::user()->id)
+        return Transaction::where('idUser', Auth::user()->id)
             ->whereMonth('dataLancamento', $mes)
             ->whereYear('dataLancamento', $ano)
             ->rightJoin('operacoes', 'lancamentos.id', '=', 'operacoes.idLancamento')
@@ -57,7 +57,7 @@ class LancamentoService
 
     public function getLancamentoById(int $id)
     {
-        return Lancamento::where('idUser', Auth::user()->id)
+        return Transaction::where('idUser', Auth::user()->id)
             ->where('lancamentos.id', $id)
             ->select(
                 'lancamentos.*'
@@ -88,7 +88,7 @@ class LancamentoService
     //TODO: Implementar filtro por data.
     public function getLancamentosAgendado(): array
     {
-        return Lancamento::where('idUser', Auth::user()->id)
+        return Transaction::where('idUser', Auth::user()->id)
             ->where('agendado', '=', 'S')
             ->rightJoin('operacoes', 'lancamentos.id', '=', 'operacoes.idLancamento')
             ->join('bancos', 'idBanco', '=', 'bancos.id')
@@ -97,7 +97,7 @@ class LancamentoService
                 'lancamentos.*',
                 'bancos.nome as bancoNome',
                 'forma_pagamentos.nome as formaPagamentoNome',
-                Lancamento::raw("CONCAT('1', '/', lancamentos.totalParcelas) as fParcela")
+                Transaction::raw("CONCAT('1', '/', lancamentos.totalParcelas) as fParcela")
             )
             ->orderBy('dataAgendamento', 'asc')
             ->get()
@@ -107,10 +107,10 @@ class LancamentoService
     //Função para criar um novo lançamento
     public function createLancamento(array $data): Response
     {
-        $lancamento = Lancamento::create($data);
+        $transaction = Transaction::create($data);
         return new Response([
-            'message' => 'Lancamento criada com sucesso.',
-            'id' => $lancamento->id
+            'message' => 'Transaction criada com sucesso.',
+            'id' => $transaction->id
         ], Response::HTTP_CREATED);
     }
 
@@ -122,12 +122,12 @@ class LancamentoService
 
     public function createLancamentoNOperacao(array $data): Response
     {
-        $lancamento = Lancamento::create($data);
-        $data['idLancamento'] = $lancamento->id;
+        $transaction = Transaction::create($data);
+        $data['idLancamento'] = $transaction->id;
         $data['dataOperacao'] = $data['data'];
         Operacao::create($data);
         return new Response([
-            'message' => 'Lancamento criada com sucesso.',
+            'message' => 'Transação criada com sucesso.',
         ], Response::HTTP_CREATED);
     }
 

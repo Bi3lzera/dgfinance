@@ -1,7 +1,6 @@
 export interface ExtratoModel {
     id: string;
-    day: string;
-    year: string;
+    data: string;
     title: string;
     tag: string;
     institution: string;
