@@ -16,9 +16,11 @@ class TransactionController extends Controller
         public TransactionService $service
     ) {}
 
-    public function movementIndex() : JsonResponse
+    public function movementIndex(Request $request) : JsonResponse
     {
-        return response()->json($this->service->getAllMovements(), Response::HTTP_OK);
+        $initialDate = $request->input('initialDate');
+        $finalDate = $request->input('finalDate');
+        return response()->json($this->service->getAllMovements($initialDate, $finalDate), Response::HTTP_OK);
     }
     public function installmentIndex(Request $request) : JsonResponse
     {
@@ -31,5 +33,85 @@ class TransactionController extends Controller
     public function transferIndex(Request $request) : JsonResponse
     {
         return response()->json($this->service->getAllTransfers(), Response::HTTP_OK);
+    }
+
+    public function deleteMovement(Request $request): JsonResponse
+    {
+        return response()->json($this->service->deleteMovement($request->query('id')), Response::HTTP_OK);
+    }
+
+    public function deleteInstallment(Request $request): JsonResponse
+    {
+        return response()->json($this->service->deleteInstallment($request->query('id')), Response::HTTP_OK);
+    }
+
+    public function deleteTransaction(Request $request): JsonResponse
+    {
+        return response()->json($this->service->deleteTransaction($request->query('id')), Response::HTTP_OK);
+    }
+
+    public function deleteTransfer(Request $request): JsonResponse
+    {
+        return response()->json($this->service->deleteTransfer($request->query('id')), Response::HTTP_OK);
+    }
+
+    public function updateMovement(Request $request): JsonResponse
+    {
+        return response()->json($this->service->updateMovement($request->query('idMovement'), $request->all()), Response::HTTP_OK);
+    }
+
+    public function updateInstallment(Request $request): JsonResponse
+    {
+        return response()->json($this->service->updateInstallment($request->query('idInstallment'), $request->all()), Response::HTTP_OK);
+    }
+
+    public function updateTransaction(Request $request): JsonResponse
+    {
+        return response()->json($this->service->updateTransaction($request->query('id'), $request->all()), Response::HTTP_OK);
+    }
+
+    public function updateTransfer(Request $request): JsonResponse
+    {
+        return response()->json($this->service->updateTransfer($request->query('id'), $request->all()), Response::HTTP_OK);
+    }
+
+    public function createMovement(Request $request): JsonResponse
+    {
+        return response()->json($this->service->createMovement($request->all()), Response::HTTP_CREATED);
+    }
+
+    public function createInstallment(Request $request): JsonResponse
+    {
+        return response()->json($this->service->createInstallment($request->all()), Response::HTTP_CREATED);
+    }
+
+    public function createTransaction(array $data): JsonResponse
+    {
+        return response()->json($this->service->createTransaction($data), Response::HTTP_CREATED);
+    }
+
+    public function createTransfer(array $data): JsonResponse
+    {
+        return response()->json($this->service->createTransfer($data), Response::HTTP_CREATED);
+    }
+    
+    public function findMovement(Request $request): JsonResponse
+    {
+        return response()->json($this->service->findMovement($request->query('id')), Response::HTTP_OK);
+    }
+    
+    public function findInstallment(Request $request): JsonResponse
+    {
+        return response()->json($this->service->findInstallment($request->query('id')), Response::HTTP_OK);
+    }
+
+    public function findTransaction(Request $request): JsonResponse
+    {
+        return response()->json($this->service->findTransaction($request->query('id')), Response::HTTP_OK);
+    }
+
+    public function findTransfer(Request $request): JsonResponse
+    {
+        return response()->json($this->service->findTransfer($request->query('id')), Response::HTTP_OK);
     }
 }

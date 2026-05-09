@@ -12,12 +12,47 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
 
     Route::group(['prefix' => 'finance'], function () {
-        Route::get('movementIndex', [TransactionController::class, 'movementIndex']);
-        Route::get('installmentIndex', [TransactionController::class, 'installmentIndex']);
-        Route::get('transactionIndex', [TransactionController::class, 'transactionIndex']);
+        Route::get('movementIndex', [TransactionController::class, 'movementIndex'])
+            ->where('initialDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}')
+            ->where('finalDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}');
+        Route::get('installmentIndex', [TransactionController::class, 'installmentIndex'])
+            ->where('movementId', '[0-9]+');
+        Route::get('transactionIndex', [TransactionController::class, 'transactionIndex'])
+            ->where('movementId', '[0-9]+');
         Route::get('transferIndex', [TransactionController::class, 'transferIndex']);
 
+        Route::delete('deleteMovement', [TransactionController::class, 'deleteMovement'])
+            ->where('id', '[0-9]+');
+        Route::delete('deleteInstallment', [TransactionController::class, 'deleteInstallment'])
+            ->where('id', '[0-9]+');
+        Route::delete('deleteTransaction', [TransactionController::class, 'deleteTransaction'])
+            ->where('id', '[0-9]+');
+        Route::delete('deleteTransfer', [TransactionController::class, 'deleteTransfer'])
+            ->where('id', '[0-9]+');
 
+        Route::post('createMovement', [TransactionController::class, 'createMovement']);
+        Route::post('createInstallment', [TransactionController::class, 'createInstallment']);
+        Route::post('createTransaction', [TransactionController::class, 'createTransaction']);
+        Route::post('createTransfer', [TransactionController::class, 'createTransfer']);
+
+        Route::put('updateMovement', [TransactionController::class, 'updateMovement'])
+            ->where('id', '[0-9]+');
+        Route::put('updateInstallment', [TransactionController::class, 'updateInstallment'])
+            ->where('id', '[0-9]+');
+        Route::put('updateTransaction', [TransactionController::class, 'updateTransaction'])
+            ->where('id', '[0-9]+');
+        Route::put('updateTransfer', [TransactionController::class, 'updateTransfer'])
+            ->where('id', '[0-9]+');
+
+        Route::get('findMovement', [TransactionController::class, 'findMovement'])
+            ->where('id', '[0-9]+');
+        Route::get('findInstallment', [TransactionController::class, 'findInstallment'])
+            ->where('id', '[0-9]+');
+        Route::get('findTransaction', [TransactionController::class, 'findTransaction'])
+            ->where('id', '[0-9]+');
+        Route::get('findTransfer', [TransactionController::class, 'findTransfer'])
+            ->where('id', '[0-9]+');
+    });
     /*
     Route::group(['prefix' => 'lancamentos'], function () {
         Route::get('index', [LancamentoController::class, 'index'])
@@ -43,8 +78,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         //Route::delete('delete', [DespesaController::class, 'destroy'])->where('id', '[0-9]+');
         //Route::get('total', [DespesaController::class, 'total']);
         //
-        */
-    });
+    */
 
     Route::group(['prefix' => 'categorias'], function () {
         Route::get('index', [CategoriaController::class, 'index']);
