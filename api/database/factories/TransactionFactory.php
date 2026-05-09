@@ -25,7 +25,7 @@ class TransactionFactory extends Factory
             'idBankAccount' => BankAccount::inRandomOrder()->first()->idAccount ?? BankAccount::factory(),
             'idPaymentMethod' => PaymentMethod::inRandomOrder()->first()->idPaymentMethod ?? PaymentMethod::factory(),
             'idPaymentCard' => UserCard::inRandomOrder()->first()->idCard ?? UserCard::factory(),
-            'idUser' => User::inRandomOrder()->first()->idUser ?? User::factory(),
+            'idUser' => $this->faker->numberBetween(1, 2),
         ];
     }
 }

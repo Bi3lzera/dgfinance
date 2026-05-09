@@ -14,7 +14,7 @@ class BankAccountFactory extends Factory
     public function definition(): array
     {
         return [
-            'idUser' => User::inRandomOrder()->first()->idUser ?? 1,
+            'idUser' => $this->faker->numberBetween(1, 2),
             'idBank' => Bank::inRandomOrder()->first()->idBank ?? Bank::factory(),
             'agencyNumber' => $this->faker->numberBetween(1000, 9999),
             'accountNumber' => $this->faker->numberBetween(10000, 99999),

@@ -14,7 +14,7 @@ class TransfersFactory extends Factory
     public function definition(): array
     {
         return [
-            'idUser' => User::inRandomOrder()->first()->idUser ?? 1,
+            'idUser' => $this->faker->numberBetween(1, 2),
             'idDebtAcc' => BankAccount::inRandomOrder()->first()->idAccount ?? BankAccount::factory(),
             'idCreditAcc' => BankAccount::inRandomOrder()->first()->idAccount ?? BankAccount::factory(),
             'value' => $this->faker->randomFloat(2, 10, 1000),

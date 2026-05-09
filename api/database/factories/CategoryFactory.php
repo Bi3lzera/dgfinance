@@ -12,7 +12,7 @@ class CategoryFactory extends Factory
 
     public function definition(): array
     {
-        $userId = User::inRandomOrder()->first()->idUser ?? 1;
+        $userId = $this->faker->numberBetween(1, 2);
 
         $categories = [
             ['title' => 'Alimentação', 'type' => 'Despesa', 'idUser' => null],

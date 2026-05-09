@@ -23,7 +23,7 @@ class PaymentMethodFactory extends Factory
 
         return [
             'title' => $this->faker->randomElement($methods),
-            'idUser' => $this->faker->randomElement([null, User::inRandomOrder()->first()->idUser ?? 1]),
+            'idUser' => $this->faker->randomElement([null, $this->faker->numberBetween(1, 2)]),
         ];
     }
 }

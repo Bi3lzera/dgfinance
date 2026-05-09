@@ -14,7 +14,7 @@ class MovementFactory extends Factory
     public function definition(): array
     {
         return [
-            'idUser' => User::inRandomOrder()->first()->idUser ?? 1,
+            'idUser' => $this->faker->numberBetween(1, 2),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->sentence(),
             'initialValue' => $this->faker->randomFloat(2, 50, 2000),

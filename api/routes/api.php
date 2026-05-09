@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LancamentoController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\UserbanksController;
 
@@ -11,6 +11,14 @@ Route::post('login', [AuthenticationController::class, 'login']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
 
+    Route::group(['prefix' => 'finance'], function () {
+        Route::get('movementIndex', [TransactionController::class, 'movementIndex']);
+        Route::get('installmentIndex', [TransactionController::class, 'installmentIndex']);
+        Route::get('transactionIndex', [TransactionController::class, 'transactionIndex']);
+        Route::get('transferIndex', [TransactionController::class, 'transferIndex']);
+
+
+    /*
     Route::group(['prefix' => 'lancamentos'], function () {
         Route::get('index', [LancamentoController::class, 'index'])
             ->where('mes', '[a-zA-Z]+')
@@ -35,6 +43,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         //Route::delete('delete', [DespesaController::class, 'destroy'])->where('id', '[0-9]+');
         //Route::get('total', [DespesaController::class, 'total']);
         //
+        */
     });
 
     Route::group(['prefix' => 'categorias'], function () {

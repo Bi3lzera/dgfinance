@@ -15,7 +15,7 @@ class UserCardFactory extends Factory
     public function definition(): array
     {
         return [
-            'idUser' => User::inRandomOrder()->first()->idUser ?? 1,
+            'idUser' => $this->faker->numberBetween(1, 2),
             'idBank' => Bank::inRandomOrder()->first()->idBank ?? Bank::factory(),
             'idAccount' => BankAccount::inRandomOrder()->first()->idAccount ?? BankAccount::factory(),
             'finalCardNumber' => $this->faker->numberBetween(1000, 9999),
