@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Response;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Movement;
@@ -10,6 +10,7 @@ use App\Models\Installment;
 use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class TransactionService
 {
@@ -22,38 +23,36 @@ class TransactionService
 
         return $user;
     }
- 
+
     //Movement CRUD
-    public function createMovement(array $data): Response
+    public function createMovement(array $data): array
     {
         Movement::create($data);
-        return new Response([
+        return [
             'message' => 'Movimentação criada com sucesso.',
-        ], Response::HTTP_CREATED);
+        ];
     }
 
-    public function updateMovement(int $id, array $data): Response
+    public function updateMovement(int $id, array $data): array
     {
         $user = $this->getUser();
         Movement::where('idMovement', $id)->where('idUser', $user->idUser)->update($data);
-        return new Response([
+        return [
             'message' => 'Movimentação atualizada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
-    public function deleteMovement(int $id): Response
+    public function deleteMovement(int $id): array
     {
         $user = $this->getUser();
         if (Movement::where('idMovement', $id)->where('idUser', $user->idUser)->count() == 0) {
-            return new Response([
-                'message' => 'Movimentação não encontrada ou não pertence ao usuário logado.',
-            ], Response::HTTP_NOT_FOUND);
+            abort(404, 'Movimentação não encontrada ou não pertence ao usuário logado.');
         }
 
         Movement::where('idMovement', $id)->where('idUser', $user->idUser)->delete();
-        return new Response([
+        return [
             'message' => 'Movimentação deletada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
     public function findMovement(int $id): array
@@ -72,61 +71,64 @@ class TransactionService
     }
 
     //Installment CRUD
-    public function createInstallment(array $data): Response
+    public function createInstallment(array $data): array
     {
         $user = $this->getUser();
-        Installment::create($data, ['idUser' => $user->idUser]);
-        return new Response([
+        $data['idUser'] = $user->idUser;
+        Installment::create($data);
+        return [
             'message' => 'Parcela criada com sucesso.',
-        ], Response::HTTP_CREATED);
+        ];
     }
 
-    public function updateInstallment(int $id, array $data): Response
+    public function updateInstallment(int $id, array $data): array
     {
         $user = $this->getUser();
-        if (Installment::where('idInstallment', $id)
-            ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
-            ->where('movements.idUser', $user->idUser)
-            ->count() == 0) {
-            return new Response([
-                'message' => 'Parcela não encontrada ou não pertence ao usuário logado.',
-            ], Response::HTTP_NOT_FOUND);
+        if (
+            Installment::where('idInstallment', $id)
+                ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
+                ->where('movements.idUser', $user->idUser)
+                ->count() == 0
+        ) {
+            abort(404, 'Parcela não encontrada ou não pertence ao usuário logado.');
         }
 
         Installment::where('idInstallment', $id)->update($data);
-        return new Response([
+        return [
             'message' => 'Parcela atualizada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
-    public function deleteInstallment(int $id): Response
+    public function deleteInstallment(int $id): array
     {
         $user = $this->getUser();
-        if (Installment::where('idInstallment', $id)
-            ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
-            ->where('movements.idUser', $user->idUser)
-            ->count() == 0) {
-            return new Response([
-                'message' => 'Parcela não encontrada ou não pertence ao usuário logado.',
-            ], Response::HTTP_NOT_FOUND);
+        if (
+            Installment::where('idInstallment', $id)
+                ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
+                ->where('movements.idUser', $user->idUser)
+                ->count() == 0
+        ) {
+            abort(404, 'Parcela não encontrada ou não pertence ao usuário logado.');
         }
-        
+
         Installment::where('idInstallment', $id)->delete();
-        return new Response([
+        return [
             'message' => 'Parcela deletada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
     public function findInstallment(int $id): array
     {
         $user = $this->getUser();
-        if (Installment::where('idInstallment', $id)
-            ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
-            ->where('movements.idUser', $user->idUser)
-            ->count() == 0) {
-            return new Response([
+        if (
+            Installment::where('idInstallment', $id)
+                ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
+                ->where('movements.idUser', $user->idUser)
+                ->count() == 0
+        ) {
+            return [
                 'message' => 'Parcela não encontrada ou não pertence ao usuário logado.',
-            ], Response::HTTP_NOT_FOUND);
+            ];
         }
 
         return Installment::where('idInstallment', $id)->get()->toArray();
@@ -144,37 +146,40 @@ class TransactionService
     }
 
     //Transaction CRUD
-    public function createTransaction(array $data): Response
+    public function createTransaction(array $data): array
     {
         $user = $this->getUser();
-        Transaction::create($data, ['idUser' => $user->idUser]);
-        return new Response([
+        Transaction::create($data);
+        return [
             'message' => 'Transação criada com sucesso.',
-        ], Response::HTTP_CREATED);
+        ];
     }
 
-    public function updateTransaction(int $id, array $data): Response
+    public function updateTransaction(int $id, array $data): array
     {
         $user = $this->getUser();
-        Transaction::where('id', $id)->where('idUser', $user->idUser)->update($data);
-        return new Response([
+        Transaction::where('idTransaction', $id)->where('idUser', $user->idUser)->update($data);
+        return [
             'message' => 'Transação atualizada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
-    public function deleteTransaction(int $id): Response
+    public function deleteTransaction(int $id): array
     {
         $user = $this->getUser();
-        Transaction::where('id', $id)->where('idUser', $user->idUser)->delete();
-        return new Response([
+        if (Transaction::where('idTransaction', $id)->where('idUser', $user->idUser)->count() == 0) {
+            abort(Response::HTTP_NOT_FOUND, 'Transação não encontrada ou não pertence ao usuário logado.');
+        }
+        Transaction::where('idTransaction', $id)->where('idUser', $user->idUser)->delete();
+        return [
             'message' => 'Transação deletada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
-    public function findTransaction(int $id): Response
+    public function findTransaction(int $id): array
     {
         $user = $this->getUser();
-        return Transaction::where('id', $id)->where('idUser', $user->idUser)->first();
+        return Transaction::where('idTransaction', $id)->where('idUser', $user->idUser)->get()->toArray();
     }
 
     public function getAllTransactions(int $movementId): array
@@ -189,37 +194,38 @@ class TransactionService
     }
 
     //Transfer CRUD
-    public function createTransfer(array $data): Response
+    public function createTransfer(array $data): array
     {
         $user = $this->getUser();
-        $transfer = Transfer::create($data, ['idUser' => $user->idUser]);
-        return new Response([
+        $data['idUser'] = $user->idUser;
+        $transfer = Transfer::create($data);
+        return [
             'message' => 'Transferência criada com sucesso.',
-        ], Response::HTTP_CREATED);
+        ];
     }
 
-    public function updateTransfer(int $id, array $data): Response
+    public function updateTransfer(int $id, array $data): array
     {
         $user = $this->getUser();
         Transfer::where('id', $id)->where('idUser', $user->idUser)->update($data);
-        return new Response([
+        return [
             'message' => 'Transferência atualizada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
-    public function deleteTransfer(int $id): Response
+    public function deleteTransfer(int $id): array
     {
         $user = $this->getUser();
         Transfer::where('id', $id)->where('idUser', $user->idUser)->delete();
-        return new Response([
+        return [
             'message' => 'Transferência deletada com sucesso.',
-        ], Response::HTTP_OK);
+        ];
     }
 
-    public function findTransfer(int $id): Response
+    public function findTransfer(int $id): array
     {
         $user = $this->getUser();
-        return Transfer::where('id', $id)->where('idUser', $user->idUser)->first();
+        return Transfer::where('id', $id)->where('idUser', $user->idUser)->get()->toArray();
     }
 
     public function getAllTransfers(): array
