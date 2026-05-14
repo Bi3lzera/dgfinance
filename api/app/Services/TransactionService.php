@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
 use App\Models\Movement;
 use App\Models\Installment;
@@ -22,6 +23,60 @@ class TransactionService
         }
 
         return $user;
+    }
+
+    public function createCompleteTransaction(array $data): array
+    {
+        $user = $this->getUser();
+        $data['idUser'] = $user->idUser;
+
+        return DB::transaction(function () use ($data) {
+            $movement = Movement::create($data);
+
+            $data['idMovement'] = $movement->idMovement;
+            $installment = Installment::create($data);
+
+            $data['idInstallment'] = $installment->idInstallment;
+            Transaction::create($data);
+
+            return [
+                'message' => 'Transação completa criada com sucesso.',
+            ];
+        });
+    }
+
+    public function getExtrato(string $initialDate, string $finalDate): array
+    {
+        $user = $this->getUser();
+        
+        return Movement::query()
+            ->select([
+                'movements.idMovement',
+                'installments.idInstallment',
+                'transaction.idTransaction',
+                'transaction.date as transactionDate',
+                'movements.title as movementTitle',
+                'categories.title as categoryTitle',
+                'banks.name as bankName',
+                'users_bank_accounts.accountAlias as bankAccountAlias',
+                'payment_methods.title as paymentMethodName',
+                'users_cards.cardAlias as cardAlias',
+                'transaction.value as transactionValue',
+                'transaction.type as transactionType',
+                'installments.status as installmentStatus',
+            ])
+            ->join('installments', 'movements.idMovement', '=', 'installments.idMovement')
+            ->join('transaction', 'installments.idInstallment', '=', 'transaction.idInstallment')
+            ->leftJoin('categories', 'movements.idCategory', '=', 'categories.idCategory')
+            ->leftJoin('users_bank_accounts', 'transaction.idBankAccount', '=', 'users_bank_accounts.idAccount')
+            ->leftJoin('banks', 'users_bank_accounts.idBank', '=', 'banks.idBank')
+            ->leftJoin('payment_methods', 'transaction.idPaymentMethod', '=', 'payment_methods.idPayMethod')
+            ->leftJoin('users_cards', 'transaction.idPaymentCard', '=', 'users_cards.idCard')
+            ->where('movements.idUser', $user->idUser)
+            ->whereBetween('transaction.date', [$initialDate, $finalDate])
+            ->orderBy('transaction.date', 'desc')
+            ->get()
+            ->toArray();
     }
 
     //Movement CRUD

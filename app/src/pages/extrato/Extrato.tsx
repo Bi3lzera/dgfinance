@@ -13,9 +13,21 @@ const Extrato: React.FC = () => {
     const { mes, ano } = useContext(DateContext);
 
     useEffect(() => {
+        const monthMap: { [key: string]: number } = {
+            "janeiro": 1, "fevereiro": 2, "marco": 3, "abril": 4,
+            "maio": 5, "junho": 6, "julho": 7, "agosto": 8,
+            "setembro": 9, "outubro": 10, "novembro": 11, "dezembro": 12
+        };
+        const monthNumber = monthMap[mes.toLowerCase()] || 1;
+        const formattedMonth = monthNumber.toString().padStart(2, '0');
+
+        const initialDate = `${ano}-${formattedMonth}-01`;
+        const lastDayOfMonth = new Date(ano, monthNumber, 0).getDate();
+        const finalDate = `${ano}-${formattedMonth}-${lastDayOfMonth}`;
+        console.log(initialDate, finalDate);
         const fetchExtrato = async () => {
             try {
-                const data = await getExtrato(mes, ano);
+                const data = await getExtrato(initialDate, finalDate);
                 setExtrato(data);
             } catch (error) {
                 console.error("Failed to fetch extrato:", error);

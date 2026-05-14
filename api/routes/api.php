@@ -24,6 +24,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('transactionIndex', [TransactionController::class, 'transactionIndex'])
             ->where('movementId', '[0-9]+');
         Route::get('transferIndex', [TransactionController::class, 'transferIndex']);
+        Route::get('extratoIndex', [TransactionController::class, 'extratoIndex'])
+            ->where('initialDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}')
+            ->where('finalDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}');
 
         //
         // Deleções de dados
@@ -44,6 +47,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('createInstallment', [TransactionController::class, 'createInstallment']);
         Route::post('createTransaction', [TransactionController::class, 'createTransaction']);
         Route::post('createTransfer', [TransactionController::class, 'createTransfer']);
+        Route::post('createCompleteTransaction', [TransactionController::class, 'createCompleteTransaction']);
 
         //
         // Atualizações de dados

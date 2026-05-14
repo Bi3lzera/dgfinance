@@ -44,6 +44,17 @@ export const createTransaction = async (lancamentoData: Lancamento, onSuccess?: 
     }
 }
 
+export const createCompleteTransactionApi = async (transactionData: any, onSuccess?: () => void) => {
+    try {
+        await axiosInstance.post('/finance/createCompleteTransaction', transactionData);
+        if (onSuccess) {
+            onSuccess();
+        }
+    } catch (error) {
+        console.error('Erro ao criar a transação completa:', error);
+    }
+}
+
 
 
 ////OLD//////

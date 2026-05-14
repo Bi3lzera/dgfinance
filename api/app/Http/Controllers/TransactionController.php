@@ -26,10 +26,12 @@ class TransactionController extends Controller
         $finalDate = $request->input('finalDate');
         return response()->json($this->service->getAllMovements($initialDate, $finalDate), Response::HTTP_OK);
     }
+
     public function installmentIndex(Request $request): JsonResponse
     {
         return response()->json($this->service->getAllInstallments($request->query('movementId')), Response::HTTP_OK);
     }
+
     public function transactionIndex(Request $request): JsonResponse
     {
         return response()->json($this->service->getAllTransactions($request->query('movementId')), Response::HTTP_OK);
@@ -37,6 +39,13 @@ class TransactionController extends Controller
     public function transferIndex(Request $request): JsonResponse
     {
         return response()->json($this->service->getAllTransfers(), Response::HTTP_OK);
+    }
+
+    public function extratoIndex(Request $request): JsonResponse
+    {
+        $initialDate = $request->input('initialDate');
+        $finalDate = $request->input('finalDate');
+        return response()->json($this->service->getExtrato($initialDate, $finalDate), Response::HTTP_OK);
     }
 
     //
@@ -129,5 +138,13 @@ class TransactionController extends Controller
     public function createTransfer(Request $request): JsonResponse
     {
         return response()->json($this->service->createTransfer($request->all()), Response::HTTP_CREATED);
+    }
+
+    //
+    // Create complete transaction
+    //
+    public function createCompleteTransaction(Request $request): JsonResponse
+    {
+        return response()->json($this->service->createCompleteTransaction($request->all()), Response::HTTP_CREATED);
     }
 }

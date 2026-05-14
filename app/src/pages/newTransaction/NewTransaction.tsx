@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { getCategories } from '../../services/pageServices/miscelaneous';
 import { CategoryModel } from '../../types/miscelaneousModels';
-import { createTransaction } from '../../services/pageServices/transactionActions';
+import { createCompleteTransactionApi } from '../../services/pageServices/transactionActions';
 import { Lancamento } from '../../types/lancamentoModel';
 
 type TransactionType = 'receita' | 'despesa';
@@ -116,23 +116,25 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
         setArquivo(null);
     };
 
-    const buildLancamentoPayload = (): Lancamento => {
+    const buildLancamentoPayload = () => {
         const parsedValor = parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
         return {
-            idUser: 1, // Assumindo 1 como default se não houver contexto de usuário disponível aqui
-            valor: parsedValor,
-            totalParcelas: parseInt(parcelas.split('/')[0]) || 1,
-            data: data,
-            descricao: descricao,
-            tipo: tipo === 'receita' ? 'C' : 'D',
-            agendado: agendado ? 'S' : 'N',
-            idLancamento: 0,
-            operacao: tipo === 'receita' ? 'C' : 'D',
-            valorOperacao: parsedValor,
-            parcelaOperacao: 1,
-            dataOperacao: data,
-            idFormaPagamento: 1, // Fallback se os selects possuírem apenas strings textuais ao invés de ids reais
-            idBanco: 1
+            title: descricao,
+            description: notas || descricao,
+            initialValue: parsedValor,
+            type: tipo === 'receita' ? 'Credito' : 'Debito',
+            totalPaymentCount: parseInt(parcelas.split('/')[0]) || 1,
+            idCategory: parseInt(categoria) || 1,
+            date: data,
+            plannedDate: data,
+            expectedValue: parsedValor,
+            installmentNumber: 1,
+            status: agendado ? 'Pendente' : 'Efetivado',
+            transactionDescription: descricao,
+            value: parsedValor,
+            idBankAccount: 1, // Fallback
+            idPaymentMethod: 1, // Fallback
+            idPaymentCard: null
         };
     };
 
@@ -142,7 +144,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
             return;
         }
         const payload = buildLancamentoPayload();
-        await createTransaction(payload, () => {
+        await createCompleteTransactionApi(payload, () => {
             resetForm();
         });
     };
@@ -153,7 +155,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ isOpen, onClose }) => {
             return;
         }
         const payload = buildLancamentoPayload();
-        await createTransaction(payload, () => {
+        await createCompleteTransactionApi(payload, () => {
             resetForm();
             onClose();
         });
