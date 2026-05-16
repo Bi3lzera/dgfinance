@@ -79,6 +79,42 @@ class TransactionService
             ->toArray();
     }
 
+    public function getTransactionDetails(int $id)
+    {
+        $user = $this->getUser();
+        
+        $transaction = Transaction::with(['installment.movement'])
+            ->where('idTransaction', $id)
+            ->where('idUser', $user->idUser)
+            ->first();
+
+        if (!$transaction) {
+            abort(404, 'Transação não encontrada ou não pertence ao usuário logado.');
+        }
+
+        $installment = $transaction->installment;
+        $movement = $installment ? $installment->movement : null;
+
+        return [
+            'title' => $movement ? $movement->title : '',
+            'description' => $movement ? $movement->description : '',
+            'initialValue' => $movement ? $movement->initialValue : $transaction->value,
+            'type' => $movement ? $movement->type : $transaction->type,
+            'totalPaymentCount' => $movement ? $movement->totalPaymentCount : 1,
+            'idCategory' => $movement ? $movement->idCategory : 1,
+            'date' => $movement ? $movement->date : $transaction->date,
+            'plannedDate' => $installment ? $installment->plannedDate : $transaction->date,
+            'expectedValue' => $installment ? $installment->expectedValue : $transaction->value,
+            'installmentNumber' => $installment ? $installment->installmentNumber : 1,
+            'status' => $installment ? $installment->status : 'Efetivado',
+            'transactionDescription' => $transaction->transactionDescription,
+            'value' => $transaction->value,
+            'idBankAccount' => $transaction->idBankAccount,
+            'idPaymentMethod' => $transaction->idPaymentMethod,
+            'idPaymentCard' => $transaction->idPaymentCard,
+        ];
+    }
+
     //Movement CRUD
     public function createMovement(array $data): array
     {

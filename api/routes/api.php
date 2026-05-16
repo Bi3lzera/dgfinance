@@ -27,6 +27,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('extratoIndex', [TransactionController::class, 'extratoIndex'])
             ->where('initialDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}')
             ->where('finalDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}');
+        Route::get('transactionDetails', [TransactionController::class, 'transactionDetails'])
+            ->where('id', '[0-9]+');
 
         //
         // Deleções de dados

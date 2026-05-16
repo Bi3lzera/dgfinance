@@ -3,6 +3,7 @@ import { ExtratoModel } from "../../../types/extratoModel";
 
 interface TransactionsProps {
     extrato: ExtratoModel[];
+    onDoubleClick?: (id: number) => void;
 }
 
 const formatDate = (dateString: string) => {
@@ -24,7 +25,7 @@ const formatDate = (dateString: string) => {
     };
 };
 
-const Transactions = ({ extrato }: TransactionsProps) => {
+const Transactions = ({ extrato, onDoubleClick }: TransactionsProps) => {
     return (
         <div className="flex-1 h-full bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden flex flex-col relative">
             {/* List Header */}
@@ -43,7 +44,11 @@ const Transactions = ({ extrato }: TransactionsProps) => {
                     const formattedDate = formatDate(item.data);
 
                     return (
-                        <div key={item.id + id} className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer">
+                        <div 
+                            key={item.id + id} 
+                            onDoubleClick={() => onDoubleClick && onDoubleClick(Number(item.id))}
+                            className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer"
+                        >
                             {/* Data */}
                             <div className="flex flex-col gap-0.5">
                                 <span className="font-bold text-sm text-gray-900">{formattedDate.dayMonth}</span>

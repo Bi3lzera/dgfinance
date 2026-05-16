@@ -5,7 +5,7 @@ export const getExtrato = async (initialDate: string, finalDate: string) => {
 
     const extrato = response.data.map((item: any) => {
         return {
-            id: item.id,
+            id: item.idTransaction,
             data: item.transactionDate,
             title: item.movementTitle,
             tag: item.categoryTitle,

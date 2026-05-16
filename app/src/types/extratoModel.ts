@@ -11,6 +11,25 @@ export interface ExtratoModel {
     status: string;
 }
 
+export interface ExtratoDetailsModel {
+    title: string;
+    description: string;
+    initialValue: number;
+    type: string;
+    totalPaymentCount: number;
+    idCategory: number;
+    date: string,
+    plannedDate: string,
+    expectedValue: number,
+    installmentNumber: number,
+    status: string,
+    transactionDescription: string,
+    value: number,
+    idBankAccount: number,
+    idPaymentMethod: number,
+    idPaymentCard: number
+}
+
 /*
     "id": 713,
     "idUser": 1,

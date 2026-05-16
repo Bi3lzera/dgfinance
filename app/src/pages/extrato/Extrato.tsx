@@ -6,10 +6,13 @@ import Filters from './components/Filters';
 import { getExtrato } from '../../services/pageServices/extrato';
 import { ExtratoModel } from '../../types/extratoModel';
 import { DateContext } from '../../contexts/DateContext';
+import TransactionForm from '../transactionForm/TransactionForm';
 
 
 const Extrato: React.FC = () => {
     const [extrato, setExtrato] = useState<ExtratoModel[]>([]);
+    const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
+    const [selectedMovementId, setSelectedMovementId] = useState<number | undefined>(undefined);
     const { mes, ano } = useContext(DateContext);
 
     useEffect(() => {
@@ -24,7 +27,6 @@ const Extrato: React.FC = () => {
         const initialDate = `${ano}-${formattedMonth}-01`;
         const lastDayOfMonth = new Date(ano, monthNumber, 0).getDate();
         const finalDate = `${ano}-${formattedMonth}-${lastDayOfMonth}`;
-        console.log(initialDate, finalDate);
         const fetchExtrato = async () => {
             try {
                 const data = await getExtrato(initialDate, finalDate);
@@ -48,7 +50,10 @@ const Extrato: React.FC = () => {
                 {/* Main Content Area */}
                 <div className="flex gap-8 items-stretch flex-1 overflow-hidden">
                     {/* Main: List of transactions */}
-                    <Transactions extrato={extrato} />
+                    <Transactions extrato={extrato} onDoubleClick={(id) => {
+                        setSelectedMovementId(id);
+                        setIsTransactionFormOpen(true);
+                    }} />
 
                     {/* Right side: Control Panel */}
                     <div className="w-[340px] flex flex-col flex-shrink-0 h-full overflow-hidden">
@@ -57,6 +62,13 @@ const Extrato: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Transaction Form Modal */}
+            <TransactionForm
+                isOpen={isTransactionFormOpen}
+                onClose={() => setIsTransactionFormOpen(false)}
+                movementId={selectedMovementId}
+            />
         </div>
     );
 };

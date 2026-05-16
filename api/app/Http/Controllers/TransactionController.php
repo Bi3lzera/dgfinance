@@ -48,6 +48,11 @@ class TransactionController extends Controller
         return response()->json($this->service->getExtrato($initialDate, $finalDate), Response::HTTP_OK);
     }
 
+    public function transactionDetails(Request $request): JsonResponse
+    {
+        return response()->json($this->service->getTransactionDetails($request->query('id')), Response::HTTP_OK);
+    }
+
     //
     // Find data by parameters
     //
