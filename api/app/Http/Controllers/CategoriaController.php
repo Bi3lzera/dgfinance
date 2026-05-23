@@ -16,7 +16,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        return response()->json($this->service->getCategorias(), 200);
+        return response()->json($this->service->getAllCategories(), 200);
     }
 
     /**

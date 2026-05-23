@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getCategories } from '../../services/pageServices/miscelaneous';
+import { getCategories, getUserBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
 import { CategoryModel } from '../../types/miscelaneousModels';
 import { createCompleteTransactionApi, getTransactionDetails } from '../../services/pageServices/transactionActions';
 import NotationNReceipt from './components/bodyComponents/NotationNReceipt';
@@ -32,7 +32,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
     const [notas, setNotas] = useState('');
     const [arquivo, setArquivo] = useState<File | null>(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [categorias, setCategorias] = useState<CategoryModel[]>([]);
+    const [categories, setCategories] = useState<CategoryModel[]>([]);
+    const [userBanks, setUserBanks] = useState<any[]>([]);
+    const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -55,19 +57,36 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
     };
 
     const handleOverlayClick = (e: React.MouseEvent) => {
-        if (e.target === overlayRef.current) onClose();
+        if (e.target === overlayRef.current) {
+            resetForm();
+            onClose();
+        }
     };
 
     useEffect(() => {
-        const fetchCategorias = async () => {
+        const fetchDependencies = async () => {
             try {
-                const response = await getCategories();
-                setCategorias(response);
+                const categoriesRes = await getCategories();
+                setCategories(categoriesRes);
             } catch (error) {
-                console.error("Erro ao carregar categorias: ", error);
+                console.error("Erro ao carregar categories: ", error);
+            }
+
+            try {
+                const banksRes = await getUserBanks();
+                setUserBanks(banksRes);
+            } catch (error) {
+                console.error("Erro ao carregar banks: ", error);
+            }
+
+            try {
+                const pmRes = await getPaymentMethods();
+                setPaymentMethods(pmRes);
+            } catch (error) {
+                console.error("Erro ao carregar payment methods: ", error);
             }
         };
-        fetchCategorias();
+        fetchDependencies();
     }, []);
 
     useEffect(() => {
@@ -78,13 +97,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
                     if (data) {
                         setTipo(data.type === 'Credito' ? 'receita' : 'despesa');
                         setDescricao(data.title || data.transactionDescription || '');
-                        
+
                         let formattedValue = '';
                         if (data.value !== undefined && data.value !== null) {
                             formattedValue = Number(data.value).toFixed(2).replace('.', ',');
                         }
                         setValor(formattedValue);
-                        
+
                         setData(data.date ? data.date.split('T')[0] : '');
                         setCategoria(data.idCategory?.toString() || '');
                         setConta(data.idBankAccount?.toString() || '');
@@ -159,8 +178,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
             status: agendado ? 'Pendente' : 'Efetivado',
             transactionDescription: descricao,
             value: parsedValor,
-            idBankAccount: 1,
-            idPaymentMethod: 1,
+            idBankAccount: parseInt(conta) || null,
+            idPaymentMethod: parseInt(formaPagamento) || null,
             idPaymentCard: null
         };
     };
@@ -225,16 +244,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
                             setData={setData}
                             categoria={categoria}
                             setCategoria={setCategoria}
-                            categorias={categorias}
-                            conta={conta}
-                            setConta={setConta}
+                            categorias={categories}
+                            formaPagamento={formaPagamento}
+                            setFormaPagamento={setFormaPagamento}
+                            paymentMethods={paymentMethods}
                             tipo={tipo}
                         />
 
                         {/* ── Seção: Detalhes de Pagamento ── */}
                         <PaymentDetails
-                            formaPagamento={formaPagamento}
-                            setFormaPagamento={setFormaPagamento}
+                            conta={conta}
+                            setConta={setConta}
+                            userBanks={userBanks}
                             parcelas={parcelas}
                             setParcelas={setParcelas}
                             repetir={repetir}

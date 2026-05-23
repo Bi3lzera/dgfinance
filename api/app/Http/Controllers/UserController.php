@@ -3,20 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\UserbanksService;
 
-class UserbanksController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
-    public function index(): JsonResponse
+    public function index()
     {
-        $userbanksService = new UserbanksService();
-        $userbanks = $userbanksService->getAllUserbanks();
-        return response()->json($userbanks);
+        //
     }
 
     /**

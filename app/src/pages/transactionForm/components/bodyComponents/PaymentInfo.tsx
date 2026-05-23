@@ -1,12 +1,9 @@
-import { Check, RefreshCw, CreditCard, Hash } from 'lucide-react';
-
-const formasPagamento = [
-    'Cartão de Crédito', 'Cartão de Débito', 'Pix', 'TED/DOC', 'Dinheiro', 'Boleto'
-];
+import { Check, RefreshCw, Building2, Hash, CreditCard } from 'lucide-react';
 
 interface PaymentInfoProps {
-    formaPagamento: string;
-    setFormaPagamento: (value: string) => void;
+    conta: string;
+    setConta: (value: string) => void;
+    userBanks: any[];
     parcelas: string;
     setParcelas: (value: string) => void;
     repetir: boolean;
@@ -15,7 +12,7 @@ interface PaymentInfoProps {
     setAgendado: (value: boolean) => void;
 }
 
-const paymentInfo = ({ formaPagamento, setFormaPagamento, parcelas, setParcelas, repetir, setRepetir, agendado, setAgendado }: PaymentInfoProps) => {
+const paymentInfo = ({ conta, setConta, userBanks, parcelas, setParcelas, repetir, setRepetir, agendado, setAgendado }: PaymentInfoProps) => {
     return (
         <section>
             <div className="flex items-center gap-2 mb-3">
@@ -25,16 +22,16 @@ const paymentInfo = ({ formaPagamento, setFormaPagamento, parcelas, setParcelas,
             <div className="bg-gray-50/60 rounded-xl border border-gray-100 p-4 flex flex-col gap-4">
                 <div className="grid grid-cols-[1.3fr_100px_1.2fr_1.2fr] gap-4 items-end">
                     <div className="flex flex-col gap-1">
-                        <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Forma de Pagamento</label>
+                        <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Conta / Banco</label>
                         <div className="relative">
-                            <CreditCard size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <Building2 size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <select
-                                value={formaPagamento}
-                                onChange={e => setFormaPagamento(e.target.value)}
+                                value={conta}
+                                onChange={e => setConta(e.target.value)}
                                 className="w-full appearance-none bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                             >
                                 <option value="">Selecionar...</option>
-                                {formasPagamento.map(f => <option key={f}>{f}</option>)}
+                                {userBanks.map(b => <option key={b.idAccount} value={b.idAccount}>{b.bankName} {b.accountAlias ? `(${b.accountAlias})` : ''}</option>)}
                             </select>
                         </div>
                     </div>
@@ -51,6 +48,7 @@ const paymentInfo = ({ formaPagamento, setFormaPagamento, parcelas, setParcelas,
                             </select>
                         </div>
                     </div>
+
                     {/* Repetir toggle */}
                     <button
                         onClick={() => setRepetir(!repetir)}

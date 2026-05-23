@@ -1,5 +1,4 @@
 export interface CategoryModel {
-    id: string;
-    nome: string;
-    descricao: string;
+    idCategory: string;
+    title: string;
 }

@@ -1,5 +1,5 @@
 import {
-    Calendar, Tag, Building2, FileText
+    Calendar, Tag, CreditCard, FileText
 } from 'lucide-react';
 
 
@@ -12,9 +12,10 @@ interface TransactionInfoProps {
     setData: (data: string) => void;
     categoria: string;
     setCategoria: (categoria: string) => void;
-    categorias: { id: string; nome: string }[];
-    conta: string;
-    setConta: (conta: string) => void;
+    categorias: { idCategory: string; title: string }[];
+    formaPagamento: string;
+    setFormaPagamento: (formaPagamento: string) => void;
+    paymentMethods: any[];
     tipo: 'receita' | 'despesa';
 }
 
@@ -28,19 +29,12 @@ const transactionInfo = ({
     categoria,
     setCategoria,
     categorias,
-    conta,
-    setConta,
+    formaPagamento,
+    setFormaPagamento,
+    paymentMethods,
     tipo
 }: TransactionInfoProps) => {
-    const contas = [
-        'Nubank Platinum',
-        'Nubank Business',
-        'Itaú Personalité',
-        'XP Investimentos',
-        'Mercado Pago',
-        'Inter',
-        'Carteira'
-    ];
+
     return (
         <section>
             <div className="flex items-center gap-2 mb-3">
@@ -94,21 +88,21 @@ const transactionInfo = ({
                                 className="w-full appearance-none bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                             >
                                 <option value="">Selecionar...</option>
-                                {categorias.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
+                                {categorias.map(c => <option key={c.idCategory} value={c.idCategory}>{c.title}</option>)}
                             </select>
                         </div>
                     </div>
                     <div className="flex flex-col gap-1">
-                        <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Conta / Banco</label>
+                        <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Forma de Pagamento</label>
                         <div className="relative">
-                            <Building2 size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <CreditCard size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <select
-                                value={conta}
-                                onChange={e => setConta(e.target.value)}
+                                value={formaPagamento}
+                                onChange={e => setFormaPagamento(e.target.value)}
                                 className="w-full appearance-none bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                             >
                                 <option value="">Selecionar...</option>
-                                {contas.map(c => <option key={c}>{c}</option>)}
+                                {paymentMethods.map(p => <option key={p.idPaymentMethod} value={p.idPaymentMethod}>{p.title}</option>)}
                             </select>
                         </div>
                     </div>

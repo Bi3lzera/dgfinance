@@ -2,12 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\Categoria;
+use App\Models\Category;
 
 class CategoriaService
 {
-    public function getCategorias(): array
+    public function getAllCategories(): array
     {
-        return Categoria::get()->toArray();
+        $categories = Category::all();
+
+        return $categories->map(function ($category) {
+            return [
+                'idCategory' => $category->idCategory,
+                'title' => $category->title,
+            ];
+        })->toArray();
     }
 }

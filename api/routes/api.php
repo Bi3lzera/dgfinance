@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\UserbanksController;
+use App\Http\Controllers\MiscelaneousController;
 
 Route::post('login', [AuthenticationController::class, 'login']);
 
@@ -102,12 +103,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         //
     */
 
-    Route::group(['prefix' => 'categorias'], function () {
+    Route::group(['prefix' => 'categories'], function () {
         Route::get('index', [CategoriaController::class, 'index']);
     });
 
     Route::group(['prefix' => 'userbanks'], function () {
         Route::get('index', [UserbanksController::class, 'index']);
+    });
+
+    Route::group(['prefix' => 'miscelaneous'], function () {
+        Route::get('paymentMethods', [MiscelaneousController::class, 'getPaymentMethods']);
     });
 })->middleware('auth:sanctum');
 
