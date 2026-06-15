@@ -25,6 +25,32 @@ class TransactionService
         return $user;
     }
 
+public function updateCompleteTransaction(array $data): array
+    {
+        $user = $this->getUser();
+        $data['idUser'] = $user->idUser;
+        return DB::transaction(function () use ($data, $user) {
+            // 1. Busca e atualiza a Movimentação (garantindo que pertence ao usuário)
+            $movement = Movement::where('idMovement', $data['idMovement'])
+                ->where('idUser', $user->idUser)
+                ->firstOrFail();
+            $movement->update($data); // Filtra pelo $fillable de Movement
+            // 2. Busca e atualiza a Parcela (vinculada à movimentação do usuário)
+            $installment = Installment::where('idInstallment', $data['idInstallment'])
+                ->where('idMovement', $movement->idMovement)
+                ->firstOrFail();
+            $installment->update($data); // Filtra pelo $fillable de Installment
+            // 3. Busca e atualiza a Transação (garantindo que pertence ao usuário)
+            $transaction = Transaction::where('idTransaction', $data['idTransaction'])
+                ->where('idUser', $user->idUser)
+                ->firstOrFail();
+            $transaction->update($data); // Filtra pelo $fillable de Transaction
+            return [
+                'message' => 'Transação completa atualizada com sucesso.',
+            ];
+        });
+    }
+
     public function createCompleteTransaction(array $data): array
     {
         $user = $this->getUser();
@@ -96,6 +122,9 @@ class TransactionService
         $movement = $installment ? $installment->movement : null;
 
         return [
+            'idTransaction' => $transaction->idTransaction,
+            'idInstallment' => $installment ? $installment->idInstallment : null,
+            'idMovement' => $movement ? $movement->idMovement : null,
             'title' => $movement ? $movement->title : '',
             'description' => $movement ? $movement->description : '',
             'initialValue' => $movement ? $movement->initialValue : $transaction->value,

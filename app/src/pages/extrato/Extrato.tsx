@@ -11,11 +11,26 @@ import TransactionForm from '../transactionForm/TransactionForm';
 
 const Extrato: React.FC = () => {
     const [extrato, setExtrato] = useState<ExtratoModel[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
     const [selectedMovementId, setSelectedMovementId] = useState<number | undefined>(undefined);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
     const { mes, ano } = useContext(DateContext);
 
     useEffect(() => {
+        const handleSaved = () => {
+            setRefreshTrigger(prev => prev + 1);
+        };
+        window.addEventListener('transaction-saved', handleSaved);
+        return () => {
+            window.removeEventListener('transaction-saved', handleSaved);
+        };
+    }, []);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        setIsLoading(true);
+        setExtrato([]);
         const monthMap: { [key: string]: number } = {
             "janeiro": 1, "fevereiro": 2, "marco": 3, "abril": 4,
             "maio": 5, "junho": 6, "julho": 7, "agosto": 8,
@@ -29,15 +44,23 @@ const Extrato: React.FC = () => {
         const finalDate = `${ano}-${formattedMonth}-${lastDayOfMonth}`;
         const fetchExtrato = async () => {
             try {
-                const data = await getExtrato(initialDate, finalDate);
+                const data = await getExtrato(initialDate, finalDate, controller.signal);
                 setExtrato(data);
-            } catch (error) {
-                console.error("Failed to fetch extrato:", error);
+                setIsLoading(false);
+            } catch (error: any) {
+                if (error.name !== 'CanceledError' && error.name !== 'AbortError') {
+                    console.error("Failed to fetch extrato:", error);
+                    setIsLoading(false);
+                }
             }
         };
 
         fetchExtrato();
-    }, [mes, ano]);
+
+        return () => {
+            controller.abort();
+        };
+    }, [mes, ano, refreshTrigger]);
 
     return (
         <div className="flex flex-col h-full bg-[#fbfbfe]">
@@ -50,7 +73,7 @@ const Extrato: React.FC = () => {
                 {/* Main Content Area */}
                 <div className="flex gap-8 items-stretch flex-1 overflow-hidden">
                     {/* Main: List of transactions */}
-                    <Transactions extrato={extrato} onDoubleClick={(id) => {
+                    <Transactions extrato={extrato} isLoading={isLoading} onDoubleClick={(id) => {
                         setSelectedMovementId(id);
                         setIsTransactionFormOpen(true);
                     }} />

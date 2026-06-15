@@ -14,10 +14,15 @@ class UserCardFactory extends Factory
 
     public function definition(): array
     {
+        $idUser = $this->faker->numberBetween(1, 2);
+        
+        $bankAccount = BankAccount::where('idUser', $idUser)->inRandomOrder()->first()
+            ?? BankAccount::factory()->create(['idUser' => $idUser]);
+
         return [
-            'idUser' => $this->faker->numberBetween(1, 2),
+            'idUser' => $idUser,
             'idBank' => Bank::inRandomOrder()->first()->idBank ?? Bank::factory(),
-            'idAccount' => BankAccount::inRandomOrder()->first()->idAccount ?? BankAccount::factory(),
+            'idAccount' => $bankAccount->idAccount,
             'finalCardNumber' => $this->faker->numberBetween(1000, 9999),
             'cardAlias' => $this->faker->word(),
             'expirationDate' => $this->faker->dateTimeBetween('-6 months', '+12 months')->format('Y-m-d'),

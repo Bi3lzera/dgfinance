@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getCategories, getUserBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
 import { CategoryModel } from '../../types/miscelaneousModels';
-import { createCompleteTransactionApi, getTransactionDetails } from '../../services/pageServices/transactionActions';
+import { createCompleteTransactionApi, updateCompleteTransactionApi, getTransactionDetails } from '../../services/pageServices/transactionActions';
 import NotationNReceipt from './components/bodyComponents/NotationNReceipt';
 import BasicInfo from './components/bodyComponents/TransactionInfo';
 import PaymentDetails from './components/bodyComponents/PaymentInfo';
@@ -35,6 +35,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
     const [categories, setCategories] = useState<CategoryModel[]>([]);
     const [userBanks, setUserBanks] = useState<any[]>([]);
     const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
+    const [idTransaction, setIdTransaction] = useState<number | null>(null);
+    const [idInstallment, setIdInstallment] = useState<number | null>(null);
+    const [idMovement, setIdMovement] = useState<number | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -111,6 +114,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
                         setParcelas(`${data.installmentNumber || 1}/${data.totalPaymentCount || 1}`);
                         setAgendado(data.status === 'Pendente');
                         setNotas(data.description || '');
+
+                        setIdTransaction(data.idTransaction || null);
+                        setIdInstallment(data.idInstallment || null);
+                        setIdMovement(data.idMovement || null);
                     }
                 } catch (error) {
                     console.error("Erro ao buscar detalhes:", error);
@@ -160,21 +167,24 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
         setAgendado(false);
         setNotas('');
         setArquivo(null);
+        setIdTransaction(null);
+        setIdInstallment(null);
+        setIdMovement(null);
     };
 
     const buildLancamentoPayload = () => {
         const parsedValor = parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
-        return {
+        const payload: any = {
             title: descricao,
             description: notas || descricao,
             initialValue: parsedValor,
             type: tipo === 'receita' ? 'Credito' : 'Debito',
-            totalPaymentCount: parseInt(parcelas.split('/')[0]) || 1,
+            totalPaymentCount: parseInt(parcelas.split('/')[1]) || parseInt(parcelas.split('/')[0]) || 1,
             idCategory: parseInt(categoria) || 1,
             date: data,
             plannedDate: data,
             expectedValue: parsedValor,
-            installmentNumber: 1,
+            installmentNumber: parseInt(parcelas.split('/')[0]) || 1,
             status: agendado ? 'Pendente' : 'Efetivado',
             transactionDescription: descricao,
             value: parsedValor,
@@ -182,6 +192,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
             idPaymentMethod: parseInt(formaPagamento) || null,
             idPaymentCard: null
         };
+
+        if (movementId) {
+            payload.idTransaction = idTransaction;
+            payload.idInstallment = idInstallment;
+            payload.idMovement = idMovement;
+        }
+
+        return payload;
     };
 
     const handleSaveAndNew = async () => {
@@ -190,9 +208,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
             return;
         }
         const payload = buildLancamentoPayload();
-        await createCompleteTransactionApi(payload, () => {
+        const callback = () => {
             resetForm();
-        });
+            window.dispatchEvent(new Event('transaction-saved'));
+        };
+
+        if (movementId) {
+            await updateCompleteTransactionApi(payload, callback);
+        } else {
+            await createCompleteTransactionApi(payload, callback);
+        }
     };
 
     const handleSaveAndClose = async () => {
@@ -201,10 +226,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
             return;
         }
         const payload = buildLancamentoPayload();
-        await createCompleteTransactionApi(payload, () => {
+        const callback = () => {
             resetForm();
+            window.dispatchEvent(new Event('transaction-saved'));
             onClose();
-        });
+        };
+
+        if (movementId) {
+            await updateCompleteTransactionApi(payload, callback);
+        } else {
+            await createCompleteTransactionApi(payload, callback);
+        }
     };
 
     if (!isOpen) return null;

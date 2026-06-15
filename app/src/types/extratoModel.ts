@@ -7,11 +7,14 @@ export interface ExtratoModel {
     institutionDot: string;
     amount: string;
     paymentType: string;
-    isExpense: boolean;
+    transactionType: string;
     status: string;
 }
 
 export interface ExtratoDetailsModel {
+    idTransaction?: number;
+    idInstallment?: number;
+    idMovement?: number;
     title: string;
     description: string;
     initialValue: number;

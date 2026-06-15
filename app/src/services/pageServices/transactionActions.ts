@@ -53,6 +53,17 @@ export const createCompleteTransactionApi = async (transactionData: any, onSucce
     }
 }
 
+export const updateCompleteTransactionApi = async (transactionData: any, onSuccess?: () => void) => {
+    try {
+        await axiosInstance.put('/finance/updateCompleteTransaction', transactionData);
+        if (onSuccess) {
+            onSuccess();
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar a transação completa:', error);
+    }
+}
+
 export const getTransactionDetails = async (id: number) => {
     try {
         const response = await axiosInstance.get('/finance/transactionDetails', {

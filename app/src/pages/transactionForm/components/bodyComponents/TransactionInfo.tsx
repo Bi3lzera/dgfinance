@@ -1,6 +1,7 @@
 import {
     Calendar, Tag, CreditCard, FileText
 } from 'lucide-react';
+import { formatCurrencyToBRL } from '../../../../utils/formats';
 
 
 interface TransactionInfoProps {
@@ -56,7 +57,7 @@ const transactionInfo = ({
                     <div className="flex flex-col gap-1">
                         <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Valor (R$)</label>
                         <input
-                            value={valor}
+                            value={formatCurrencyToBRL(Number(valor.replace(',', '.')) || 0)}
                             onChange={handleValorChange}
                             placeholder="0,00"
                             className={`w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-bold placeholder-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition ${tipo === 'despesa' ? 'text-red-500' : 'text-emerald-600'}`}

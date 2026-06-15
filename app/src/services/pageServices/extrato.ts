@@ -1,7 +1,7 @@
 import axiosInstance from "../../../config/axiosConfig"
 
-export const getExtrato = async (initialDate: string, finalDate: string) => {
-    const response = await axiosInstance.get(`/finance/extratoIndex/?initialDate=${initialDate}&finalDate=${finalDate}`);
+export const getExtrato = async (initialDate: string, finalDate: string, signal?: AbortSignal) => {
+    const response = await axiosInstance.get(`/finance/extratoIndex/?initialDate=${initialDate}&finalDate=${finalDate}`, { signal });
 
     const extrato = response.data.map((item: any) => {
         return {
@@ -13,7 +13,7 @@ export const getExtrato = async (initialDate: string, finalDate: string) => {
             //institutionDot: item.bancoDot,
             amount: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(item.transactionValue)),
             paymentType: item.paymentMethodName,
-            //isExpense: item.isExpense,
+            transactionType: ['debito', 'despesa'].includes(String(item.transactionType).toLowerCase()) ? 'Despesa' : 'Receita',
             status: item.installmentStatus,
         }
     });

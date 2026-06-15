@@ -152,4 +152,8 @@ class TransactionController extends Controller
     {
         return response()->json($this->service->createCompleteTransaction($request->all()), Response::HTTP_CREATED);
     }
+    public function updateCompleteTransaction(Request $request): JsonResponse
+    {
+        return response()->json($this->service->updateCompleteTransaction($request->all()), Response::HTTP_OK);
+    }
 }

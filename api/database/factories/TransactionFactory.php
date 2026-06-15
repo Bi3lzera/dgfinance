@@ -16,16 +16,25 @@ class TransactionFactory extends Factory
 
     public function definition(): array
     {
+        $installment = Installment::inRandomOrder()->first() ?? Installment::factory()->create();
+        $idUser = $installment->movement->idUser;
+
+        $bankAccount = BankAccount::where('idUser', $idUser)->inRandomOrder()->first()
+            ?? BankAccount::factory()->create(['idUser' => $idUser]);
+
+        $paymentCard = UserCard::where('idUser', $idUser)->inRandomOrder()->first()
+            ?? UserCard::factory()->create(['idUser' => $idUser]);
+
         return [
-            'idInstallment' => Installment::inRandomOrder()->first()->idInstallment ?? Installment::factory(),
+            'idInstallment' => $installment->idInstallment,
             'transactionDescription' => $this->faker->sentence(),
             'value' => $this->faker->randomFloat(2, 10, 1000),
-            'date' => $this->faker->dateTimeBetween('-6 months', '+12 months')->format('Y-m-d'),
+            'date' => $this->faker->dateTimeBetween('-6 months', '-1 months')->format('Y-m-d'),
             'type' => $this->faker->randomElement(['Despesa', 'Receita']),
-            'idBankAccount' => BankAccount::inRandomOrder()->first()->idAccount ?? BankAccount::factory(),
+            'idBankAccount' => $bankAccount->idAccount,
             'idPaymentMethod' => PaymentMethod::inRandomOrder()->first()->idPaymentMethod ?? PaymentMethod::factory(),
-            'idPaymentCard' => UserCard::inRandomOrder()->first()->idCard ?? UserCard::factory(),
-            'idUser' => $this->faker->numberBetween(1, 2),
+            'idPaymentCard' => $paymentCard->idCard,
+            'idUser' => $idUser,
         ];
     }
 }

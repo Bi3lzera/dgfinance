@@ -63,7 +63,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             ->where('id', '[0-9]+');
         Route::put('updateTransfer', [TransactionController::class, 'updateTransfer'])
             ->where('id', '[0-9]+');
-
+        Route::put('updateCompleteTransaction', [TransactionController::class, 'updateCompleteTransaction']);
         //
         // Busca por ID ou outros parâmetros
         //
