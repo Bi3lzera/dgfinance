@@ -75,14 +75,41 @@ const Dashboard: React.FC = () => {
             <div className="flex flex-col flex-1 min-h-0 max-w-[80vw] mx-auto w-full py-8">
                 {/* Summary Cards */}
                 <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <SummaryCard title="Receitas do Mês" amount={mockSummary.income} type="income" />
-                    <SummaryCard title="Despesas do Mês" amount={mockSummary.expense} type="expense" />
-                    <SummaryCard title="Agendamentos do Mês" amount={mockSummary.scheduled} type="scheduled" />
-                    <SummaryCard title="Saldo Previsto" amount={mockSummary.balance} type="balance" />
+                    <SummaryCard 
+                        title="Receitas do Mês" 
+                        amount={mockSummary.income} 
+                        type="income" 
+                        className="animate-fade-in-down"
+                        style={{ animationDelay: '0ms' }}
+                    />
+                    <SummaryCard 
+                        title="Despesas do Mês" 
+                        amount={mockSummary.expense} 
+                        type="expense" 
+                        className="animate-fade-in-down"
+                        style={{ animationDelay: '75ms' }}
+                    />
+                    <SummaryCard 
+                        title="Agendamentos do Mês" 
+                        amount={mockSummary.scheduled} 
+                        type="scheduled" 
+                        className="animate-fade-in-down"
+                        style={{ animationDelay: '150ms' }}
+                    />
+                    <SummaryCard 
+                        title="Saldo Previsto" 
+                        amount={mockSummary.balance} 
+                        type="balance" 
+                        className="animate-fade-in-down"
+                        style={{ animationDelay: '225ms' }}
+                    />
                 </div>
 
                 {/* Tabs & Filters */}
-                <div className="flex-shrink-0 flex items-center justify-between mb-8">
+                <div 
+                    className="flex-shrink-0 flex items-center justify-between mb-8 animate-fade-in"
+                    style={{ animationDelay: '300ms' }}
+                >
                     <div className="flex items-center gap-2 bg-gray-100/50 p-1.5 rounded-xl border border-gray-100">
                         {['Lançamentos', 'Agendados'].map(tab => (
                             <button
@@ -103,15 +130,23 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 {/* List Title */}
-                <div className="flex-shrink-0 flex items-center gap-2 mb-6">
+                <div 
+                    className="flex-shrink-0 flex items-center gap-2 mb-6 animate-fade-in"
+                    style={{ animationDelay: '350ms' }}
+                >
                     <History className="text-blue-600" size={20} strokeWidth={2.5} />
                     <h2 className="text-xl font-bold text-gray-800 tracking-tight">Fluxo de Caixa Mensal</h2>
                 </div>
 
                 {/* Transaction List — scrollable */}
                 <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-3 pb-4">
-                    {mockTransactions.map(transaction => (
-                        <TransactionCard key={transaction.id} transaction={transaction} />
+                    {mockTransactions.map((transaction, index) => (
+                        <TransactionCard 
+                            key={transaction.id} 
+                            transaction={transaction} 
+                            className="animate-fade-in-up"
+                            style={{ animationDelay: `${400 + index * 60}ms` }}
+                        />
                     ))}
                 </div>
             </div>

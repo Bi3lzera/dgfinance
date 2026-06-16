@@ -1,12 +1,11 @@
 import {
     Calendar, Tag, CreditCard, FileText
 } from 'lucide-react';
-import { formatCurrencyToBRL } from '../../../../utils/formats';
 
 
 interface TransactionInfoProps {
-    descricao: string;
-    setDescricao: (descricao: string) => void;
+    title: string;
+    setTitle: (title: string) => void;
     valor: string;
     handleValorChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     data: string;
@@ -21,8 +20,8 @@ interface TransactionInfoProps {
 }
 
 const transactionInfo = ({
-    descricao,
-    setDescricao,
+    title,
+    setTitle,
     valor,
     handleValorChange,
     data,
@@ -46,10 +45,10 @@ const transactionInfo = ({
                 {/* Descrição + Valor */}
                 <div className="grid grid-cols-[1fr_180px] gap-4">
                     <div className="flex flex-col gap-1">
-                        <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Descrição</label>
+                        <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Breve Descrição</label>
                         <input
-                            value={descricao}
-                            onChange={e => setDescricao(e.target.value)}
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
                             placeholder="Ex: Manutenção Mensal do Servidor AWS"
                             className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                         />
@@ -57,9 +56,9 @@ const transactionInfo = ({
                     <div className="flex flex-col gap-1">
                         <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Valor (R$)</label>
                         <input
-                            value={formatCurrencyToBRL(Number(valor.replace(',', '.')) || 0)}
+                            value={valor ? `R$ ${valor}` : ''}
                             onChange={handleValorChange}
-                            placeholder="0,00"
+                            placeholder="R$ 0,00"
                             className={`w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-bold placeholder-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition ${tipo === 'despesa' ? 'text-red-500' : 'text-emerald-600'}`}
                         />
                     </div>

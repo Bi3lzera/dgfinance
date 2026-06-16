@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowUp, ArrowDown, Wallet, Clock1 } from 'lucide-react';
-import { formatCurrencyToBRL } from '../../../utils/formats';
+import AnimatedCounter from './AnimatedCounter';
 
 export type SummaryType = 'income' | 'expense' | 'balance' | 'scheduled';
 
@@ -8,11 +8,11 @@ interface SummaryCardProps {
     title: string;
     amount: number;
     type: SummaryType;
+    className?: string;
+    style?: React.CSSProperties;
 }
 
-const formatCurrency = (value: number) => formatCurrencyToBRL(value);
-
-const SummaryCard: React.FC<SummaryCardProps> = ({ title, amount, type }) => {
+const SummaryCard: React.FC<SummaryCardProps> = ({ title, amount, type, className = '', style }) => {
     let Icon = ArrowUp;
     let iconClass = '';
 
@@ -31,10 +31,15 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, amount, type }) => {
     }
 
     return (
-        <div className="bg-white rounded-2xl p-6 flex items-center justify-between shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] border border-gray-50 flex-1">
+        <div 
+            style={style}
+            className={`bg-white rounded-2xl p-6 flex items-center justify-between shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] border border-gray-50 flex-1 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-gray-200/80 ${className}`}
+        >
             <div className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-gray-500">{title}</span>
-                <span className="text-2xl font-bold text-gray-900">{formatCurrency(amount)}</span>
+                <span className="text-2xl font-bold text-gray-900">
+                    <AnimatedCounter value={amount} />
+                </span>
             </div>
             <div className={`w-12 h-12 rounded-full flex items-center justify-center ${iconClass}`}>
                 <Icon size={20} strokeWidth={2} />
@@ -42,5 +47,6 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, amount, type }) => {
         </div>
     );
 };
+
 
 export default SummaryCard;

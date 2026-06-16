@@ -26,6 +26,7 @@ export interface ExtratoDetailsModel {
     expectedValue: number,
     installmentNumber: number,
     status: string,
+    paymentRecurrencyMethod: string,
     transactionDescription: string,
     value: number,
     idBankAccount: number,

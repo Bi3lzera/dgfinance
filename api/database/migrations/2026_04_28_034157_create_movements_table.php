@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('totalPaymentCount')->nullable();
             $table->unsignedBigInteger('idCategory')->nullable();
             $table->date('date');
+            $table->string('paymentRecurrencyMethod')->nullable(); // A -> Agendado, R -> Recorrente, P -> Parcelado
             $table->timestamps();
 
             // Needs to be added after categories

@@ -21,6 +21,7 @@ class Movement extends Model
         'totalPaymentCount',
         'idCategory',
         'date',
+        'paymentRecurrencyMethod', // Forma como o pagamento será feito, 'unico','recorrente','parcelado'
     ];
 
     public function user()

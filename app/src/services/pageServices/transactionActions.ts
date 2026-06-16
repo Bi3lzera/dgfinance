@@ -64,6 +64,19 @@ export const updateCompleteTransactionApi = async (transactionData: any, onSucce
     }
 }
 
+export const getInstallmentsApi = async (movementId: number) => {
+    try {
+        const response = await axiosInstance.get('/finance/installmentIndex', {
+            params: {
+                movementId
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao buscar parcelas:', error);
+    }
+}
+
 export const getTransactionDetails = async (id: number) => {
     try {
         const response = await axiosInstance.get('/finance/transactionDetails', {

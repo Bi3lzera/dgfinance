@@ -22,6 +22,7 @@ class MovementFactory extends Factory
             'totalPaymentCount' => $this->faker->numberBetween(1, 12),
             'idCategory' => Category::inRandomOrder()->first()->idCategory ?? Category::factory(),
             'date' => $this->faker->dateTimeBetween('-6 months', '+12 months')->format('Y-m-d'),
+            'paymentRecurrencyMethod' => $this->faker->randomElement(['A','R','P', '']), // A -> Agendado, R -> Recorrente, P -> Parcelado
         ];
     }
 }

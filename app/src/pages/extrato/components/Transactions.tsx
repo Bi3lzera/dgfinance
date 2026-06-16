@@ -40,14 +40,14 @@ const Transactions = ({ extrato, isLoading, onDoubleClick }: TransactionsProps) 
             </div>
 
             {/* List Body (Scrollable) */}
-            <div className="flex-1 overflow-y-auto flex flex-col">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col">
                 {isLoading ? (
-                    <div className="flex-1 flex flex-col items-center justify-center py-16 px-4">
+                    <div className="flex-1 flex flex-col items-center justify-center py-16 px-4 animate-fade-in">
                         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                         <span className="text-xs font-bold text-gray-500 mt-4 tracking-wider uppercase">Carregando transações...</span>
                     </div>
                 ) : extrato.length === 0 ? (
-                    <div className="flex-1 flex flex-col items-center justify-center py-20 px-6 text-center">
+                    <div className="flex-1 flex flex-col items-center justify-center py-20 px-6 text-center animate-fade-in">
                         <div className="w-16 h-16 bg-slate-50 text-indigo-500/80 rounded-2xl flex items-center justify-center mb-4 border border-indigo-50/50 shadow-sm">
                             <Inbox size={32} strokeWidth={1.5} />
                         </div>
@@ -57,7 +57,7 @@ const Transactions = ({ extrato, isLoading, onDoubleClick }: TransactionsProps) 
                         </p>
                     </div>
                 ) : (
-                    <>
+                    <div className="flex-1 flex flex-col animate-fade-in">
                         {extrato.map((item, id) => {
                             const formattedDate = formatDate(item.data);
 
@@ -65,7 +65,8 @@ const Transactions = ({ extrato, isLoading, onDoubleClick }: TransactionsProps) 
                                 <div
                                     key={item.id + id}
                                     onDoubleClick={() => onDoubleClick && onDoubleClick(Number(item.id))}
-                                    className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer"
+                                    className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer animate-scale-in"
+                                    style={{ animationDelay: `${id * 30}ms` }}
                                 >
                                     {/* Data */}
                                     <div className="flex flex-col gap-0.5">
@@ -121,7 +122,7 @@ const Transactions = ({ extrato, isLoading, onDoubleClick }: TransactionsProps) 
                         <div className="py-6 flex justify-center items-center text-xs font-bold text-gray-400 uppercase tracking-wider">
                             Fim dos lançamentos do período
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </div>

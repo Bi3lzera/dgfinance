@@ -141,6 +141,7 @@ public function updateCompleteTransaction(array $data): array
             'idBankAccount' => $transaction->idBankAccount,
             'idPaymentMethod' => $transaction->idPaymentMethod,
             'idPaymentCard' => $transaction->idPaymentCard,
+            'paymentRecurrencyMethod' => $movement ? $movement->paymentRecurrencyMethod : null,
         ];
     }
 
@@ -259,7 +260,16 @@ public function updateCompleteTransaction(array $data): array
         $user = $this->getUser();
         return Installment::where('installments.idMovement', $movementId)
             ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
-            ->select('installments.*', 'movements.description as movement_description')
+            ->leftjoin('transaction', 'transaction.idInstallment', '=', 'installments.idInstallment')
+            ->leftjoin('payment_methods', 'transaction.idPaymentMethod', '=', 'payment_methods.idPayMethod')
+            ->select(
+                'installments.*',
+                'movements.description as movement_description',
+                'movements.totalPaymentCount',
+                'transaction.idTransaction',
+                'transaction.value as transactionValuePaid',
+                'payment_methods.title as paymentMethod',
+            )
             ->where('movements.idUser', $user->idUser)
             ->get()
             ->toArray();

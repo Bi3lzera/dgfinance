@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SideBar from './components/menuBar/MenuBar';
 import Dashboard from './pages/dashboard/Dashboard';
 import Extrato from './pages/extrato/Extrato';
+import Accounts from './accounts/accounts';
 import TopBar from './components/topBar/TopBar';
 import { AuthenticationService } from './services/authentication/authService';
 import { Login } from './pages/authentication/login/login';
@@ -21,6 +22,8 @@ const App = () => {
                 return <Dashboard />;
             case 'extrato':
                 return <Extrato />;
+            case 'accountsAndBanks':
+                return <Accounts />;
             default:
                 return <Dashboard />;
         }
