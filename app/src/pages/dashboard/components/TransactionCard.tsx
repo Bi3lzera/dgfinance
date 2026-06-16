@@ -16,11 +16,13 @@ export interface Transaction {
 
 interface TransactionCardProps {
     transaction: Transaction;
+    className?: string;
+    style?: React.CSSProperties;
 }
 
 const formatCurrencyString = (value: number) => formatCurrencyToBRL(value);
 
-const TransactionCard: React.FC<TransactionCardProps> = ({ transaction }) => {
+const TransactionCard: React.FC<TransactionCardProps> = ({ transaction, className = '', style }) => {
     const isIncome = transaction.type === 'income';
 
     const Icon = isIncome ? ArrowUp : ArrowDown;
@@ -36,7 +38,10 @@ const TransactionCard: React.FC<TransactionCardProps> = ({ transaction }) => {
     };
 
     return (
-        <div className="bg-white rounded-2xl p-4 flex items-center justify-between border border-gray-100/80 shadow-sm transition hover:shadow-md">
+        <div 
+            style={style}
+            className={`bg-white rounded-2xl p-4 flex items-center justify-between border border-gray-100/80 shadow-[0_2px_8px_-3px_rgba(6,81,237,0.04)] transition-all duration-300 hover:shadow-md hover:scale-[1.01] hover:border-gray-200/80 ${className}`}
+        >
             <div className="flex items-center gap-4">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${iconClass}`}>
                     <Icon size={18} strokeWidth={2} />

@@ -1,15 +1,37 @@
 export interface ExtratoModel {
     id: string;
-    day: string;
-    year: string;
+    data: string;
     title: string;
     tag: string;
     institution: string;
     institutionDot: string;
     amount: string;
     paymentType: string;
-    isExpense: boolean;
+    transactionType: string;
     status: string;
+}
+
+export interface ExtratoDetailsModel {
+    idTransaction?: number;
+    idInstallment?: number;
+    idMovement?: number;
+    title: string;
+    description: string;
+    initialValue: number;
+    type: string;
+    totalPaymentCount: number;
+    idCategory: number;
+    date: string,
+    plannedDate: string,
+    expectedValue: number,
+    installmentNumber: number,
+    status: string,
+    paymentRecurrencyMethod: string,
+    transactionDescription: string,
+    value: number,
+    idBankAccount: number,
+    idPaymentMethod: number,
+    idPaymentCard: number
 }
 
 /*

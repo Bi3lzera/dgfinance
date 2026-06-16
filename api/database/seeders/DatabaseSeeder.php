@@ -13,11 +13,15 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            BancosSeeder::class,
-            FormasPagamentoSeeder::class,
-            CategoriaSeeder::class,
-            LancamentoSeeder::class,
-            OperacaoSeeder::class,
+            BankSeeder::class,
+            BankAccountSeeder::class,
+            PaymentMethodSeeder::class,
+            UserCardSeeder::class,
+            CategorySeeder::class,
+            MovementSeeder::class,
+            InstallmentSeeder::class,
+            TransfersSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }
