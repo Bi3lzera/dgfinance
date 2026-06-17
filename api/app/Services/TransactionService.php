@@ -25,7 +25,7 @@ class TransactionService
         return $user;
     }
 
-public function updateCompleteTransaction(array $data): array
+    public function updateCompleteTransaction(array $data): array
     {
         $user = $this->getUser();
         $data['idUser'] = $user->idUser;
@@ -71,10 +71,20 @@ public function updateCompleteTransaction(array $data): array
         });
     }
 
+    public function createMovementWithInstallments(array $data): array
+    {
+        $user = $this->getUser();
+        $data['idUser'] = $user->idUser;
+
+        return [
+            'message' => 'Movimentação criada com sucesso.',
+        ];
+    }
+
     public function getExtrato(string $initialDate, string $finalDate): array
     {
         $user = $this->getUser();
-        
+
         return Movement::query()
             ->select([
                 'movements.idMovement',
@@ -108,7 +118,7 @@ public function updateCompleteTransaction(array $data): array
     public function getTransactionDetails(int $id)
     {
         $user = $this->getUser();
-        
+
         $transaction = Transaction::with(['installment.movement'])
             ->where('idTransaction', $id)
             ->where('idUser', $user->idUser)

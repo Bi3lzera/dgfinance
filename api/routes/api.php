@@ -76,32 +76,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('findTransfer', [TransactionController::class, 'findTransfer'])
             ->where('id', '[0-9]+');
     });
-    /*
-    Route::group(['prefix' => 'lancamentos'], function () {
-        Route::get('index', [LancamentoController::class, 'index'])
-            ->where('mes', '[a-zA-Z]+')
-            ->where('ano', '[0-9]+');
-        Route::get('agendado', [LancamentoController::class, 'lancamentoAgendado'])
-            ->where('mes', '[a-zA-Z]+')
-            ->where('ano', '[0-9]+');
-        Route::get('efetivado', [LancamentoController::class, 'lancamentoEfetivado'])
-            ->where('mes', '[a-zA-Z]+')
-            ->where('ano', '[0-9]+');
-        Route::post('createLancamento', [LancamentoController::class, 'createLancamento']);
-        Route::post('createOperacao', [LancamentoController::class, 'createOperacao']);
-        Route::post('createLancamentoNOperacao', [LancamentoController::class, 'createLancamentoNOperacao']);
-        Route::get('lancamentoById', [LancamentoController::class, 'lancamentoById'])
-            ->where('id', '[0-9]');
-        Route::get('operacoesByLancamentoId', [LancamentoController::class, 'operacoesByLancamentoId'])
-            ->where('lancamentoId', '[0-9]');
-
-        //
-        //
-        //Route::put('update', [DespesaController::class, 'update'])->where('id', '[0-9]+');
-        //Route::delete('delete', [DespesaController::class, 'destroy'])->where('id', '[0-9]+');
-        //Route::get('total', [DespesaController::class, 'total']);
-        //
-    */
 
     Route::group(['prefix' => 'categories'], function () {
         Route::get('index', [CategoriaController::class, 'index']);

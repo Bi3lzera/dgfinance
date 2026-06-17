@@ -1,5 +1,5 @@
 import axiosInstance from "../../../config/axiosConfig"
-import { Lancamento, Operacao } from "../../types/lancamentoModel"
+import { Lancamento } from "../../types/lancamentoModel"
 
 
 export const createTransaction = async (lancamentoData: Lancamento, onSuccess?: () => void) => {

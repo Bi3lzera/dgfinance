@@ -13,7 +13,7 @@ interface NotationNReceiptProps {
     handleFileInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const notationNReceipt = ({ description, setDescription, arquivo, setArquivo, isDragging, setIsDragging, fileInputRef, handleDrop, handleFileInput }: NotationNReceiptProps) => {
+const notationNReceipt = ({ description, setDescription, arquivo, isDragging, setIsDragging, fileInputRef, handleDrop, handleFileInput }: NotationNReceiptProps) => {
     return (
         <section>
             <div className="flex items-center gap-2 mb-3">
