@@ -1,10 +1,11 @@
-import { Edit2, Paperclip, Inbox } from "lucide-react";
+import { Paperclip, Inbox, CheckCircle2 } from "lucide-react";
 import { ExtratoModel } from "../../../types/extratoModel";
 
 interface TransactionsProps {
     extrato: ExtratoModel[];
     isLoading?: boolean;
     onDoubleClick?: (id: number) => void;
+    onConfirmPaymentClick?: (item: ExtratoModel) => void;
 }
 
 const formatDate = (dateString: string) => {
@@ -26,7 +27,7 @@ const formatDate = (dateString: string) => {
     };
 };
 
-const Transactions = ({ extrato, isLoading, onDoubleClick }: TransactionsProps) => {
+const Transactions = ({ extrato, isLoading, onDoubleClick, onConfirmPaymentClick }: TransactionsProps) => {
     return (
         <div className="flex-1 h-full bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden flex flex-col relative">
             {/* List Header */}
@@ -111,8 +112,15 @@ const Transactions = ({ extrato, isLoading, onDoubleClick }: TransactionsProps) 
 
                                     {/* Ações */}
                                     <div className="flex items-center justify-end">
-                                        <button className="text-gray-400 hover:text-gray-700 transition p-1">
-                                            <Edit2 size={16} strokeWidth={2} />
+                                        <button 
+                                            className="text-gray-400 hover:text-green-600 transition p-1"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onConfirmPaymentClick && onConfirmPaymentClick(item);
+                                            }}
+                                            title="Confirmar Pagamento"
+                                        >
+                                            <CheckCircle2 size={16} strokeWidth={2} />
                                         </button>
                                     </div>
                                 </div>

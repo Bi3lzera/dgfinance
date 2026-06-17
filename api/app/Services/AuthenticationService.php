@@ -23,13 +23,13 @@ class AuthenticationService
         return new Response(['message' => 'Credenciais inválidas.'], Response::HTTP_UNAUTHORIZED);
     }
 
-    public function getAuthenticatedUser()
+    public function getAuthenticatedUser(): Array
     {
         $user = Auth::user();
 
         $user = $user->toArray();
 
-        return new Response($user, Response::HTTP_OK);
+        return $user;
     }
 
     public function logout(): Response

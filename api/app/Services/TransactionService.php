@@ -71,16 +71,6 @@ class TransactionService
         });
     }
 
-    public function createMovementWithInstallments(array $data): array
-    {
-        $user = $this->getUser();
-        $data['idUser'] = $user->idUser;
-
-        return [
-            'message' => 'Movimentação criada com sucesso.',
-        ];
-    }
-
     public function getExtrato(string $initialDate, string $finalDate): array
     {
         $user = $this->getUser();
@@ -158,9 +148,11 @@ class TransactionService
     //Movement CRUD
     public function createMovement(array $data): array
     {
-        Movement::create($data);
+        $movement = Movement::create($data);
+        $movement->id = $movement->idMovement;
         return [
             'message' => 'Movimentação criada com sucesso.',
+            'createdMovementId' => $movement,
         ];
     }
 

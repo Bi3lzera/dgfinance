@@ -37,6 +37,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
         arquivo, setArquivo,
         isDragging, setIsDragging,
         idMovement,
+        installmentData,
+        setInstallmentData,
+        calculateInstallments,
+        hasCalculatedInstallments,
         titleInputRef
     } = formState;
 
@@ -51,6 +55,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
         fileInputRef,
         overlayRef,
     } = fetchState;
+
+    const handleOpenInstallments = () => {
+        console.log('[handleOpenInstallments] clicked', { hasCalculatedInstallments, installmentData, valor, parcelas });
+        // Calcula parcelas automaticamente somente na primeira vez
+        if (!hasCalculatedInstallments) {
+            const result = calculateInstallments();
+            console.log('[handleOpenInstallments] calculated result:', result);
+        }
+        setIsInstallmentModalOpen(true);
+    };
 
     const {
         handleValorChange,
@@ -129,7 +143,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
                             recurrencyMethod={paymentRecurrencyMethod}
                             setRecurrencyMethod={setPaymentRecurrencyMethod}
                             movementId={movementId}
-                            onOpenInstallments={() => setIsInstallmentModalOpen(true)}
+                            onOpenInstallments={handleOpenInstallments}
                         />
 
                         {/* ── Seção: Anotações e Comprovantes ── */}
@@ -161,8 +175,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
             <InstallmentModal
                 isOpen={isInstallmentModalOpen}
                 onClose={() => setIsInstallmentModalOpen(false)}
-                movementTitle={descricao}
+                movementTitle={title}
                 movementId={idMovement ?? undefined}
+                installmentData={installmentData}
+                onSaveInstallments={(data) => setInstallmentData(data)}
+                onRecalculate={() => calculateInstallments(true)}
             />
 
             <AlertDialog

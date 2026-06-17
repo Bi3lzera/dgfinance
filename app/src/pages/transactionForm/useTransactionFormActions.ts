@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createCompleteTransactionApi, updateCompleteTransactionApi } from '../../services/pageServices/transactionActions';
+import { createCompleteTransactionApi, createMovementWithInstallments, updateCompleteTransactionApi } from '../../services/pageServices/transactionActions';
 import { useTransactionFormFetch } from './useTransactionFormFetch';
 import { useTransactionFormFuncs } from './useTransactionFormFuncs';
 
@@ -14,8 +14,8 @@ export interface UseTransactionFormActionsProps {
 }
 
 export function useTransactionFormActions({ onClose = () => { }, movementId, formState, fetchState }: UseTransactionFormActionsProps) {
-    const { title, valor, setValor, setArquivo, setIsDragging, resetForm, titleInputRef } = formState;
-    const { buildLancamentoPayload, isLoading, setIsLoading, setLoadingText, overlayRef } = fetchState;
+    const { title, valor, setValor, setArquivo, setIsDragging, resetForm, titleInputRef, calculateInstallments, hasCalculatedInstallments, paymentRecurrencyMethod, installmentData } = formState;
+    const { buildLancamentoPayload, buildMovementWithInstallmentsPayload, isLoading, setIsLoading, setLoadingText, overlayRef } = fetchState;
 
     const [alertDialog, setAlertDialog] = useState<{
         isOpen: boolean;
@@ -46,7 +46,13 @@ export function useTransactionFormActions({ onClose = () => { }, movementId, for
             triggerAlert('Preencha a descrição e o valor.', 'Campos Obrigatórios', 'warning');
             return;
         }
-        const payload = buildLancamentoPayload();
+
+        // Auto-calcula parcelas antes de salvar se ainda não foi calculado
+        const isParcelavel = paymentRecurrencyMethod === 'P' || paymentRecurrencyMethod === 'R';
+        if (isParcelavel && !hasCalculatedInstallments) {
+            calculateInstallments();
+        }
+
         const callback = () => {
             resetForm();
             window.dispatchEvent(new Event('transaction-saved'));
@@ -59,8 +65,14 @@ export function useTransactionFormActions({ onClose = () => { }, movementId, for
         setIsLoading(true);
         try {
             if (movementId) {
+                const payload = buildLancamentoPayload();
                 await updateCompleteTransactionApi(payload, callback);
+            } else if (isParcelavel && installmentData.length > 0) {
+                // Usa o endpoint com parcelas separadas
+                const payload = buildMovementWithInstallmentsPayload();
+                await createMovementWithInstallments(payload.movement, payload.installments, callback);
             } else {
+                const payload = buildLancamentoPayload();
                 await createCompleteTransactionApi(payload, callback);
             }
         } finally {
@@ -73,7 +85,13 @@ export function useTransactionFormActions({ onClose = () => { }, movementId, for
             triggerAlert('Preencha a descrição breve e o valor.', 'Campos Obrigatórios', 'warning');
             return;
         }
-        const payload = buildLancamentoPayload();
+
+        // Auto-calcula parcelas antes de salvar se ainda não foi calculado
+        const isParcelavel = paymentRecurrencyMethod === 'P' || paymentRecurrencyMethod === 'R';
+        if (isParcelavel && !hasCalculatedInstallments) {
+            calculateInstallments();
+        }
+
         const callback = () => {
             resetForm();
             window.dispatchEvent(new Event('transaction-saved'));
@@ -84,8 +102,15 @@ export function useTransactionFormActions({ onClose = () => { }, movementId, for
         setIsLoading(true);
         try {
             if (movementId) {
+                const payload = buildLancamentoPayload();
                 await updateCompleteTransactionApi(payload, callback);
+            } else if (isParcelavel && installmentData.length > 0) {
+                // Usa o endpoint com parcelas separadas
+                const payload = buildMovementWithInstallmentsPayload();
+                console.log(payload)
+                await createMovementWithInstallments(payload.movement, payload.installments, callback);
             } else {
+                const payload = buildLancamentoPayload();
                 await createCompleteTransactionApi(payload, callback);
             }
         } finally {

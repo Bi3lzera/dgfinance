@@ -20,7 +20,8 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         parcelas, setParcelas, paymentRecurrencyMethod, setPaymentRecurrencyMethod,
         notas, setNotas,
         idTransaction, setIdTransaction, idInstallment, setIdInstallment,
-        idMovement, setIdMovement, resetForm
+        idMovement, setIdMovement, resetForm,
+        installmentData
     } = formState;
 
     const repetir = paymentRecurrencyMethod === 'R';
@@ -189,6 +190,52 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         return payload;
     };
 
+    /**
+     * Constrói o payload estruturado para criação de movimentação com parcelas.
+     * Formato: { movement: {...}, installments: [...] }
+     * Campos do movement seguem o fillable do Model Movement.
+     * Campos de cada installment seguem o fillable do Model Installment.
+     */
+    const buildMovementWithInstallmentsPayload = () => {
+        const parsedValor = parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
+
+        let totalCount = 1;
+        if (parcelado || repetir) {
+            if (parcelas.includes('/')) {
+                const parts = parcelas.split('/');
+                totalCount = parseInt(parts[1]) || 1;
+            } else {
+                totalCount = parseInt(parcelas) || 1;
+            }
+        }
+
+        // Movement — campos do Model Movement ($fillable)
+        const movement = {
+            title: title,
+            description: notas || descricao,
+            initialValue: parsedValor,
+            type: tipo === 'receita' ? 'Credito' : 'Debito',
+            totalPaymentCount: totalCount,
+            idCategory: parseInt(categoria) || 1,
+            date: data,
+            paymentRecurrencyMethod: paymentRecurrencyMethod || null,
+            idBankAccount: parseInt(conta) || null,
+            idPaymentMethod: parseInt(formaPagamento) || null,
+            transactionDescription: descricao,
+        };
+
+        // Installments — campos do Model Installment ($fillable)
+        // Usa os dados calculados/editados do installmentData
+        const installments = installmentData.map(inst => ({
+            plannedDate: inst.plannedDate,
+            expectedValue: inst.expectedValue,
+            installmentNumber: inst.installmentNumber,
+            status: inst.status || 'Pendente',
+        }));
+
+        return { movement, installments };
+    };
+
     return {
         categories, setCategories,
         userBanks, setUserBanks,
@@ -199,5 +246,6 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         fileInputRef,
         overlayRef,
         buildLancamentoPayload,
+        buildMovementWithInstallmentsPayload,
     }
 }

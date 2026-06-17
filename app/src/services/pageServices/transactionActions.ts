@@ -53,6 +53,17 @@ export const createCompleteTransactionApi = async (transactionData: any, onSucce
     }
 }
 
+export const createMovementWithInstallments = async (movementData: any, installmentData: any[], onSuccess?: () => void) => {
+    try {
+        await axiosInstance.post('/finance/createMovementWithInstallments', { movement: movementData, installments: installmentData });
+        if (onSuccess) {
+            onSuccess();
+        }
+    } catch (error) {
+        console.error('Erro ao criar a transação completa:', error);
+    }
+}
+
 export const updateCompleteTransactionApi = async (transactionData: any, onSuccess?: () => void) => {
     try {
         await axiosInstance.put('/finance/updateCompleteTransaction', transactionData);

@@ -7,6 +7,8 @@ import { getExtrato } from '../../services/pageServices/extrato';
 import { ExtratoModel } from '../../types/extratoModel';
 import { DateContext } from '../../contexts/DateContext';
 import TransactionForm from '../transactionForm/TransactionForm';
+import PaymentModal from '../paymentModal/paymentModal';
+import { getUserBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
 
 
 const Extrato: React.FC = () => {
@@ -15,7 +17,27 @@ const Extrato: React.FC = () => {
     const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
     const [selectedMovementId, setSelectedMovementId] = useState<number | undefined>(undefined);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [selectedPaymentItem, setSelectedPaymentItem] = useState<ExtratoModel | null>(null);
+    const [userBanks, setUserBanks] = useState<any[]>([]);
+    const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
     const { mes, ano } = useContext(DateContext);
+
+    useEffect(() => {
+        const fetchDependencies = async () => {
+            try {
+                const [banks, methods] = await Promise.all([
+                    getUserBanks(),
+                    getPaymentMethods()
+                ]);
+                setUserBanks(banks);
+                setPaymentMethods(methods);
+            } catch (error) {
+                console.error("Erro ao carregar dependencias de pagamento:", error);
+            }
+        };
+        fetchDependencies();
+    }, []);
 
     useEffect(() => {
         const handleSaved = () => {
@@ -73,10 +95,16 @@ const Extrato: React.FC = () => {
                 {/* Main Content Area */}
                 <div className="flex gap-8 items-stretch flex-1 overflow-hidden">
                     {/* Main: List of transactions */}
-                    <Transactions extrato={extrato} isLoading={isLoading} onDoubleClick={(id) => {
-                        setSelectedMovementId(id);
-                        setIsTransactionFormOpen(true);
-                    }} />
+                    <Transactions extrato={extrato} isLoading={isLoading} 
+                        onDoubleClick={(id) => {
+                            setSelectedMovementId(id);
+                            setIsTransactionFormOpen(true);
+                        }} 
+                        onConfirmPaymentClick={(item) => {
+                            setSelectedPaymentItem(item);
+                            setIsPaymentModalOpen(true);
+                        }}
+                    />
 
                     {/* Right side: Control Panel */}
                     <div className="w-[340px] flex flex-col flex-shrink-0 h-full overflow-hidden">
@@ -91,6 +119,26 @@ const Extrato: React.FC = () => {
                 isOpen={isTransactionFormOpen}
                 onClose={() => setIsTransactionFormOpen(false)}
                 movementId={selectedMovementId}
+            />
+
+            {/* Payment Modal */}
+            <PaymentModal
+                isOpen={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
+                onConfirm={(data) => {
+                    console.log('Payment confirmed:', data);
+                    // Add backend call logic later
+                    setIsPaymentModalOpen(false);
+                }}
+                movement={{
+                    title: selectedPaymentItem?.title,
+                    value: selectedPaymentItem?.amount ? parseFloat(selectedPaymentItem.amount.replace(/[^\d,-]/g, '').replace(',', '.')) : 0,
+                    date: selectedPaymentItem?.data ? selectedPaymentItem.data.split('T')[0] : ''
+                }}
+                installment={null}
+                transaction={null}
+                userBanks={userBanks}
+                paymentMethods={paymentMethods}
             />
         </div>
     );

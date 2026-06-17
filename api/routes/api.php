@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('createTransaction', [TransactionController::class, 'createTransaction']);
         Route::post('createTransfer', [TransactionController::class, 'createTransfer']);
         Route::post('createCompleteTransaction', [TransactionController::class, 'createCompleteTransaction']);
+        Route::post('createMovementWithInstallments', [TransactionController::class, 'createMovementWithInstallments']);
 
         //
         // Atualizações de dados
