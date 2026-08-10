@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "api/app"
+		},
+		{
+			"path": "app/src"
+		},
+		{
+			"path": "api/routes"
+		}
+	],
+	"settings": {}
+}
