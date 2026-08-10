@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createCompleteTransactionApi, createMovementWithInstallments, updateCompleteTransactionApi } from '../../services/pageServices/transactionActions';
+import { createCompleteTransactionApi, createMovementWithInstallments, updateCompleteTransactionApi } from '../../../services/pageServices/transactionActions';
 import { useTransactionFormFetch } from './useTransactionFormFetch';
 import { useTransactionFormFuncs } from './useTransactionFormFuncs';
 

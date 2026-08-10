@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { getCategories, getUserBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
-import { CategoryModel } from '../../types/miscelaneousModels';
+import { getCategories, getUserBanks, getPaymentMethods } from '../../../services/pageServices/miscelaneous';
+import { CategoryModel } from '../../../types/miscelaneousModels';
 import { useTransactionFormFuncs } from './useTransactionFormFuncs';
-import { getTransactionDetails } from '../../services/pageServices/transactionActions';
+import { getTransactionDetails } from '../../../services/pageServices/transactionActions';
 
 export type TransactionType = 'receita' | 'despesa';
 

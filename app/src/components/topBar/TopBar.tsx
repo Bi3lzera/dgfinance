@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { ChevronLeft, ChevronRight, Search, Filter, Plus } from 'lucide-react';
-import NewTransaction from '../../pages/transactionForm/TransactionForm';
+import NewTransaction from '../../pages/forms/transactionForm/TransactionForm';
 import { DateContext } from '../../contexts/DateContext';
 
 type TopBarProps = {

@@ -6,8 +6,8 @@ import Filters from './components/Filters';
 import { getExtrato } from '../../services/pageServices/extrato';
 import { ExtratoModel } from '../../types/extratoModel';
 import { DateContext } from '../../contexts/DateContext';
-import TransactionForm from '../transactionForm/TransactionForm';
-import PaymentModal from '../paymentModal/paymentModal';
+import TransactionForm from '../forms/transactionForm/TransactionForm';
+import PaymentModal from '../modals/paymentModal/paymentModal';
 import { getUserBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
 
 
@@ -95,11 +95,11 @@ const Extrato: React.FC = () => {
                 {/* Main Content Area */}
                 <div className="flex gap-8 items-stretch flex-1 overflow-hidden">
                     {/* Main: List of transactions */}
-                    <Transactions extrato={extrato} isLoading={isLoading} 
+                    <Transactions extrato={extrato} isLoading={isLoading}
                         onDoubleClick={(id) => {
                             setSelectedMovementId(id);
                             setIsTransactionFormOpen(true);
-                        }} 
+                        }}
                         onConfirmPaymentClick={(item) => {
                             setSelectedPaymentItem(item);
                             setIsPaymentModalOpen(true);

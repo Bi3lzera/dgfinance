@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { 
-  Search, 
-  LayoutGrid, 
-  Wallet, 
-  CreditCard, 
-  TrendingUp, 
-  MoreVertical, 
-  Plus 
+import NewAccountForm from '../forms/newAccountForm/NewAccountForm';
+import {
+  Search,
+  LayoutGrid,
+  Wallet,
+  CreditCard,
+  TrendingUp,
+  MoreVertical,
+  Plus
 } from 'lucide-react';
 
 // ==========================================
@@ -21,7 +22,7 @@ const mockAccounts = [
     lastFour: '4592',
     status: 'ativo',
     // Usando placeholders visuais ou SVGs simples
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Nubank_logo_2021.svg', 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Nubank_logo_2021.svg',
   },
   {
     id: 2,
@@ -39,7 +40,7 @@ const mockAccounts = [
     balance: 2500.00,
     lastFour: '0001',
     status: 'pausado',
-    logoUrl: '' 
+    logoUrl: ''
   },
   {
     id: 4,
@@ -67,6 +68,7 @@ const mockCards = [
 
 const Accounts = () => {
   const [activeCategory, setActiveCategory] = useState('todos');
+  const [isNewAccountFormOpen, setIsNewAccountFormOpen] = useState(false);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -74,88 +76,12 @@ const Accounts = () => {
 
   return (
     <div className="flex w-full h-full bg-white">
-      {/* ========================================== */}
-      {/* BLOCK 1: SIDEBAR (CATEGORIES)              */}
-      {/* ========================================== */}
-      <div className="w-[18rem] border-r border-gray-100 bg-[#fbfbfe] flex flex-col justify-between py-6">
-        <div className="px-4">
-          {/* Search Bar */}
-          <div className="relative mb-8">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-gray-400" />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Buscar..." 
-              className="block w-full pl-10 pr-3 py-2 border-none rounded-lg bg-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Categories List */}
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 px-2">
-            Categorias
-          </h3>
-          <nav className="space-y-1">
-            <button 
-              onClick={() => setActiveCategory('todos')}
-              className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors ${activeCategory === 'todos' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
-            >
-              <div className="flex items-center gap-3">
-                <LayoutGrid className="w-4 h-4" />
-                <span>Todos</span>
-              </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${activeCategory === 'todos' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>6</span>
-            </button>
-            
-            <button 
-              onClick={() => setActiveCategory('contas')}
-              className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors ${activeCategory === 'contas' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
-            >
-              <div className="flex items-center gap-3">
-                <Wallet className="w-4 h-4" />
-                <span>Contas</span>
-              </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${activeCategory === 'contas' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>3</span>
-            </button>
-
-            <button 
-              onClick={() => setActiveCategory('cartoes')}
-              className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors ${activeCategory === 'cartoes' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
-            >
-              <div className="flex items-center gap-3">
-                <CreditCard className="w-4 h-4" />
-                <span>Cartões</span>
-              </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${activeCategory === 'cartoes' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>2</span>
-            </button>
-
-            <button 
-              onClick={() => setActiveCategory('investimentos')}
-              className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md transition-colors ${activeCategory === 'investimentos' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
-            >
-              <div className="flex items-center gap-3">
-                <TrendingUp className="w-4 h-4" />
-                <span>Investimentos</span>
-              </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${activeCategory === 'investimentos' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>1</span>
-            </button>
-          </nav>
-        </div>
-
-        {/* Bottom Banner */}
-        <div className="px-4">
-          <div className="bg-blue-50/50 rounded-lg p-4 text-sm text-gray-600">
-            <p className="mb-2 text-[13px] leading-relaxed">Mantenha seus saldos em dia conciliando suas contas semanalmente.</p>
-            <a href="#" className="text-blue-600 font-medium hover:underline text-xs">Saber mais</a>
-          </div>
-        </div>
-      </div>
 
       {/* ========================================== */}
       {/* BLOCK 2: MAIN CONTENT AREA                 */}
       {/* ========================================== */}
       <div className="flex-1 flex flex-col overflow-y-auto">
-        
+
         {/* ========================================== */}
         {/* BLOCK 3: HEADER (TOTALS)                   */}
         {/* ========================================== */}
@@ -174,7 +100,7 @@ const Accounts = () => {
               <h2 className="text-[1.75rem] font-bold text-orange-500">R$ 2.500,00</h2>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <button className="px-4 py-2 border border-gray-200 rounded-md text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-colors">
               Filtros Avançados
@@ -193,7 +119,10 @@ const Accounts = () => {
             <input type="checkbox" className="rounded border-gray-400 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 w-4 h-4" />
             <span className="text-sm text-gray-600 font-medium">Selecionar Tudo</span>
           </label>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#3b6fff] text-white rounded-md text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm">
+          <button
+            onClick={() => setIsNewAccountFormOpen(true)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#3b6fff] text-white rounded-md text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm"
+          >
             <Plus className="w-4 h-4" strokeWidth={3} />
             Adicionar Conta
           </button>
@@ -207,15 +136,15 @@ const Accounts = () => {
             <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Contas e Investimentos</h3>
             <div className="flex-1 h-px bg-gray-200"></div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {mockAccounts.map(account => (
               <div key={account.id} className="border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col h-full relative">
                 {/* Checkbox Placeholder for the top-left (visible in the mock image if we observe closely) */}
                 <div className="absolute top-6 right-6">
-                   {/* Here we could put a checkbox for selection */}
+                  {/* Here we could put a checkbox for selection */}
                 </div>
-                
+
                 {/* Card Header */}
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden border border-gray-100">
@@ -236,7 +165,7 @@ const Accounts = () => {
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Saldo Atual</p>
                   <p className="text-xl font-extrabold text-gray-900">{formatCurrency(account.balance)}</p>
                 </div>
-                
+
                 <div className="mt-auto">
                   <div className="h-px bg-gray-100 w-16 mb-4"></div>
                   {/* Card Footer */}
@@ -268,7 +197,7 @@ const Accounts = () => {
             <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Meus Cartões</h3>
             <div className="flex-1 h-px bg-gray-200"></div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {mockCards.map(card => (
               <div key={card.id} className="border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col h-full">
@@ -296,7 +225,7 @@ const Accounts = () => {
                 {/* Card Limit */}
                 <div className="mb-6 flex gap-4 items-center">
                   <div className="text-[10px] font-bold text-gray-500 leading-tight">
-                    Limite<br/>Disponível
+                    Limite<br />Disponível
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-extrabold text-gray-900 mb-1">
@@ -307,7 +236,7 @@ const Accounts = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-auto">
                   <div className="h-px bg-gray-100 w-16 mb-4"></div>
                   {/* Card Footer */}
@@ -332,6 +261,10 @@ const Accounts = () => {
         </div>
 
       </div>
+      <NewAccountForm
+        isOpen={isNewAccountFormOpen}
+        onClose={() => setIsNewAccountFormOpen(false)}
+      />
     </div>
   );
 };

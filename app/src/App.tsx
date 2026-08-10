@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import SideBar from './components/menuBar/MenuBar';
-import Dashboard from './pages/dashboard/Dashboard';
-import Extrato from './pages/extrato/Extrato';
-import Accounts from './accounts/accounts';
+import Dashboard from './pages/dashboardPage/Dashboard';
+import Extrato from './pages/extratoPage/Extrato';
+import Accounts from './pages/accountsPage/accounts';
 import TopBar from './components/topBar/TopBar';
 import { AuthenticationService } from './services/authentication/authService';
-import { Login } from './pages/authentication/login/login';
+import { Login } from './pages/authenticationPage/loginPage/login';
 import { DateProvider } from './contexts/DateContext';
 
 const App = () => {

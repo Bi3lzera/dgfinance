@@ -10,8 +10,8 @@ import {
     RefreshCw,
     Save
 } from 'lucide-react';
-import { getInstallmentsApi } from '../../services/pageServices/transactionActions';
-import { InstallmentItem } from '../transactionForm/useTransactionFormFuncs';
+import { getInstallmentsApi } from '../../../services/pageServices/transactionActions';
+import { InstallmentItem } from '../../forms/transactionForm/useTransactionFormFuncs';
 
 interface InstallmentModalProps {
     isOpen: boolean;
