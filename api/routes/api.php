@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoriaController;
-use App\Http\Controllers\UserbanksController;
+use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\MiscelaneousController;
 
 Route::post('login', [AuthenticationController::class, 'login']);
@@ -65,6 +65,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::put('updateTransfer', [TransactionController::class, 'updateTransfer'])
             ->where('id', '[0-9]+');
         Route::put('updateCompleteTransaction', [TransactionController::class, 'updateCompleteTransaction']);
+
+
         //
         // Busca por ID ou outros parâmetros
         //
@@ -76,18 +78,29 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             ->where('id', '[0-9]+');
         Route::get('findTransfer', [TransactionController::class, 'findTransfer'])
             ->where('id', '[0-9]+');
+
+    });
+
+    Route::group(['prefix' => 'userAccounts'], function () {
+        Route::get('getAllUserAccounts', [UserAccountController::class, 'getAllUserAccounts']);
+        Route::delete('deleteAccount', [UserAccountController::class, 'deleteAccount'])
+            ->where('id', '[0-9]+');
+        Route::post('createAccount', [UserAccountController::class, 'createAccount']);
+
+        Route::put('updateAccount', [UserAccountController::class, 'updateUserAccount'])
+            ->where('id', '[0-9]+');
+
+        Route::get('findAccountById', [UserAccountController::class, 'findAccountById'])
+            ->where('id', '[0-9]+');
     });
 
     Route::group(['prefix' => 'categories'], function () {
         Route::get('index', [CategoriaController::class, 'index']);
     });
 
-    Route::group(['prefix' => 'userbanks'], function () {
-        Route::get('index', [UserbanksController::class, 'index']);
-    });
-
     Route::group(['prefix' => 'miscelaneous'], function () {
         Route::get('paymentMethods', [MiscelaneousController::class, 'getPaymentMethods']);
+        Route::get('bankList', [MiscelaneousController::class, 'getBanks']);
     });
 })->middleware('auth:sanctum');
 

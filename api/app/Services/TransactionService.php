@@ -167,6 +167,11 @@ class TransactionService
 
     public function deleteMovement(int $id): array
     {
+        //
+        //TODO: Não somente aqui, mas em todos os lugares, revisar a busca no banco de dados, neste caso aqui
+        //a função está consultando no banco de dados duas vezes sem necessidade, poderia ser feito apenas uma consulta e
+        //armazena-la na variavel.
+        //
         $user = $this->getUser();
         if (Movement::where('idMovement', $id)->where('idUser', $user->idUser)->count() == 0) {
             abort(404, 'Movimentação não encontrada ou não pertence ao usuário logado.');

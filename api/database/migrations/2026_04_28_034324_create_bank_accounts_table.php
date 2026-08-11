@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('idAccount');
             $table->unsignedBigInteger('idUser');
             $table->unsignedBigInteger('idBank');
-            $table->integer('agencyNumber')->nullable();
-            $table->integer('accountNumber')->nullable();
+            $table->string('agencyNumber')->nullable();
+            $table->string('accountNumber')->nullable();
             $table->string('accountAlias')->nullable();
             $table->string('accountType')->nullable();
             $table->decimal('initialValue', 10, 2)->nullable();

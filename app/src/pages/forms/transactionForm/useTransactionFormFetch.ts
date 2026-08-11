@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { getCategories, getUserBanks, getPaymentMethods } from '../../../services/pageServices/miscelaneous';
+import { getCategories, getBanks, getPaymentMethods } from '../../../services/pageServices/miscelaneous';
 import { CategoryModel } from '../../../types/miscelaneousModels';
 import { useTransactionFormFuncs } from './useTransactionFormFuncs';
 import { getTransactionDetails } from '../../../services/pageServices/transactionActions';
@@ -51,7 +51,7 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
             }
 
             try {
-                const banksRes = await getUserBanks();
+                const banksRes = await getBanks();
                 setUserBanks(banksRes);
             } catch (error) {
                 console.error("Erro ao carregar banks: ", error);

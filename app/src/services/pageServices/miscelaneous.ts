@@ -26,10 +26,10 @@ export const getPaymentMethods = async () => {
     return paymentMethods;
 }
 
-export const getUserBanks = async () => {
-    const response = await axiosInstance.get(`/userbanks/index`);
+export const getUserAccounts = async () => {
+    const response = await axiosInstance.get(`/userAccounts/getAllUserAccounts`);
 
-    const userbanks = response.data.map((item: any) => {
+    const userAccounts = response.data.map((item: any) => {
         return {
             idAccount: item.idAccount,
             idUser: item.idUser,
@@ -40,5 +40,19 @@ export const getUserBanks = async () => {
         }
     });
 
-    return userbanks;
+    return userAccounts;
 }
+
+export const getBanks = async () => {
+    const response = await axiosInstance.get(`/miscelaneous/bankList`);
+
+    const banks = response.data.map((item: any) => {
+        return {
+            idBank: item.idBank,
+            name: item.name,
+        }
+    });
+
+    return banks;
+}
+

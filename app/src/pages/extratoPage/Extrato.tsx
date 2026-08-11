@@ -8,7 +8,7 @@ import { ExtratoModel } from '../../types/extratoModel';
 import { DateContext } from '../../contexts/DateContext';
 import TransactionForm from '../forms/transactionForm/TransactionForm';
 import PaymentModal from '../modals/paymentModal/paymentModal';
-import { getUserBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
+import { getBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
 
 
 const Extrato: React.FC = () => {
@@ -27,7 +27,7 @@ const Extrato: React.FC = () => {
         const fetchDependencies = async () => {
             try {
                 const [banks, methods] = await Promise.all([
-                    getUserBanks(),
+                    getBanks(),
                     getPaymentMethods()
                 ]);
                 setUserBanks(banks);

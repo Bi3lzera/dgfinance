@@ -4,8 +4,8 @@ import Footer from './components/Footer';
 import Style from './components/Style';
 import AccountInfo from './components/AccountInfo';
 import { useNewAccountFormFuncs } from './useNewAccountFormFuncs';
-// import { createBankAccountApi } from '../../../services/pageServices/accountActions'; 
-// import { getAllAvailableBanks } from '../../../services/pageServices/accountActions';
+import { createBankAccountApi } from '../../../services/pageServices/accountActions';
+import { getBanks } from '../../../services/pageServices/miscelaneous';
 
 interface NewAccountFormProps {
     isOpen: boolean;
@@ -22,19 +22,9 @@ const NewAccountForm: React.FC<NewAccountFormProps> = ({ isOpen, onClose, accoun
 
     useEffect(() => {
         if (isOpen) {
-            // Simulando fetch de bancos por enquanto (descomentar quando o service for implementado)
-            /*
-            getAllAvailableBanks().then(res => {
+            getBanks().then((res: any) => {
                 setBanks(res);
             });
-            */
-            setBanks([
-                { idBank: 1, name: 'Itaú' },
-                { idBank: 2, name: 'Nubank' },
-                { idBank: 3, name: 'Bradesco' },
-                { idBank: 4, name: 'Banco do Brasil' },
-                { idBank: 5, name: 'Caixa Econômica' },
-            ]);
         }
     }, [isOpen]);
 
@@ -44,15 +34,53 @@ const NewAccountForm: React.FC<NewAccountFormProps> = ({ isOpen, onClose, accoun
         }
     };
 
-    const handleSaveAndNew = () => {
-        // Implementar lógica de salvar e manter aberto
-        console.log("Salvar e Novo clicado. FormState: ", formState);
+    const getPayload = () => {
+        const numericInitialValue = formState.initialValue
+            ? parseFloat(formState.initialValue.replace(/\./g, '').replace(',', '.'))
+            : 0;
+
+        return {
+            idBank: formState.idBank,
+            accountAlias: formState.accountAlias,
+            accountType: formState.accountType,
+            initialValue: numericInitialValue,
+            agencyNumber: formState.agencyNumber,
+            accountNumber: formState.accountNumber,
+            notes: formState.notes,
+        };
     };
 
-    const handleSaveAndClose = () => {
-        // Implementar lógica de salvar e fechar
-        console.log("Salvar e Fechar clicado. FormState: ", formState);
-        onClose();
+    const handleSaveAndNew = async () => {
+        setIsLoading(true);
+        setLoadingText('Salvando...');
+        try {
+            await createBankAccountApi(getPayload());
+            formState.setAccountAlias('');
+            formState.setInitialValue('');
+            formState.setAgencyNumber('');
+            formState.setAccountNumber('');
+            formState.setNotes('');
+            formState.setIdBank('');
+        } catch (err) {
+            console.error(err);
+            alert("Erro ao salvar a conta");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleSaveAndClose = async () => {
+        setIsLoading(true);
+        setLoadingText('Salvando...');
+        try {
+            await createBankAccountApi(getPayload());
+            onClose();
+        } catch (err) {
+            console.error(err);
+            alert("Erro ao salvar a conta");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     if (!isOpen) return null;

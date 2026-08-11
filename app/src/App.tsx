@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SideBar from './components/menuBar/MenuBar';
 import Dashboard from './pages/dashboardPage/Dashboard';
 import Extrato from './pages/extratoPage/Extrato';
-import Accounts from './pages/accountsPage/accounts';
+import Accounts from './pages/accountsPage/accountsPage';
 import TopBar from './components/topBar/TopBar';
 import { AuthenticationService } from './services/authentication/authService';
 import { Login } from './pages/authenticationPage/loginPage/login';
