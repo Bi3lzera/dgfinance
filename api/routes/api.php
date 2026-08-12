@@ -6,6 +6,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\MiscelaneousController;
+use App\Http\Controllers\UserCardController;
 
 Route::post('login', [AuthenticationController::class, 'login']);
 
@@ -92,6 +93,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::get('findAccountById', [UserAccountController::class, 'findAccountById'])
             ->where('id', '[0-9]+');
+    });
+
+    Route::group(['prefix' => 'userCards'], function (){
+        Route::get('getUserCardList', [UserCardController::class, 'getUserCardList']);
     });
 
     Route::group(['prefix' => 'categories'], function () {

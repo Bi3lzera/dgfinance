@@ -48,11 +48,6 @@ const SkeletonCard = () => (
 const AccountsSection = ({ accounts, isLoading, onAccountDoubleClick }: AccountsSectionProps) => {
     return (
         <div className="px-8 pb-8">
-            <div className="flex items-center gap-4 mb-6">
-                <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Contas Bancárias</h3>
-                <div className="flex-1 h-px bg-gray-200"></div>
-            </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
                 {isLoading ? (
                     // Render 4 skeleton placeholders

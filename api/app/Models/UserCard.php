@@ -18,8 +18,9 @@ class UserCard extends Model
         'idAccount',
         'finalCardNumber',
         'cardAlias',
-        'expirationDate',
+        'dueDate',
         'defaultPaymentMethod',
+        'creditLimit'
     ];
 
     public function user()

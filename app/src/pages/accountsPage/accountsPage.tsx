@@ -3,7 +3,6 @@ import NewAccountForm from '../forms/newAccountForm/NewAccountForm';
 import Header from './components/header';
 import UpperBarSection from './components/upperBarSection';
 import AccountsSection from './components/accountsSection';
-import CreditCardSection from './components/creditCardSection';
 import DetailAccountPage from '../detailAccountPage/detailAccountPage';
 import { useAccountsData, UserAccount } from './accounts';
 
@@ -53,15 +52,6 @@ const Accounts = () => {
         <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
           <AccountsSection accounts={accounts} isLoading={isLoading} onAccountDoubleClick={setSelectedAccount} />
         </div>
-
-        {/* ========================================== */}
-        {/* BLOCK 6: CREDIT CARDS SECTION              */}
-        {/* ========================================== */}
-        <div className="animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-          <CreditCardSection />
-        </div>
-
-
       </div>
       <NewAccountForm
         isOpen={isNewAccountFormOpen}

@@ -27,6 +27,7 @@ class UserCardFactory extends Factory
             'cardAlias' => $this->faker->word(),
             'expirationDate' => $this->faker->dateTimeBetween('-6 months', '+12 months')->format('Y-m-d'),
             'defaultPaymentMethod' => $this->faker->numberBetween(1, 2),
+            'creditLimit' => $this->faker->numberBetween(1000, 99999),
         ];
     }
 }

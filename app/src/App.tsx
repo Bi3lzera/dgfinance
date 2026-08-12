@@ -7,6 +7,8 @@ import TopBar from './components/topBar/TopBar';
 import { AuthenticationService } from './services/authentication/authService';
 import { Login } from './pages/authenticationPage/loginPage/login';
 import { DateProvider } from './contexts/DateContext';
+import CardsPage from './pages/cardsPage/cardsPage';
+import InvestmentsPage from './pages/investmentsPage/InvestmentsPage';
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(!!AuthenticationService.getToken());
@@ -24,6 +26,10 @@ const App = () => {
                 return <Extrato />;
             case 'accountsAndBanks':
                 return <Accounts />;
+            case 'cards':
+                return <CardsPage />;
+            case 'invests':
+                return <InvestmentsPage />;
             default:
                 return <Dashboard />;
         }

@@ -15,6 +15,7 @@ class PaymentMethod extends Model
     protected $fillable = [
         'title',
         'idUser',
+        'hasDueDate'
     ];
 
     public function user()

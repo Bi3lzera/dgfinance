@@ -22,6 +22,7 @@ class Transaction extends Model
         'idPaymentMethod',
         'idPaymentCard',
         'idUser',
+        'idBill'
     ];
 
     public function user()

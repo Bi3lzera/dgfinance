@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('cardAlias')->nullable();
             $table->date('expirationDate')->nullable();
             $table->integer('defaultPaymentMethod')->nullable();
+            $table->decimal('creditLimit', 10, 2)->nullable();
             $table->timestamps();
         });
     }
