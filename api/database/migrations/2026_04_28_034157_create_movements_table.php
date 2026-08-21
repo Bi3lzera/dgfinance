@@ -16,17 +16,17 @@ return new class extends Migration
             $table->unsignedBigInteger('idUser');
             $table->string('title');
             $table->string('description');
-            $table->decimal('initialValue', 10, 2);
+            $table->decimal('totalValue', 10, 2);
             $table->string('type');
-            $table->integer('totalPaymentCount')->nullable();
-            $table->unsignedBigInteger('idCategory')->nullable();
-            $table->date('date');
+            $table->integer('totalInstallments')->nullable();
+            $table->string('idCategory')->nullable();
             $table->string('paymentRecurrencyMethod')->nullable(); // A -> Agendado, R -> Recorrente, P -> Parcelado
+            $table->string('transferUUID');
             $table->timestamps();
 
             // Needs to be added after categories
             // $table->foreign('idUser')->references('idUser')->on('users');
-            // $table->foreign('idCategory')->references('idCategory')->on('categories');
+            // $table->foreign('idCategory')->references('id')->on('categories');
         });
     }
 

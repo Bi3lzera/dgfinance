@@ -16,11 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('idUser');
             $table->unsignedBigInteger('idBank')->nullable();
             $table->unsignedBigInteger('idAccount')->nullable();
-            $table->integer('finalCardNumber')->nullable();
+            $table->string('finalCardNumber')->nullable();
             $table->string('cardAlias')->nullable();
             $table->date('expirationDate')->nullable();
             $table->integer('defaultPaymentMethod')->nullable();
             $table->decimal('creditLimit', 10, 2)->nullable();
+            $table->string('status');
             $table->timestamps();
         });
     }

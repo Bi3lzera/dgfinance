@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id('idPayMethod');
-            $table->string('title');
+            $table->string('description');
+            $table->string('payMethodType');
             $table->unsignedBigInteger('idUser')->nullable();
             $table->timestamps();
         });

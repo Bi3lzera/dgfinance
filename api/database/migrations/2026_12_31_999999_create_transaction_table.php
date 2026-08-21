@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->id('idTransaction');
-            $table->unsignedBigInteger('idInstallment');
+            $table->unsignedBigInteger('idInstallment')->nullable();
             $table->string('transactionDescription')->nullable();
             $table->decimal('value', 10, 2);
             $table->date('date');
@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('idPaymentMethod');
             $table->unsignedBigInteger('idPaymentCard')->nullable();
             $table->unsignedBigInteger('idUser');
+            $table->unsignedBigInteger('idBill');
             $table->timestamps();
 
             // Uncomment these when foreign keys are strictly checked:

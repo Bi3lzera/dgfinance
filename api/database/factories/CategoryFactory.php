@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Category;
-use App\Models\User;
+use Illuminate\Support\Facades\File;
 
 class CategoryFactory extends Factory
 {
@@ -12,24 +12,15 @@ class CategoryFactory extends Factory
 
     public function definition(): array
     {
-        $userId = $this->faker->numberBetween(1, 2);
-
-        $categories = [
-            ['title' => 'Alimentação', 'type' => 'Despesa', 'idUser' => null],
-            ['title' => 'Transporte', 'type' => 'Despesa', 'idUser' => null],
-            ['title' => 'Moradia', 'type' => 'Despesa', 'idUser' => null],
-            ['title' => 'Lazer', 'type' => 'Despesa', 'idUser' => $userId],
-            ['title' => 'Salário', 'type' => 'Receita', 'idUser' => null],
-            ['title' => 'Freelance', 'type' => 'Receita', 'idUser' => $userId],
-            ['title' => 'Educação', 'type' => 'Despesa', 'idUser' => null],
-        ];
-
-        $category = $this->faker->randomElement($categories);
+        $json = File::get(base_path('../.documents/Categories By Malvo.json'));
+        $data = json_decode($json, true);
+        $item = $this->faker->randomElement($data['results']);
 
         return [
-            'title' => $category['title'],
-            'type' => $category['type'],
-            'idUser' => $category['idUser'],
+            'id' => $item['id'],
+            'description' => $item['description'],
+            'descriptionTranslated' => $item['descriptionTranslated'] ?? null,
+            'parentId' => $item['parentId'] ?? null,
         ];
     }
 }

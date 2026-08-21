@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             MovementSeeder::class,
             InstallmentSeeder::class,
-            TransfersSeeder::class,
+            CreditCardBillSeeder::class,
+            VirtualUserCardSeeder::class,
             TransactionSeeder::class,
         ]);
     }

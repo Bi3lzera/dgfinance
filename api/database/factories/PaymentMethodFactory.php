@@ -22,7 +22,8 @@ class PaymentMethodFactory extends Factory
         ];
 
         return [
-            'title' => $this->faker->randomElement($methods),
+            'description' => $this->faker->randomElement($methods),
+            'payMethodType' => $this->faker->randomElement(['Digital', 'Physical']),
             'idUser' => $this->faker->randomElement([null, $this->faker->numberBetween(1, 2)]),
         ];
     }

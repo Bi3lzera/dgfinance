@@ -10,16 +10,22 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'categories';
-    protected $primaryKey = 'idCategory';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
-        'title',
-        'type',
-        'idUser',
+        'description',
+        'descriptionTranslated',
+        'parentId',
     ];
 
-    public function user()
+    public function parent()
     {
-        return $this->belongsTo(User::class, 'idUser');
+        return $this->belongsTo(Category::class, 'parentId');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parentId');
     }
 }

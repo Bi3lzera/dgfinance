@@ -26,15 +26,16 @@ class TransactionFactory extends Factory
             ?? UserCard::factory()->create(['idUser' => $idUser]);
 
         return [
-            'idInstallment' => $installment->idInstallment,
+            'idInstallment' => $this->faker->randomElement([null, $installment->idInstallment]),
             'transactionDescription' => $this->faker->sentence(),
             'value' => $this->faker->randomFloat(2, 10, 1000),
             'date' => $this->faker->dateTimeBetween('-6 months', '-1 months')->format('Y-m-d'),
             'type' => $this->faker->randomElement(['Despesa', 'Receita']),
             'idBankAccount' => $bankAccount->idAccount,
-            'idPaymentMethod' => PaymentMethod::inRandomOrder()->first()->idPaymentMethod ?? PaymentMethod::factory(),
+            'idPaymentMethod' => PaymentMethod::inRandomOrder()->first()->idPayMethod ?? PaymentMethod::factory(),
             'idPaymentCard' => $paymentCard->idCard,
             'idUser' => $idUser,
+            'idBill' => \Illuminate\Support\Facades\DB::table('credit_card_bills')->inRandomOrder()->value('idBill') ?? 1,
         ];
     }
 }

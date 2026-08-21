@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('accountAlias')->nullable();
             $table->string('accountType')->nullable();
             $table->decimal('initialValue', 10, 2)->nullable();
+            $table->string('isOpenFinance');
+            $table->string('openFinanceItemId');
+            $table->string('institutionUrl');
             $table->timestamps();
         });
     }

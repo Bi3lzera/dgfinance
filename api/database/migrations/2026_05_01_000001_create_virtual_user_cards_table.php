@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->string('id')->primary();
+        Schema::create('virtual_user_cards', function (Blueprint $table) {
+            $table->id('idVirtualCard');
+            $table->unsignedBigInteger('idMainCard');
+            $table->string('finalCardNumber');
             $table->string('description');
-            $table->string('descriptionTranslated')->nullable();
-            $table->string('parentId')->nullable();
-            $table->timestamps();
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('virtual_user_cards');
     }
 };

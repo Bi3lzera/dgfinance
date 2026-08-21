@@ -13,9 +13,9 @@ class PaymentMethod extends Model
     protected $primaryKey = 'idPayMethod';
 
     protected $fillable = [
-        'title',
+        'description',
+        'payMethodType',
         'idUser',
-        'hasDueDate'
     ];
 
     public function user()

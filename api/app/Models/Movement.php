@@ -16,12 +16,12 @@ class Movement extends Model
         'idUser',
         'title',
         'description',
-        'initialValue',
+        'totalValue',
         'type',
-        'totalPaymentCount',
+        'totalInstallments',
         'idCategory',
-        'date',
-        'paymentRecurrencyMethod', // Forma como o pagamento será feito, 'unico','recorrente','parcelado'
+        'paymentRecurrencyMethod',
+        'transferUUID',
     ];
 
     public function user()

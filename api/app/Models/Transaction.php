@@ -49,4 +49,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(UserCard::class, 'idPaymentCard');
     }
+
+    public function bill()
+    {
+        return $this->belongsTo(CreditCardBill::class, 'idBill');
+    }
 }

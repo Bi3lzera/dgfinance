@@ -17,12 +17,12 @@ class MovementFactory extends Factory
             'idUser' => $this->faker->numberBetween(1, 2),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->sentence(),
-            'initialValue' => $this->faker->randomFloat(2, 50, 2000),
+            'totalValue' => $this->faker->randomFloat(2, 50, 2000),
             'type' => $this->faker->randomElement(['Despesa', 'Receita']),
-            'totalPaymentCount' => $this->faker->numberBetween(1, 12),
-            'idCategory' => Category::inRandomOrder()->first()->idCategory ?? Category::factory(),
-            'date' => $this->faker->dateTimeBetween('-6 months', '+12 months')->format('Y-m-d'),
+            'totalInstallments' => $this->faker->numberBetween(1, 12),
+            'idCategory' => Category::inRandomOrder()->first()->id ?? Category::factory(),
             'paymentRecurrencyMethod' => $this->faker->randomElement(['A','R','P', '']), // A -> Agendado, R -> Recorrente, P -> Parcelado
+            'transferUUID' => $this->faker->uuid(),
         ];
     }
 }

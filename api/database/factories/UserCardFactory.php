@@ -28,6 +28,7 @@ class UserCardFactory extends Factory
             'expirationDate' => $this->faker->dateTimeBetween('-6 months', '+12 months')->format('Y-m-d'),
             'defaultPaymentMethod' => $this->faker->numberBetween(1, 2),
             'creditLimit' => $this->faker->numberBetween(1000, 99999),
+            'status' => $this->faker->randomElement(['Active', 'Blocked', 'Cancelled']),
         ];
     }
 }

@@ -20,6 +20,9 @@ class BankAccount extends Model
         'accountAlias',
         'accountType',
         'initialValue',
+        'isOpenFinance',
+        'openFinanceItemId',
+        'institutionUrl',
     ];
 
     public function user()

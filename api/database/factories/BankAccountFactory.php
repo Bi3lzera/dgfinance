@@ -21,6 +21,9 @@ class BankAccountFactory extends Factory
             'accountAlias' => $this->faker->word(),
             'accountType' => $this->faker->randomElement(['Corrente', 'Poupanca', 'Investimento']),
             'initialValue' => $this->faker->randomFloat(2, 0, 5000),
+            'isOpenFinance' => $this->faker->randomElement(['yes', 'no']),
+            'openFinanceItemId' => $this->faker->uuid(),
+            'institutionUrl' => $this->faker->url(),
         ];
     }
 }
