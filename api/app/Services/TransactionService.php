@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
 use App\Models\Movement;
 use App\Models\Installment;
-use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,10 +81,10 @@ class TransactionService
                 'transaction.idTransaction',
                 'transaction.date as transactionDate',
                 'movements.title as movementTitle',
-                'categories.title as categoryTitle',
+                'categories.descriptionTranslated as categoryTitle',
                 'banks.name as bankName',
                 'users_bank_accounts.accountAlias as bankAccountAlias',
-                'payment_methods.title as paymentMethodName',
+                'payment_methods.description as paymentMethodName',
                 'users_cards.cardAlias as cardAlias',
                 'transaction.value as transactionValue',
                 'transaction.type as transactionType',
@@ -93,7 +92,7 @@ class TransactionService
             ])
             ->join('installments', 'movements.idMovement', '=', 'installments.idMovement')
             ->join('transaction', 'installments.idInstallment', '=', 'transaction.idInstallment')
-            ->leftJoin('categories', 'movements.idCategory', '=', 'categories.idCategory')
+            ->leftJoin('categories', 'movements.idCategory', '=', 'categories.id')
             ->leftJoin('users_bank_accounts', 'transaction.idBankAccount', '=', 'users_bank_accounts.idAccount')
             ->leftJoin('banks', 'users_bank_accounts.idBank', '=', 'banks.idBank')
             ->leftJoin('payment_methods', 'transaction.idPaymentMethod', '=', 'payment_methods.idPayMethod')
@@ -127,11 +126,11 @@ class TransactionService
             'idMovement' => $movement ? $movement->idMovement : null,
             'title' => $movement ? $movement->title : '',
             'description' => $movement ? $movement->description : '',
-            'initialValue' => $movement ? $movement->initialValue : $transaction->value,
+            'totalValue' => $movement ? $movement->totalValue : $transaction->value,
             'type' => $movement ? $movement->type : $transaction->type,
-            'totalPaymentCount' => $movement ? $movement->totalPaymentCount : 1,
+            'totalInstallments' => $movement ? $movement->totalInstallments : 1,
             'idCategory' => $movement ? $movement->idCategory : 1,
-            'date' => $movement ? $movement->date : $transaction->date,
+            'date' => $transaction->date,
             'plannedDate' => $installment ? $installment->plannedDate : $transaction->date,
             'expectedValue' => $installment ? $installment->expectedValue : $transaction->value,
             'installmentNumber' => $installment ? $installment->installmentNumber : 1,
@@ -142,6 +141,8 @@ class TransactionService
             'idPaymentMethod' => $transaction->idPaymentMethod,
             'idPaymentCard' => $transaction->idPaymentCard,
             'paymentRecurrencyMethod' => $movement ? $movement->paymentRecurrencyMethod : null,
+            'transferUUID' => $movement ? $movement->transferUUID : null,
+            'idBill' => $transaction->idBill,
         ];
     }
 
@@ -167,17 +168,14 @@ class TransactionService
 
     public function deleteMovement(int $id): array
     {
-        //
-        //TODO: Não somente aqui, mas em todos os lugares, revisar a busca no banco de dados, neste caso aqui
-        //a função está consultando no banco de dados duas vezes sem necessidade, poderia ser feito apenas uma consulta e
-        //armazena-la na variavel.
-        //
         $user = $this->getUser();
-        if (Movement::where('idMovement', $id)->where('idUser', $user->idUser)->count() == 0) {
+        $movement = Movement::where('idMovement', $id)->where('idUser', $user->idUser)->first();
+        
+        if (!$movement) {
             abort(404, 'Movimentação não encontrada ou não pertence ao usuário logado.');
         }
 
-        Movement::where('idMovement', $id)->where('idUser', $user->idUser)->delete();
+        $movement->delete();
         return [
             'message' => 'Movimentação deletada com sucesso.',
         ];
@@ -193,7 +191,7 @@ class TransactionService
     {
         $user = $this->getUser();
         return Movement::where('idUser', $user->idUser)
-            ->whereBetween('date', [$initialDate, $finalDate])
+            ->whereBetween('created_at', [$initialDate, $finalDate])
             ->get()
             ->toArray();
     }
@@ -230,16 +228,17 @@ class TransactionService
     public function deleteInstallment(int $id): array
     {
         $user = $this->getUser();
-        if (
-            Installment::where('idInstallment', $id)
-                ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
-                ->where('movements.idUser', $user->idUser)
-                ->count() == 0
-        ) {
+        $installment = Installment::where('installments.idInstallment', $id)
+            ->join('movements', 'installments.idMovement', '=', 'movements.idMovement')
+            ->where('movements.idUser', $user->idUser)
+            ->select('installments.*')
+            ->first();
+
+        if (!$installment) {
             abort(404, 'Parcela não encontrada ou não pertence ao usuário logado.');
         }
 
-        Installment::where('idInstallment', $id)->delete();
+        $installment->delete();
         return [
             'message' => 'Parcela deletada com sucesso.',
         ];
@@ -272,7 +271,7 @@ class TransactionService
             ->select(
                 'installments.*',
                 'movements.description as movement_description',
-                'movements.totalPaymentCount',
+                'movements.totalInstallments',
                 'transaction.idTransaction',
                 'transaction.value as transactionValuePaid',
                 'payment_methods.title as paymentMethod',
@@ -304,10 +303,12 @@ class TransactionService
     public function deleteTransaction(int $id): array
     {
         $user = $this->getUser();
-        if (Transaction::where('idTransaction', $id)->where('idUser', $user->idUser)->count() == 0) {
+        $transaction = Transaction::where('idTransaction', $id)->where('idUser', $user->idUser)->first();
+        if (!$transaction) {
             abort(Response::HTTP_NOT_FOUND, 'Transação não encontrada ou não pertence ao usuário logado.');
         }
-        Transaction::where('idTransaction', $id)->where('idUser', $user->idUser)->delete();
+        
+        $transaction->delete();
         return [
             'message' => 'Transação deletada com sucesso.',
         ];
@@ -330,44 +331,4 @@ class TransactionService
             ->toArray();
     }
 
-    //Transfer CRUD
-    public function createTransfer(array $data): array
-    {
-        $user = $this->getUser();
-        $data['idUser'] = $user->idUser;
-        $transfer = Transfer::create($data);
-        return [
-            'message' => 'Transferência criada com sucesso.',
-        ];
-    }
-
-    public function updateTransfer(int $id, array $data): array
-    {
-        $user = $this->getUser();
-        Transfer::where('id', $id)->where('idUser', $user->idUser)->update($data);
-        return [
-            'message' => 'Transferência atualizada com sucesso.',
-        ];
-    }
-
-    public function deleteTransfer(int $id): array
-    {
-        $user = $this->getUser();
-        Transfer::where('id', $id)->where('idUser', $user->idUser)->delete();
-        return [
-            'message' => 'Transferência deletada com sucesso.',
-        ];
-    }
-
-    public function findTransfer(int $id): array
-    {
-        $user = $this->getUser();
-        return Transfer::where('id', $id)->where('idUser', $user->idUser)->get()->toArray();
-    }
-
-    public function getAllTransfers(): array
-    {
-        $user = $this->getUser();
-        return Transfer::where('idUser', $user->idUser)->get()->toArray();
-    }
 }
