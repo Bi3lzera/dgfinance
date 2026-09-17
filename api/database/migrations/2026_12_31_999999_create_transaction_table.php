@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('idPaymentMethod');
             $table->unsignedBigInteger('idPaymentCard')->nullable();
             $table->unsignedBigInteger('idUser');
-            $table->unsignedBigInteger('idBill');
+            $table->unsignedBigInteger('idBill')->nullable();
             $table->timestamps();
 
             // Uncomment these when foreign keys are strictly checked:

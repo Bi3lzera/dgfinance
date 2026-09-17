@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('totalInstallments')->nullable();
             $table->string('idCategory')->nullable();
             $table->string('paymentRecurrencyMethod')->nullable(); // A -> Agendado, R -> Recorrente, P -> Parcelado
-            $table->string('transferUUID');
+            $table->string('transferUUID')->nullable();
             $table->timestamps();
 
             // Needs to be added after categories

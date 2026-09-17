@@ -149,6 +149,8 @@ class TransactionService
     //Movement CRUD
     public function createMovement(array $data): array
     {
+        $user = $this->getUser();
+        $data['idUser'] = $user->idUser;
         $movement = Movement::create($data);
         $movement->id = $movement->idMovement;
         return [
@@ -274,7 +276,7 @@ class TransactionService
                 'movements.totalInstallments',
                 'transaction.idTransaction',
                 'transaction.value as transactionValuePaid',
-                'payment_methods.title as paymentMethod',
+                'payment_methods.description as paymentMethod',
             )
             ->where('movements.idUser', $user->idUser)
             ->get()
