@@ -54,7 +54,8 @@ export interface CompleteTransactionDTO {
     totalValue: number;
     type: string;
     totalInstallments?: number | null;
-    idCategory?: string | null;
+    totalPaymentCount?: number | null;
+    idCategory?: string | number | null;
     paymentRecurrencyMethod?: string | null;
     transferUUID?: string | null;
 
@@ -68,13 +69,15 @@ export interface CompleteTransactionDTO {
     transactionDescription?: string | null;
     value: number;
     date: string;
-    idBankAccount: number;
-    idPaymentMethod: number;
+    idBankAccount?: number | null;
+    idPaymentMethod?: number | null;
     idPaymentCard?: number | null;
     idBill?: number | null;
 
     // IDs para atualização completa (updateCompleteTransaction)
-    idMovement?: number;
-    idInstallment?: number;
-    idTransaction?: number;
+    idMovement?: number | null;
+    idInstallment?: number | null;
+    idTransaction?: number | null;
 }
+
+export type CreateTransactionWithInstallmentsDTO = CompleteTransactionDTO;

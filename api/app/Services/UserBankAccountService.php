@@ -5,8 +5,9 @@ namespace App\Services;
 use App\Models\BankAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class UserAccountService
+class UserBankAccountService
 {
     public function getUser(): User
     {
@@ -16,6 +17,33 @@ class UserAccountService
         }
 
         return $user;
+    }
+
+    public function getBankAccountTransactionList($idAccount): array
+    {
+        return BankAccount::where('users_bank_accounts.idUser', Auth::id())
+            ->where('users_bank_accounts.idAccount', $idAccount)
+            ->join('banks', 'users_bank_accounts.idBank', '=', 'banks.idBank')
+            ->join('transaction', 'users_bank_accounts.idAccount', '=', 'transaction.idBankAccount')
+            ->leftjoin('installments', 'transaction.idInstallment', '=', 'installments.idInstallment')
+            ->leftjoin('movements', 'installments.idMovement', '=', 'movements.idMovement')
+            ->select(
+                'users_bank_accounts.idAccount',
+                'users_bank_accounts.idUser',
+                'users_bank_accounts.idBank',
+                'users_bank_accounts.accountNumber',
+                'users_bank_accounts.accountAlias',
+                'banks.name as bankName',
+                'transaction.idTransaction',
+                'transaction.date',
+                'transaction.value as transactionValue',
+                'transaction.type as transactionType',
+                'installments.idMovement',
+                'movements.title as movementTitle'
+            )
+            ->orderBy('transaction.date', 'asc')
+            ->get()
+            ->toArray();
     }
 
     //Função para retornar todos os bancos do usuário autenticado.

@@ -1,8 +1,8 @@
 
 
-export function formatCurrencyToBRL(value: number) {
+export function formatCurrencyToBRL(value: number, addMoneySign: boolean = true) {
     return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
+        style: addMoneySign ? 'currency' : 'decimal',
         currency: 'BRL',
     }).format(value);
 };

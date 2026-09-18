@@ -22,7 +22,7 @@ export interface BankItem {
 
 export const getAllAvailableBanksApi = async (): Promise<BankItem[]> => {
     try {
-        const response = await axiosInstance.get(`/userAccounts/getAllUserAccounts`);
+        const response = await axiosInstance.get(`/userBankAccounts/getAllUserAccounts`);
         if (response.data && Array.isArray(response.data)) {
             return response.data;
         }
@@ -34,7 +34,7 @@ export const getAllAvailableBanksApi = async (): Promise<BankItem[]> => {
 
 export const createBankAccountApi = async (data: BankAccountPayload, callback?: () => void) => {
     try {
-        const response = await axiosInstance.post('/userAccounts/createAccount', data);
+        const response = await axiosInstance.post('/userBankAccounts/createAccount', data);
         if (response.status === 200 || response.status === 201) {
             if (callback) callback();
             return response.data;
@@ -47,7 +47,7 @@ export const createBankAccountApi = async (data: BankAccountPayload, callback?: 
 
 export const updateBankAccountApi = async (id: number, data: BankAccountPayload, callback?: () => void) => {
     try {
-        const response = await axiosInstance.put(`/userAccounts/updateAccount/${id}`, data);
+        const response = await axiosInstance.put(`/userBankAccounts/updateAccount/${id}`, data);
         if (response.status === 200) {
             if (callback) callback();
             return response.data;
@@ -60,7 +60,7 @@ export const updateBankAccountApi = async (id: number, data: BankAccountPayload,
 
 export const deleteBankAccountApi = async (id: number, callback?: () => void) => {
     try {
-        const response = await axiosInstance.delete(`/userAccounts/deleteAccount/${id}`);
+        const response = await axiosInstance.delete(`/userBankAccounts/deleteAccount/${id}`);
         if (response.status === 200) {
             if (callback) callback();
             return response.data;
@@ -73,7 +73,7 @@ export const deleteBankAccountApi = async (id: number, callback?: () => void) =>
 
 export const getBankAccountDetailsApi = async (id: number) => {
     try {
-        const response = await axiosInstance.get(`/userAccounts/getAccountsById/${id}`);
+        const response = await axiosInstance.get(`/userBankAccounts/getAccountsById/${id}`);
         return response.data;
     } catch (error) {
         console.error("Erro ao buscar detalhes da conta bancária:", error);

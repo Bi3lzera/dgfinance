@@ -4,7 +4,7 @@ import { UserAccount } from '../accounts';
 interface AccountsSectionProps {
     accounts: UserAccount[];
     isLoading: boolean;
-    onAccountDoubleClick?: (account: UserAccount) => void;
+    onAccountClick?: (account: UserAccount) => void;
 }
 
 const formatCurrency = (value?: number) => {
@@ -45,7 +45,7 @@ const SkeletonCard = () => (
     </div>
 );
 
-const AccountsSection = ({ accounts, isLoading, onAccountDoubleClick }: AccountsSectionProps) => {
+const AccountsSection = ({ accounts, isLoading, onAccountClick }: AccountsSectionProps) => {
     return (
         <div className="px-8 pb-8">
             <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
@@ -62,7 +62,7 @@ const AccountsSection = ({ accounts, isLoading, onAccountDoubleClick }: Accounts
                     accounts.map((account, index) => (
                         <div
                             key={account.idAccount}
-                            onDoubleClick={() => onAccountDoubleClick && onAccountDoubleClick(account)}
+                            onClick={() => onAccountClick && onAccountClick(account)}
                             className="border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 bg-white flex flex-col h-full relative cursor-pointer opacity-0 animate-[fadeSlideIn_0.4s_ease-out_forwards]"
                             style={{ animationDelay: `${index * 80}ms` }}
                         >

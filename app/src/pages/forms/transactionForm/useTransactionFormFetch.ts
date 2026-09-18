@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { getCategories, getUserAccounts, getPaymentMethods } from '../../../services/pageServices/miscelaneous';
 import { CategoryModel } from '../../../types/miscelaneousModels';
-import { CreateMovementWithInstallmentsDTO, CreateInstallmentDTO } from '../../../types';
+import { 
+    CreateMovementWithInstallmentsDTO, 
+    CreateInstallmentDTO, 
+    CreateTransactionWithInstallmentsDTO 
+} from '../../../types';
 import { useTransactionFormFuncs } from './useTransactionFormFuncs';
 import { getTransactionDetails } from '../../../services/pageServices/transactionActions';
+import { formatCurrencyToBRL } from '../../../utils/formats';
 
 export type TransactionType = 'receita' | 'despesa';
 
@@ -38,12 +43,18 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
 
-    //Carrega as dependencias necessarias para o formulário
-    //Categorias, Contas e Formas de Pagamento
+    /*
+    Carrega as dependencias necessarias para o formulário, ao abrir:
+    - Categorias
+    - Contas
+    - Formas de Pagamento
+    */
     useEffect(() => {
         const fetchDependencies = async () => {
             setLoadingText('Carregando...');
             setIsLoading(true);
+
+            //Faz a tentativa de buscar os dados das CATEGORIAS cadastrados.
             try {
                 const categoriesRes = await getCategories();
                 setCategories(categoriesRes);
@@ -51,6 +62,7 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
                 console.error("Erro ao carregar categories: ", error);
             }
 
+            //Faz a tentativa de buscar os dados das CONTAS bancárias cadastrados do usuário logado.
             try {
                 const banksRes = await getUserAccounts();
                 setUserBanks(banksRes);
@@ -58,6 +70,7 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
                 console.error("Erro ao carregar contas bancárias: ", error);
             }
 
+            //Faz a tentativa de buscar os métodos de pagamentos cadastrados para a conta selecionada no passo acima. (TODO)
             try {
                 const pmRes = await getPaymentMethods();
                 setPaymentMethods(pmRes);
@@ -70,27 +83,27 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         fetchDependencies();
     }, []);
 
-    //Busca os detalhes da transação, quando aberta a modal para edição.
+    /*
+    Faz a busca dos detalhes da transação, quando aberta a modal para edição usando os dois cliques no lancamento.
+    */
     useEffect(() => {
         const fetchDetails = async () => {
             if (isOpen && movementId) {
                 setLoadingText('Carregando detalhes...');
                 setIsLoading(true);
+
+                //Faz a tentativa de buscar os detalhes da transação clicada.
                 try {
+                    //Usa o service para buscar os dados na API usando a movementId.
                     const data = await getTransactionDetails(movementId);
+
+                    //Verifica se há dados e se sim continua.
                     if (data) {
+                        //Preenche os dados do formulário com os dados entregues pela API.
                         setTipo(data.type === 'Credito' ? 'receita' : 'despesa');
                         setTitle(data.title || '')
                         setDescricao(data.transactionDescription || '');
-
-                        let formattedValue = '';
-                        if (data.value !== undefined && data.value !== null) {
-                            formattedValue = new Intl.NumberFormat('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }).format(Number(data.value));
-                        }
-                        setValor(formattedValue);
+                        setValor(formatCurrencyToBRL(data.value, false));
 
                         setData(data.date ? data.date.split('T')[0] : '');
                         setCategoria(data.idCategory?.toString() || '');
@@ -162,20 +175,21 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
             }
         }
 
-        const payload: any = {
+        const payload: CreateTransactionWithInstallmentsDTO = {
             title: title,
-            description: notas || descricao,
+            description: descricao || notas || title,
             totalValue: parsedValor,
             type: tipo === 'receita' ? 'Credito' : 'Debito',
             totalPaymentCount: totalCount,
-            idCategory: categoria,
+            totalInstallments: totalCount,
+            idCategory: categoria || null,
             date: data,
             plannedDate: data,
             expectedValue: parsedValor,
             installmentNumber: instNum,
             status: agendado ? 'Pendente' : 'Efetivado',
             paymentRecurrencyMethod: paymentRecurrencyMethod || null,
-            transactionDescription: descricao,
+            transactionDescription: descricao || title,
             value: parsedValor,
             idBankAccount: parseInt(conta) || null,
             idPaymentMethod: parseInt(formaPagamento) || null,
@@ -185,7 +199,7 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         if (movementId) {
             payload.idTransaction = idTransaction;
             payload.idInstallment = idInstallment;
-            payload.idMovement = idMovement;
+            payload.idMovement = idMovement || movementId;
         }
 
         return payload;
@@ -213,16 +227,16 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         // Movement — campos do Model Movement ($fillable)
         const movement: CreateMovementWithInstallmentsDTO = {
             title: title,
-            description: notas || descricao,
+            description: descricao || notas || title,
             totalValue: parsedValor,
             type: tipo === 'receita' ? 'Credito' : 'Debito',
             totalInstallments: totalCount,
-            idCategory: parseInt(categoria) || 1,
+            idCategory: categoria || null,
             date: data,
             paymentRecurrencyMethod: paymentRecurrencyMethod || null,
             idBankAccount: parseInt(conta) || null,
             idPaymentMethod: parseInt(formaPagamento) || null,
-            transactionDescription: descricao,
+            transactionDescription: descricao || title,
         };
 
         // Installments — campos do Model Installment ($fillable)

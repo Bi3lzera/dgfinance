@@ -50,7 +50,7 @@ const Accounts = () => {
         {/* BLOCK 5: ACCOUNTS AND INVESTMENTS SECTION  */}
         {/* ========================================== */}
         <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-          <AccountsSection accounts={accounts} isLoading={isLoading} onAccountDoubleClick={setSelectedAccount} />
+          <AccountsSection accounts={accounts} isLoading={isLoading} onAccountClick={setSelectedAccount} />
         </div>
       </div>
       <NewAccountForm
