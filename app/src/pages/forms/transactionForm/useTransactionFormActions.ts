@@ -103,11 +103,12 @@ export function useTransactionFormActions({ onClose = () => { }, movementId, for
         try {
             if (movementId) {
                 const payload = buildLancamentoPayload();
+                console.log(payload);
                 await updateCompleteTransactionApi(payload, callback);
             } else if (isParcelavel && installmentData.length > 0) {
                 // Usa o endpoint com parcelas separadas
                 const payload = buildMovementWithInstallmentsPayload();
-                console.log(payload)
+                console.log(payload);
                 await createMovementWithInstallments(payload.movement, payload.installments, callback);
             } else {
                 const payload = buildLancamentoPayload();

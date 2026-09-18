@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { getCategories, getBanks, getPaymentMethods } from '../../../services/pageServices/miscelaneous';
+import { getCategories, getUserAccounts, getPaymentMethods } from '../../../services/pageServices/miscelaneous';
 import { CategoryModel } from '../../../types/miscelaneousModels';
+import { CreateMovementWithInstallmentsDTO, CreateInstallmentDTO } from '../../../types';
 import { useTransactionFormFuncs } from './useTransactionFormFuncs';
 import { getTransactionDetails } from '../../../services/pageServices/transactionActions';
 
@@ -51,10 +52,10 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
             }
 
             try {
-                const banksRes = await getBanks();
+                const banksRes = await getUserAccounts();
                 setUserBanks(banksRes);
             } catch (error) {
-                console.error("Erro ao carregar banks: ", error);
+                console.error("Erro ao carregar contas bancárias: ", error);
             }
 
             try {
@@ -164,10 +165,10 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         const payload: any = {
             title: title,
             description: notas || descricao,
-            initialValue: parsedValor,
+            totalValue: parsedValor,
             type: tipo === 'receita' ? 'Credito' : 'Debito',
             totalPaymentCount: totalCount,
-            idCategory: parseInt(categoria) || 1,
+            idCategory: categoria,
             date: data,
             plannedDate: data,
             expectedValue: parsedValor,
@@ -210,12 +211,12 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
         }
 
         // Movement — campos do Model Movement ($fillable)
-        const movement = {
+        const movement: CreateMovementWithInstallmentsDTO = {
             title: title,
             description: notas || descricao,
-            initialValue: parsedValor,
+            totalValue: parsedValor,
             type: tipo === 'receita' ? 'Credito' : 'Debito',
-            totalPaymentCount: totalCount,
+            totalInstallments: totalCount,
             idCategory: parseInt(categoria) || 1,
             date: data,
             paymentRecurrencyMethod: paymentRecurrencyMethod || null,
@@ -226,7 +227,7 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
 
         // Installments — campos do Model Installment ($fillable)
         // Usa os dados calculados/editados do installmentData
-        const installments = installmentData.map(inst => ({
+        const installments: CreateInstallmentDTO[] = installmentData.map(inst => ({
             plannedDate: inst.plannedDate,
             expectedValue: inst.expectedValue,
             installmentNumber: inst.installmentNumber,

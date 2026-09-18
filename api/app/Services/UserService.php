@@ -9,8 +9,11 @@ class UserService
 {
     public function getPaymentMethods(): array
     {
-        return PaymentMethod::where('idUser', Auth::id())
-        ->select('idPayMethod as idPaymentMethod', 'title')
+        return PaymentMethod::where(function ($query) {
+            $query->where('idUser', Auth::id())
+                  ->orWhereNull('idUser');
+        })
+        ->select('idPayMethod as idPaymentMethod', 'description', 'description as title')
         ->get()
         ->toArray();
     }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('idMovement');
             $table->unsignedBigInteger('idUser');
             $table->string('title');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->decimal('totalValue', 10, 2);
             $table->string('type');
             $table->integer('totalInstallments')->nullable();

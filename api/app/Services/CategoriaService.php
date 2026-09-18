@@ -12,8 +12,8 @@ class CategoriaService
 
         return $categories->map(function ($category) {
             return [
-                'idCategory' => $category->idCategory,
-                'title' => $category->title,
+                'idCategory' => $category->id,
+                'title' => $category->descriptionTranslated,
             ];
         })->toArray();
     }

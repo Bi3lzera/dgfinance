@@ -1,4 +1,5 @@
 import axiosInstance from "../../../config/axiosConfig";
+import * as type from "../../types/";
 
 export const getCategories = async () => {
     const response = await axiosInstance.get(`/categories/index`);
@@ -18,8 +19,9 @@ export const getPaymentMethods = async () => {
 
     const paymentMethods = response.data.map((item: any) => {
         return {
-            idPaymentMethod: item.idPaymentMethod,
-            title: item.title,
+            idPaymentMethod: item.idPaymentMethod ?? item.idPayMethod,
+            title: item.title ?? item.description,
+            description: item.description ?? item.title,
         }
     });
 
@@ -29,7 +31,7 @@ export const getPaymentMethods = async () => {
 export const getUserAccounts = async () => {
     const response = await axiosInstance.get(`/userAccounts/getAllUserAccounts`);
 
-    const userAccounts = response.data.map((item: any) => {
+    const userAccounts = response.data.map((item: type.BankAccountModel) => {
         return {
             idAccount: item.idAccount,
             idUser: item.idUser,
@@ -45,8 +47,8 @@ export const getUserAccounts = async () => {
 
 export const getBanks = async () => {
     const response = await axiosInstance.get(`/miscelaneous/bankList`);
-
-    const banks = response.data.map((item: any) => {
+    console.log(response.data);
+    const banks = response.data.map((item: type.BankModel) => {
         return {
             idBank: item.idBank,
             name: item.name,
