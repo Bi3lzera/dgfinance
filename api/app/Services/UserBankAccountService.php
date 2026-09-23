@@ -27,6 +27,7 @@ class UserBankAccountService
             ->join('transaction', 'users_bank_accounts.idAccount', '=', 'transaction.idBankAccount')
             ->leftjoin('installments', 'transaction.idInstallment', '=', 'installments.idInstallment')
             ->leftjoin('movements', 'installments.idMovement', '=', 'movements.idMovement')
+            ->leftjoin('categories', 'movements.idCategory', '=', 'categories.id')
             ->select(
                 'users_bank_accounts.idAccount',
                 'users_bank_accounts.idUser',
@@ -39,7 +40,8 @@ class UserBankAccountService
                 'transaction.value as transactionValue',
                 'transaction.type as transactionType',
                 'installments.idMovement',
-                'movements.title as movementTitle'
+                'movements.title as movementTitle',
+                'categories.descriptionTranslated as movementCategory'
             )
             ->orderBy('transaction.date', 'asc')
             ->get()

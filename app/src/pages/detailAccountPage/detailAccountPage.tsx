@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { ArrowLeft, Wallet, ArrowDownLeft, ArrowUpRight, Clock } from 'lucide-react';
 import { UserAccount } from '../accountsPage/accounts';
-import TransacoesTab from './components/transacoesTab';
-import ResumeTab from './components/resumeTab';
-import SettingsTab from './components/settingsTab';
+import TransacoesTab from './components/TransacoesTab';
+import ResumeTab from './components/ResumeTab';
+import SettingsTab from './components/SettingsTab';
 
 interface DetailAccountPageProps {
     account: UserAccount;
@@ -170,7 +170,7 @@ const DetailAccountPage = ({ account, onBack }: DetailAccountPageProps) => {
 
                             {/* Transações Tab */}
                             <div className="w-1/4 mr-10 h-auto 2xl:h-full flex flex-col min-h-0">
-                                <TransacoesTab />
+                                <TransacoesTab idAccount={account.idAccount} />
                             </div>
 
                             {/* Configurações Tab */}
