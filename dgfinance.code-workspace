@@ -1,16 +1,20 @@
 {
 	"folders": [
 		{
+			"name": "dgfinance",
 			"path": "."
 		},
 		{
+			"name": "app",
 			"path": "api/app"
 		},
 		{
-			"path": "app/src"
+			"name": "routes",
+			"path": "api/routes"
 		},
 		{
-			"path": "api/routes"
+			"name": "src",
+			"path": "app/src"
 		}
 	],
 	"settings": {}

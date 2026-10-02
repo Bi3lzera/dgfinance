@@ -3,7 +3,7 @@ import NewAccountForm from '../forms/newAccountForm/NewAccountForm';
 import Header from './components/header';
 import UpperBarSection from './components/upperBarSection';
 import AccountsSection from './components/accountsSection';
-import DetailAccountPage from '../detailAccountPage/detailAccountPage';
+import DetailAccountPage from '../detailAccountPage/DetailAccountPage';
 import { useAccountsData, UserAccount } from './accounts';
 
 const Accounts = () => {

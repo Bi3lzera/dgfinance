@@ -22,7 +22,7 @@ class UserBankAccountController extends Controller
     public function getBankAccountTransactionList(Request $request): JsonResponse
     {
         $userBankAccountService = new UserBankAccountService();
-        $userAccount = $userBankAccountService->getBankAccountTransactionList($request->idAccount);
+        $userAccount = $userBankAccountService->getBankAccountTransactionList($request->idAccount, $request->initialDate, $request->finalDate);
         return response()->json($userAccount);
     }
 

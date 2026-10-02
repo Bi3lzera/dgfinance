@@ -14,5 +14,7 @@ Route::group(['prefix' => 'userBankAccounts'], function () {
         ->where('id', '[0-9]+');
 
     Route::get('getBankAccountTransactionList', [UserBankAccountController::class, 'getBankAccountTransactionList'])
-        ->where('idAccount', '[0-9]+');
+        ->where('idAccount', '[0-9]+')
+        ->where('initialDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}')
+        ->where('finalDate', '[0-9]{4}-[0-9]{2}-[0-9]{2}');
 });

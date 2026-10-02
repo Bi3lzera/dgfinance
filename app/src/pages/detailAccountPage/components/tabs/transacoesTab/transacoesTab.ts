@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { getAllTransactionsByAccountApi } from '../../../services/pageServices/transactionTabServices/transactionTabServices';
+import { useState, useEffect, useCallback, useMemo, useContext } from 'react';
+import { getAllTransactionsByAccountApi } from '../../../../../services/pageServices/transactionTabServices/transactionTabServices';
+import { DateContext } from '../../../../../contexts/DateContext';
 
 export interface BankAccountTransaction {
     idAccount: number;
@@ -53,9 +54,33 @@ export const useTransacoesTab = (idAccount?: number) => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filterType, setFilterType] = useState<'todos' | 'receita' | 'despesa'>('todos');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+    const { mes, ano } = useContext(DateContext);
     const itemsPerPage = 8;
 
-    const fetchTransactions = useCallback(async () => {
+    const monthMap: { [key: string]: number } = {
+        "janeiro": 1, "fevereiro": 2, "marco": 3, "março": 3, "abril": 4,
+        "maio": 5, "junho": 6, "julho": 7, "agosto": 8,
+        "setembro": 9, "outubro": 10, "novembro": 11, "dezembro": 12
+    };
+    const monthNumber = monthMap[mes?.toLowerCase()] || 1;
+    const formattedMonth = monthNumber.toString().padStart(2, '0');
+
+    const initialDate = `${ano}-${formattedMonth}-01`;
+    const lastDayOfMonth = new Date(ano, monthNumber, 0).getDate();
+    const finalDate = `${ano}-${formattedMonth}-${lastDayOfMonth}`;
+
+    useEffect(() => {
+        const handleSaved = () => {
+            setRefreshTrigger(prev => prev + 1);
+        };
+        window.addEventListener('transaction-saved', handleSaved);
+        return () => {
+            window.removeEventListener('transaction-saved', handleSaved);
+        };
+    }, []);
+
+    const fetchTransactions = useCallback(async (signal?: AbortSignal) => {
         if (!idAccount) {
             setTransactions([]);
             return;
@@ -65,29 +90,36 @@ export const useTransacoesTab = (idAccount?: number) => {
         setError(null);
 
         try {
-            const data = await getAllTransactionsByAccountApi(idAccount);
+            const data = await getAllTransactionsByAccountApi(idAccount, initialDate, finalDate, signal);
             if (Array.isArray(data)) {
                 setTransactions(data);
             } else {
                 setTransactions([]);
             }
-        } catch (err) {
-            console.error('Erro ao carregar transações:', err);
-            setError('Não foi possível carregar as transações desta conta.');
-            setTransactions([]);
+        } catch (err: any) {
+            if (err?.name !== 'CanceledError' && err?.name !== 'AbortError' && err?.code !== 'ERR_CANCELED') {
+                console.error('Erro ao carregar transações:', err);
+                setError('Não foi possível carregar as transações desta conta.');
+                setTransactions([]);
+            }
         } finally {
             setIsLoading(false);
         }
-    }, [idAccount]);
+    }, [idAccount, initialDate, finalDate]);
 
     useEffect(() => {
-        fetchTransactions();
-    }, [fetchTransactions]);
+        const controller = new AbortController();
+        fetchTransactions(controller.signal);
 
-    // Reset pagination when search or filter changes
+        return () => {
+            controller.abort();
+        };
+    }, [fetchTransactions, refreshTrigger]);
+
+    // Reset pagination when search, filter or date changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, filterType]);
+    }, [searchTerm, filterType, mes, ano]);
 
     // Filter transactions
     const filteredTransactions = useMemo(() => {

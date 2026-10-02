@@ -54,10 +54,14 @@ const AccountsSection = ({ accounts, isLoading, onAccountClick }: AccountsSectio
                     Array.from({ length: 4 }).map((_, i) => (
                         <SkeletonCard key={i} />
                     ))
+
+                    /* Validação para que caso não existam contas, exiba a mensagem de nenhuma conta encontrada. */
                 ) : accounts.length === 0 ? (
                     <div className="col-span-full flex justify-center items-center py-12 text-gray-500">
                         Nenhuma conta encontrada.
                     </div>
+
+                    /* Caso existam contas, exibe as contas via map, gerando vários cards dinamicamente com a quantidade de contas. */
                 ) : (
                     accounts.map((account, index) => (
                         <div

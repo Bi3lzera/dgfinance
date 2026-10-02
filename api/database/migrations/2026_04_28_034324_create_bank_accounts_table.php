@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('isOpenFinance');
             $table->string('openFinanceItemId');
             $table->string('institutionUrl');
+            $table->string('logoUrl')->nullable();
             $table->timestamps();
         });
     }

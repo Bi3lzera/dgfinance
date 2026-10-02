@@ -1,7 +1,7 @@
 import React from 'react';
 import { Download, Search, ArrowUpRight, ArrowDownLeft, FileText, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 import { useTransacoesTab, isIncomeTransaction, formatDateBR, parseNumericValue } from './transacoesTab';
-import { formatCurrencyToBRL } from '../../../utils/formats';
+import { formatCurrencyToBRL } from '../../../../../utils/formats';
 
 interface TransacoesTabProps {
     idAccount?: number;
@@ -94,25 +94,22 @@ const TransacoesTab: React.FC<TransacoesTabProps> = ({ idAccount }) => {
                         <div className="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200 self-start sm:self-auto">
                             <button
                                 onClick={() => setFilterType('todos')}
-                                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                                    filterType === 'todos' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
-                                }`}
+                                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${filterType === 'todos' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                                    }`}
                             >
                                 Todos
                             </button>
                             <button
                                 onClick={() => setFilterType('receita')}
-                                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                                    filterType === 'receita' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'
-                                }`}
+                                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${filterType === 'receita' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                                    }`}
                             >
                                 Receitas
                             </button>
                             <button
                                 onClick={() => setFilterType('despesa')}
-                                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                                    filterType === 'despesa' ? 'bg-white text-red-500 shadow-sm' : 'text-gray-500 hover:text-gray-900'
-                                }`}
+                                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${filterType === 'despesa' ? 'bg-white text-red-500 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                                    }`}
                             >
                                 Despesas
                             </button>
@@ -195,11 +192,10 @@ const TransacoesTab: React.FC<TransacoesTabProps> = ({ idAccount }) => {
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
                                                     <div
-                                                        className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
-                                                            isIncome
-                                                                ? 'bg-green-50 text-green-600 border-green-100'
-                                                                : 'bg-gray-100 text-gray-500 border-gray-200/60'
-                                                        }`}
+                                                        className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${isIncome
+                                                            ? 'bg-green-50 text-green-600 border-green-100'
+                                                            : 'bg-gray-100 text-gray-500 border-gray-200/60'
+                                                            }`}
                                                     >
                                                         {isIncome ? <ArrowDownLeft className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
                                                     </div>
@@ -265,9 +261,8 @@ const TransacoesTab: React.FC<TransacoesTabProps> = ({ idAccount }) => {
                             <button
                                 key={pageNum}
                                 onClick={() => setCurrentPage(pageNum)}
-                                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors text-xs font-bold ${
-                                    currentPage === pageNum ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'
-                                }`}
+                                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors text-xs font-bold ${currentPage === pageNum ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'
+                                    }`}
                             >
                                 {pageNum}
                             </button>
@@ -312,11 +307,10 @@ const TransacoesTab: React.FC<TransacoesTabProps> = ({ idAccount }) => {
                 <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-4">
                         <div
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center border ${
-                                metrics.balanceProjection >= 0
-                                    ? 'bg-green-50 text-green-600 border-green-100'
-                                    : 'bg-red-50 text-red-500 border-red-100'
-                            }`}
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center border ${metrics.balanceProjection >= 0
+                                ? 'bg-green-50 text-green-600 border-green-100'
+                                : 'bg-red-50 text-red-500 border-red-100'
+                                }`}
                         >
                             <ArrowDownLeft className="w-5 h-5" />
                         </div>

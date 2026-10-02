@@ -19,12 +19,13 @@ class UserBankAccountService
         return $user;
     }
 
-    public function getBankAccountTransactionList($idAccount): array
+    public function getBankAccountTransactionList($idAccount, string $initialDate, string $finalDate): array
     {
-        return BankAccount::where('users_bank_accounts.idUser', Auth::id())
+        return BankAccount::where('users_bank_accounts.idUser', $this->getUser()->idUser)
             ->where('users_bank_accounts.idAccount', $idAccount)
             ->join('banks', 'users_bank_accounts.idBank', '=', 'banks.idBank')
             ->join('transaction', 'users_bank_accounts.idAccount', '=', 'transaction.idBankAccount')
+            ->whereBetween('transaction.date', [$initialDate, $finalDate])
             ->leftjoin('installments', 'transaction.idInstallment', '=', 'installments.idInstallment')
             ->leftjoin('movements', 'installments.idMovement', '=', 'movements.idMovement')
             ->leftjoin('categories', 'movements.idCategory', '=', 'categories.id')
