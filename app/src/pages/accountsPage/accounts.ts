@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAllAvailableBanksApi } from '../../services/pageServices/accountActions';
+import { getAllAvailableBanksApi } from '../../services/pageServices/accountService';
 
 export interface UserAccount {
     idAccount: number;

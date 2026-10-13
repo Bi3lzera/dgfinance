@@ -10,14 +10,14 @@ import {
     RefreshCw,
     Save
 } from 'lucide-react';
-import { getInstallmentsApi } from '../../../services/pageServices/transactionActions';
-import { InstallmentItem } from '../../forms/transactionForm/useTransactionFormFuncs';
+import { getInstallmentsApi } from '../../../services/pageServices/transactionService';
+import { InstallmentItem } from '../../../components/forms/transactionForm/useTransactionFormFuncs';
 
 interface InstallmentModalProps {
     isOpen: boolean;
     onClose: () => void;
     movementTitle?: string;
-    movementId?: number;
+    idMovement?: number;
     installmentData: InstallmentItem[];
     onSaveInstallments: (data: InstallmentItem[]) => void;
     onRecalculate: () => void;
@@ -28,7 +28,7 @@ const InstallmentModal: React.FC<InstallmentModalProps> = ({
     onClose,
     installmentData,
     movementTitle = '',
-    movementId,
+    idMovement,
     onSaveInstallments,
     onRecalculate
 }) => {
@@ -40,15 +40,15 @@ const InstallmentModal: React.FC<InstallmentModalProps> = ({
     // Sincroniza local state com installmentData quando o modal abre
     // ou quando installmentData muda (ex: cálculo inicial ou recalcular)
     useEffect(() => {
-        console.log('[InstallmentModal useEffect]', { isOpen, movementId, installmentDataLength: installmentData.length, installmentData });
+        console.log('[InstallmentModal useEffect]', { isOpen, idMovement, installmentDataLength: installmentData.length, installmentData });
         if (!isOpen) return;
 
-        if (movementId) {
+        if (idMovement) {
             // Para transações existentes, busca da API
             const fetchInstallments = async () => {
                 setIsLoading(true);
                 try {
-                    const data = await getInstallmentsApi(movementId);
+                    const data = await getInstallmentsApi(idMovement);
                     if (data) {
                         setLocalInstallments(data);
                     }
@@ -68,7 +68,7 @@ const InstallmentModal: React.FC<InstallmentModalProps> = ({
             setHasLocalChanges(false);
             setEditingIndex(null);
         }
-    }, [isOpen, movementId, installmentData]);
+    }, [isOpen, idMovement, installmentData]);
 
     const handleValueChange = (index: number, newValue: string) => {
         const updated = [...localInstallments];

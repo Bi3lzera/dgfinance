@@ -8,6 +8,8 @@ export const useNewAccountFormFuncs = () => {
     const [agencyNumber, setAgencyNumber] = useState('');
     const [accountNumber, setAccountNumber] = useState('');
     const [notes, setNotes] = useState('');
+    const [isOpenFinance, setIsOpenFinance] = useState(false);
+    const [codeCOMPE, setCodeCOMPE] = useState('');
 
     const handleInitialValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -20,11 +22,13 @@ export const useNewAccountFormFuncs = () => {
     return {
         accountAlias, setAccountAlias,
         idBank, setIdBank,
+        codeCOMPE, setCodeCOMPE,
         accountType, setAccountType,
         initialValue, setInitialValue,
         agencyNumber, setAgencyNumber,
         accountNumber, setAccountNumber,
         notes, setNotes,
+        isOpenFinance, setIsOpenFinance,
         handleInitialValueChange
     };
 };

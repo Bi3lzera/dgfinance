@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import NewAccountForm from '../forms/newAccountForm/NewAccountForm';
+import NewAccountForm from '../../components/forms/newAccountForm/NewAccountForm';
 import Header from './components/header';
 import UpperBarSection from './components/upperBarSection';
 import AccountsSection from './components/accountsSection';

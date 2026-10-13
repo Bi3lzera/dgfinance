@@ -80,8 +80,8 @@ const AccountsSection = ({ accounts, isLoading, onAccountClick }: AccountsSectio
                                     )}
                                 </div>
                                 <div>
-                                    <h4 className="text-[15px] font-bold text-gray-900 leading-tight">{account.accountAlias}</h4>
-                                    <p className="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5">{account.bankName}</p>
+                                    <h4 className="text-[15px] font-bold text-gray-900 leading-tight">{account.bankName}</h4>
+                                    <p className="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5">{account.accountAlias}</p>
                                 </div>
                             </div>
 

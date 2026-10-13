@@ -89,6 +89,7 @@ class TransactionService
                 'transaction.value as transactionValue',
                 'transaction.type as transactionType',
                 'installments.status as installmentStatus',
+                'movements.paymentRecurrencyMethod'
             ])
             ->join('installments', 'movements.idMovement', '=', 'installments.idMovement')
             ->join('transaction', 'installments.idInstallment', '=', 'transaction.idInstallment')
@@ -104,46 +105,40 @@ class TransactionService
             ->toArray();
     }
 
-    public function getTransactionDetails(int $id)
+    public function getTransactionDetails(int $id): array
     {
         $user = $this->getUser();
 
-        $transaction = Transaction::with(['installment.movement'])
-            ->where('idTransaction', $id)
-            ->where('idUser', $user->idUser)
-            ->first();
+        $transaction = Transaction::where('transaction.idTransaction', $id)
+        ->where('transaction.idUser', $user->idUser)
+        ->leftJoin('users_bank_accounts', 'transaction.idBankAccount', '=', 'users_bank_accounts.idAccount')
+        ->leftJoin('banks', 'users_bank_accounts.idBank', '=', 'banks.idBank')
+        ->leftJoin('payment_methods', 'transaction.idPaymentMethod', '=', 'payment_methods.idPayMethod')
+        ->leftJoin('users_cards', 'transaction.idPaymentCard', '=', 'users_cards.idCard')
+        ->leftJoin('installments', 'transaction.idInstallment', '=', 'installments.idInstallment')
+        ->leftJoin('movements', 'installments.idMovement', '=', 'movements.idMovement')
+        ->leftJoin('categories', 'movements.idCategory', '=', 'categories.id')
+        ->select(
+            'transaction.*',
+            'movements.idMovement',
+            'movements.title as movementTitle',
+            'movements.description as movementDescription',
+            'movements.idCategory',
+            'movements.paymentRecurrencyMethod',
+            'categories.descriptionTranslated as categoryName',
+            'users_bank_accounts.accountAlias as bankAccountName',
+            'banks.name as bankName',
+            'payment_methods.description as paymentMethodName',
+            'users_cards.cardAlias as cardAlias'
+        )
+        ->first()
+        ->toArray();
 
         if (!$transaction) {
             abort(404, 'Transação não encontrada ou não pertence ao usuário logado.');
         }
 
-        $installment = $transaction->installment;
-        $movement = $installment ? $installment->movement : null;
-
-        return [
-            'idTransaction' => $transaction->idTransaction,
-            'idInstallment' => $installment ? $installment->idInstallment : null,
-            'idMovement' => $movement ? $movement->idMovement : null,
-            'title' => $movement ? $movement->title : '',
-            'description' => $movement ? $movement->description : '',
-            'totalValue' => $movement ? $movement->totalValue : $transaction->value,
-            'type' => $movement ? $movement->type : $transaction->type,
-            'totalInstallments' => $movement ? $movement->totalInstallments : 1,
-            'idCategory' => $movement ? $movement->idCategory : 1,
-            'date' => $transaction->date,
-            'plannedDate' => $installment ? $installment->plannedDate : $transaction->date,
-            'expectedValue' => $installment ? $installment->expectedValue : $transaction->value,
-            'installmentNumber' => $installment ? $installment->installmentNumber : 1,
-            'status' => $installment ? $installment->status : 'Efetivado',
-            'transactionDescription' => $transaction->transactionDescription,
-            'value' => $transaction->value,
-            'idBankAccount' => $transaction->idBankAccount,
-            'idPaymentMethod' => $transaction->idPaymentMethod,
-            'idPaymentCard' => $transaction->idPaymentCard,
-            'paymentRecurrencyMethod' => $movement ? $movement->paymentRecurrencyMethod : null,
-            'transferUUID' => $movement ? $movement->transferUUID : null,
-            'idBill' => $transaction->idBill,
-        ];
+        return $transaction;
     }
 
     //Movement CRUD

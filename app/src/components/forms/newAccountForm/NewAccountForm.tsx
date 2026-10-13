@@ -4,8 +4,8 @@ import Footer from './components/Footer';
 import Style from './components/Style';
 import AccountInfo from './components/AccountInfo';
 import { useNewAccountFormFuncs } from './useNewAccountFormFuncs';
-import { createBankAccountApi } from '../../../services/pageServices/accountActions';
-import { getBanks } from '../../../services/pageServices/miscelaneous';
+import { createBankAccountApi } from '../../../services/pageServices/accountService';
+import { getBanks } from '../../../services/pageServices/miscelaneousService';
 
 interface NewAccountFormProps {
     isOpen: boolean;
@@ -18,7 +18,7 @@ const NewAccountForm: React.FC<NewAccountFormProps> = ({ isOpen, onClose, accoun
     const overlayRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [loadingText, setLoadingText] = useState('Carregando...');
-    const [banks, setBanks] = useState<{ idBank: number, name: string }[]>([]);
+    const [banks, setBanks] = useState<{ idBank: number, name: string, codeCOMPE: string }[]>([]);
 
     useEffect(() => {
         if (isOpen) {
@@ -47,6 +47,7 @@ const NewAccountForm: React.FC<NewAccountFormProps> = ({ isOpen, onClose, accoun
             agencyNumber: formState.agencyNumber,
             accountNumber: formState.accountNumber,
             notes: formState.notes,
+            isOpenFinance: formState.isOpenFinance,
         };
     };
 
@@ -61,6 +62,7 @@ const NewAccountForm: React.FC<NewAccountFormProps> = ({ isOpen, onClose, accoun
             formState.setAccountNumber('');
             formState.setNotes('');
             formState.setIdBank('');
+            formState.setIsOpenFinance(false);
         } catch (err) {
             console.error(err);
             alert("Erro ao salvar a conta");
@@ -125,6 +127,8 @@ const NewAccountForm: React.FC<NewAccountFormProps> = ({ isOpen, onClose, accoun
                             notes={formState.notes}
                             setNotes={formState.setNotes}
                             banks={banks}
+                            isOpenFinance={formState.isOpenFinance}
+                            setIsOpenFinance={formState.setIsOpenFinance}
                         />
                     </div>
 

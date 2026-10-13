@@ -10,6 +10,7 @@ export interface BankAccountPayload {
     referenceMonth?: string;
     initialValue?: number;
     notes?: string;
+    isOpenFinance?: boolean;
 }
 
 export interface BankItem {

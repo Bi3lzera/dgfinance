@@ -32,8 +32,11 @@ const paymentInfo = ({
     const repetir = recurrencyMethod === 'R';
     const agendado = recurrencyMethod === 'A';
     const parcelado = recurrencyMethod === 'P';
+    const avista = recurrencyMethod === "V";
 
     const isParcelasDisabled = !!movementId || !(repetir || parcelado);
+
+    console.log(recurrencyMethod);
 
     return (
         <section>
@@ -44,6 +47,30 @@ const paymentInfo = ({
             <div className="bg-gray-50/60 rounded-xl border border-gray-100 p-4 flex flex-col gap-4">
                 {/* Linha Superior: Repetir Mensalmente, Agendado, Parcelamento */}
                 <div className="flex items-center justify-between gap-4">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (avista) {
+                                setRecurrencyMethod('');
+                                setParcelas("1");
+                            } else {
+                                setRecurrencyMethod('V');
+                            }
+                        }}
+                        disabled={!!movementId}
+                        className={`flex-1 flex items-center gap-3 px-4 py-2.5 rounded-xl border transition text-sm font-semibold text-left ${avista
+                            ? 'bg-green-50 border-green-200 text-green-700'
+                            : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'} disabled:opacity-60 disabled:cursor-not-allowed`}
+                    >
+                        <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${avista ? 'bg-green-600' : 'bg-white border-2 border-gray-300'}`}>
+                            {avista && <Check size={10} strokeWidth={3} className="text-white" />}
+                        </div>
+                        <div>
+                            <div className="text-sm font-bold leading-tight">À Vista</div>
+                            <div className="text-[10px] font-medium text-gray-400 leading-tight">Lançamento unico</div>
+                        </div>
+                    </button>
+
                     <button
                         type="button"
                         onClick={() => {

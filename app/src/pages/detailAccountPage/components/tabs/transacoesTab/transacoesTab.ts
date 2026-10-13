@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useContext } from 'react';
-import { getAllTransactionsByAccountApi } from '../../../../../services/pageServices/transactionTabServices/transactionTabServices';
+import { getAllTransactionsByAccountApi } from '../../../../../services/pageServices/transactionTabServices/transactionTabService';
 import { DateContext } from '../../../../../contexts/DateContext';
 
 export interface BankAccountTransaction {

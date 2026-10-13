@@ -4,7 +4,7 @@ import { ExtratoModel } from "../../../types/extratoModel";
 interface TransactionsProps {
     extrato: ExtratoModel[];
     isLoading?: boolean;
-    onDoubleClick?: (id: number) => void;
+    onClick?: (id: number) => void;
     onConfirmPaymentClick?: (item: ExtratoModel) => void;
 }
 
@@ -27,7 +27,7 @@ const formatDate = (dateString: string) => {
     };
 };
 
-const Transactions = ({ extrato, isLoading, onDoubleClick, onConfirmPaymentClick }: TransactionsProps) => {
+const Transactions = ({ extrato, isLoading, onClick, onConfirmPaymentClick }: TransactionsProps) => {
     return (
         <div className="flex-1 h-full bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden flex flex-col relative">
             {/* List Header */}
@@ -65,7 +65,7 @@ const Transactions = ({ extrato, isLoading, onDoubleClick, onConfirmPaymentClick
                             return (
                                 <div
                                     key={item.id + id}
-                                    onDoubleClick={() => onDoubleClick && onDoubleClick(Number(item.id))}
+                                    onClick={() => onClick && onClick(Number(item.id))}
                                     className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer animate-scale-in"
                                     style={{ animationDelay: `${id * 30}ms` }}
                                 >
@@ -112,7 +112,7 @@ const Transactions = ({ extrato, isLoading, onDoubleClick, onConfirmPaymentClick
 
                                     {/* Ações */}
                                     <div className="flex items-center justify-end">
-                                        <button 
+                                        <button
                                             className="text-gray-400 hover:text-green-600 transition p-1"
                                             onClick={(e) => {
                                                 e.stopPropagation();

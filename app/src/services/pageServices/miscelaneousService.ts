@@ -1,5 +1,5 @@
 import axiosInstance from "../../../config/axiosConfig";
-import * as type from "../../types/";
+import * as type from "../../types";
 
 export const getCategories = async () => {
     const response = await axiosInstance.get(`/categories/index`);
@@ -29,7 +29,7 @@ export const getPaymentMethods = async () => {
 }
 
 export const getUserAccounts = async () => {
-    const response = await axiosInstance.get(`/userAccounts/getAllUserAccounts`);
+    const response = await axiosInstance.get(`/userBankAccounts/getAllUserAccounts`);
 
     const userAccounts = response.data.map((item: type.BankAccountModel) => {
         return {
@@ -52,6 +52,7 @@ export const getBanks = async () => {
         return {
             idBank: item.idBank,
             name: item.name,
+            codeCOMPE: item.codeCOMPE
         }
     });
 

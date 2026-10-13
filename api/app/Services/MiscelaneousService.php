@@ -13,6 +13,7 @@ class MiscelaneousService
         return $banks->map(function ($bank) {
             return [
                 'idBank' => $bank->idBank,
+                'codeCOMPE' => $bank->codeCOMPE,
                 'name' => $bank->name,
             ];
         })->toArray();

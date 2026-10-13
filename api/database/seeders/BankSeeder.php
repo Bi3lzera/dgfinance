@@ -9,6 +9,6 @@ class BankSeeder extends Seeder
 {
     public function run(): void
     {
-        Bank::factory(10)->create();
+        Bank::factory(513)->create();
     }
 }

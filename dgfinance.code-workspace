@@ -5,16 +5,16 @@
 			"path": "."
 		},
 		{
+			"name": "src",
+			"path": "app/src"
+		},
+		{
 			"name": "app",
 			"path": "api/app"
 		},
 		{
 			"name": "routes",
 			"path": "api/routes"
-		},
-		{
-			"name": "src",
-			"path": "app/src"
 		}
 	],
 	"settings": {}

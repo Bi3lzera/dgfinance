@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import ControlPanelCard from './components/ControlPanelCard';
 import FutureCompromissesCard from './components/FutureCompromissesCard';
 import Transactions from './components/Transactions';
 import Filters from './components/Filters';
-import { getExtrato } from '../../services/pageServices/extrato';
+import { getExtrato } from '../../services/pageServices/extratoService';
 import { ExtratoModel } from '../../types/extratoModel';
 import { DateContext } from '../../contexts/DateContext';
-import TransactionForm from '../forms/transactionForm/TransactionForm';
-import PaymentModal from '../modals/paymentModal/paymentModal';
-import { getBanks, getPaymentMethods } from '../../services/pageServices/miscelaneous';
+import TransactionForm from '../../components/forms/transactionForm/TransactionForm';
+import PaymentModal from '../../components/modals/paymentModal/paymentModal';
+import { getBanks, getPaymentMethods } from '../../services/pageServices/miscelaneousService';
 
 
 const Extrato: React.FC = () => {
     const [extrato, setExtrato] = useState<ExtratoModel[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterTab, setFilterTab] = useState('Todos');
     const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
     const [selectedMovementId, setSelectedMovementId] = useState<number | undefined>(undefined);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -84,19 +86,65 @@ const Extrato: React.FC = () => {
         };
     }, [mes, ano, refreshTrigger]);
 
+    const filteredExtrato = useMemo(() => {
+        const normalizeText = (text: string) => {
+            return (text || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        };
+
+        const term = normalizeText(searchTerm.trim());
+        const numTerm = searchTerm.replace(/[^\d]/g, '');
+
+        return extrato.filter(item => {
+            // Filtro por abas (Todos, Receitas, Despesas)
+            if (filterTab === 'Receitas' && item.transactionType !== 'Receita') return false;
+            if (filterTab === 'Despesas' && item.transactionType !== 'Despesa') return false;
+
+            // Filtro por termo de busca local (sem chamadas à API)
+            if (!term) return true;
+
+            const isMatch = (field: string) => normalizeText(field).includes(term);
+            const numAmount = (item.amount || '').replace(/[^\d]/g, '');
+            const matchesNumber = numTerm.length > 0 && numAmount.includes(numTerm);
+
+            return (
+                isMatch(item.title) ||
+                isMatch(item.institution) ||
+                isMatch(item.tag) ||
+                isMatch(item.paymentType) ||
+                isMatch(item.status) ||
+                isMatch(item.amount) ||
+                matchesNumber
+            );
+        });
+    }, [extrato, searchTerm, filterTab]);
+
     return (
         <div className="flex flex-col h-full bg-[#fbfbfe]">
             <div className="flex flex-col flex-1 max-w-[80vw] mx-auto w-full py-6 overflow-hidden">
                 {/* Filters */}
                 <div className="flex-shrink-0">
-                    <Filters />
+                    <Filters
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        filterTab={filterTab}
+                        onFilterTabChange={setFilterTab}
+                        onResetFilters={() => {
+                            setSearchTerm('');
+                            setFilterTab('Todos');
+                        }}
+                        onRefresh={() => setRefreshTrigger(prev => prev + 1)}
+                        isLoading={isLoading}
+                    />
                 </div>
 
                 {/* Main Content Area */}
                 <div className="flex gap-8 items-stretch flex-1 overflow-hidden">
                     {/* Main: List of transactions */}
-                    <Transactions extrato={extrato} isLoading={isLoading}
-                        onDoubleClick={(id) => {
+                    <Transactions extrato={filteredExtrato} isLoading={isLoading}
+                        onClick={(id) => {
                             setSelectedMovementId(id);
                             setIsTransactionFormOpen(true);
                         }}

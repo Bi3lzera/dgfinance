@@ -176,7 +176,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, move
                 isOpen={isInstallmentModalOpen}
                 onClose={() => setIsInstallmentModalOpen(false)}
                 movementTitle={title}
-                movementId={idMovement ?? undefined}
+                idMovement={idMovement ?? undefined}
                 installmentData={installmentData}
                 onSaveInstallments={(data) => setInstallmentData(data)}
                 onRecalculate={() => calculateInstallments(true)}

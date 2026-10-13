@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
-import { getCategories, getUserAccounts, getPaymentMethods } from '../../../services/pageServices/miscelaneous';
+import { getCategories, getUserAccounts, getPaymentMethods } from '../../../services/pageServices/miscelaneousService';
 import { CategoryModel } from '../../../types/miscelaneousModels';
-import { 
-    CreateMovementWithInstallmentsDTO, 
-    CreateInstallmentDTO, 
-    CreateTransactionWithInstallmentsDTO 
+import {
+    CreateMovementWithInstallmentsDTO,
+    CreateInstallmentDTO,
+    CreateTransactionWithInstallmentsDTO
 } from '../../../types';
 import { useTransactionFormFuncs } from './useTransactionFormFuncs';
-import { getTransactionDetails } from '../../../services/pageServices/transactionActions';
+import { getTransactionDetails } from '../../../services/pageServices/transactionService';
 import { formatCurrencyToBRL } from '../../../utils/formats';
 
 export type TransactionType = 'receita' | 'despesa';
@@ -101,7 +101,7 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
                     if (data) {
                         //Preenche os dados do formulário com os dados entregues pela API.
                         setTipo(data.type === 'Credito' ? 'receita' : 'despesa');
-                        setTitle(data.title || '')
+                        setTitle(data.movementTitle || '')
                         setDescricao(data.transactionDescription || '');
                         setValor(formatCurrencyToBRL(data.value, false));
 
@@ -109,21 +109,14 @@ export function useTransactionFormFetch({ isOpen = false, movementId, formState 
                         setCategoria(data.idCategory?.toString() || '');
                         setConta(data.idBankAccount?.toString() || '');
                         setFormaPagamento(data.idPaymentMethod?.toString() || '');
-                        let recurrencyMethod = data.paymentRecurrencyMethod || '';
-                        if (!recurrencyMethod) {
-                            if (data.status === 'Pendente') {
-                                recurrencyMethod = 'A';
-                            } else if (data.totalPaymentCount > 1) {
-                                recurrencyMethod = 'P';
-                            }
-                        }
-                        setPaymentRecurrencyMethod(recurrencyMethod);
+                        setPaymentRecurrencyMethod(data.paymentRecurrencyMethod);
                         setParcelas(`${data.installmentNumber || 1}/${data.totalPaymentCount || 1}`);
                         setNotas(data.description || '');
 
                         setIdTransaction(data.idTransaction || null);
                         setIdInstallment(data.idInstallment || null);
                         setIdMovement(data.idMovement || null);
+                        console.log("idMovement: " + data.idMovement);
                     }
                 } catch (error) {
                     console.error("Erro ao buscar detalhes:", error);

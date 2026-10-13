@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { Download, Search, Calendar, Filter, ArrowUpRight, RefreshCw, Receipt } from 'lucide-react';
 import type { InvoiceTransaction } from '../detailCardActions';
 
@@ -102,11 +102,10 @@ const CardTransacoesTab = () => {
                             <button
                                 key={type}
                                 onClick={() => setFilterType(type)}
-                                className={`px-3 py-1 text-[11px] font-bold rounded-full uppercase tracking-wider transition-colors ${
-                                    filterType === type
+                                className={`px-3 py-1 text-[11px] font-bold rounded-full uppercase tracking-wider transition-colors ${filterType === type
                                         ? 'bg-purple-600 text-white'
                                         : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                                }`}
+                                    }`}
                             >
                                 {type === 'todos' ? 'Todos' : typeLabel[type]}
                             </button>
@@ -160,11 +159,10 @@ const CardTransacoesTab = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`text-[9px] font-bold uppercase tracking-wider ${
-                                            t.status === 'efetivado' ? 'text-green-600' :
-                                            t.status === 'pendente' ? 'text-blue-600' :
-                                            'text-gray-400 line-through'
-                                        }`}>
+                                        <span className={`text-[9px] font-bold uppercase tracking-wider ${t.status === 'efetivado' ? 'text-green-600' :
+                                                t.status === 'pendente' ? 'text-blue-600' :
+                                                    'text-gray-400 line-through'
+                                            }`}>
                                             {t.status === 'efetivado' ? 'Efetivado' : t.status === 'pendente' ? 'Pendente' : 'Estornado'}
                                         </span>
                                     </td>
