@@ -27,21 +27,27 @@ const formatDate = (dateString: string) => {
     };
 };
 
+const GRID_TEMPLATE_COLUMNS = "minmax(0, 0.9fr) minmax(0, 3fr) minmax(0, 2.2fr) minmax(0, 1.4fr) minmax(0, 1fr) 40px";
+const GRID_STYLE = { gridTemplateColumns: GRID_TEMPLATE_COLUMNS };
+
 const Transactions = ({ extrato, isLoading, onClick, onConfirmPaymentClick }: TransactionsProps) => {
     return (
         <div className="flex-1 h-full bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden flex flex-col relative">
-            {/* List Header */}
-            <div className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-100 bg-white sticky top-0 z-10">
-                <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Data</span>
-                <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Descrição & Tag</span>
-                <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Instituição</span>
-                <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Valor Líquido</span>
-                <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase text-center">Status</span>
-                <span></span>
-            </div>
+            {/* List Body with Sticky Header (Scrollable) */}
+            <div className="flex-1 overflow-y-auto overflow-x-auto flex flex-col">
+                {/* List Header */}
+                <div 
+                    className="grid gap-4 px-6 py-4 border-b border-gray-100 bg-white sticky top-0 z-10 items-center min-w-[720px]"
+                    style={GRID_STYLE}
+                >
+                    <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Data</span>
+                    <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Descrição & Tag</span>
+                    <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Instituição</span>
+                    <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Valor Líquido</span>
+                    <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase text-center">Status</span>
+                    <span className="w-10"></span>
+                </div>
 
-            {/* List Body (Scrollable) */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col">
                 {isLoading ? (
                     <div className="flex-1 flex flex-col items-center justify-center py-16 px-4 animate-fade-in">
                         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -66,54 +72,66 @@ const Transactions = ({ extrato, isLoading, onClick, onConfirmPaymentClick }: Tr
                                 <div
                                     key={item.id + id}
                                     onClick={() => onClick && onClick(Number(item.id))}
-                                    className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_40px] gap-4 px-6 py-5 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer animate-scale-in"
-                                    style={{ animationDelay: `${id * 30}ms` }}
+                                    className="grid gap-4 px-6 py-4 border-b border-gray-50 items-center hover:bg-slate-50/50 transition cursor-pointer animate-scale-in min-w-[720px]"
+                                    style={{ ...GRID_STYLE, animationDelay: `${id * 30}ms` }}
                                 >
                                     {/* Data */}
-                                    <div className="flex flex-col gap-0.5">
-                                        <span className="font-bold text-sm text-gray-900">{formattedDate.dayMonth}</span>
-                                        <span className="text-[11px] text-gray-400 font-medium">{formattedDate.year}</span>
+                                    <div className="flex flex-col gap-0.5 min-w-0">
+                                        <span className="font-bold text-sm text-gray-900 whitespace-nowrap">{formattedDate.dayMonth}</span>
+                                        <span className="text-[11px] text-gray-400 font-medium whitespace-nowrap">{formattedDate.year}</span>
                                     </div>
 
                                     {/* Descrição & Tag */}
-                                    <div className="flex flex-col gap-1.5 justify-center max-w-[18vw]">
-                                        <span className="font-bold text-sm text-gray-900 break-words whitespace-normal">{item.title}</span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100/50 whitespace-nowrap">
+                                    <div className="flex flex-col gap-1.5 justify-center min-w-0">
+                                        <span 
+                                            className="font-bold text-sm text-gray-900 break-words line-clamp-2 leading-snug"
+                                            title={item.title}
+                                        >
+                                            {item.title}
+                                        </span>
+                                        <div className="flex items-center gap-2 flex-wrap min-w-0">
+                                            <span 
+                                                className="inline-flex items-center justify-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100/50 break-words max-w-full truncate"
+                                                title={item.tag}
+                                            >
                                                 {item.tag}
                                             </span>
-                                            <Paperclip size={12} strokeWidth={2.5} className="text-gray-400" />
+                                            <Paperclip size={12} strokeWidth={2.5} className="text-gray-400 flex-shrink-0" />
                                         </div>
                                     </div>
 
                                     {/* Instituição */}
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${item.institutionDot}`}></div>
-                                        <span className="text-xs font-semibold text-gray-500 truncate">{item.institution}</span>
+                                    <div className="flex items-start gap-2 min-w-0" title={item.institution}>
+                                        <div className={`w-2 h-2 rounded-full ${item.institutionDot || 'bg-gray-400'} mt-1 flex-shrink-0`}></div>
+                                        <span className="text-xs font-semibold text-gray-600 break-words leading-snug line-clamp-2">
+                                            {item.institution}
+                                        </span>
                                     </div>
 
                                     {/* Valor Líquido */}
-                                    <div className="flex flex-col justify-center">
-                                        <span className={`font-bold text-[15px] whitespace-nowrap ${item.transactionType == 'Despesa' ? 'text-red-600' : 'text-green-700'}`}>
+                                    <div className="flex flex-col justify-center min-w-0">
+                                        <span className={`font-bold text-[15px] whitespace-nowrap ${item.transactionType === 'Despesa' ? 'text-red-600' : 'text-green-700'}`}>
                                             {item.amount}
                                         </span>
-                                        <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-0.5">
+                                        <span 
+                                            className="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-0.5 break-words line-clamp-2 leading-tight"
+                                            title={item.paymentType}
+                                        >
                                             {item.paymentType}
                                         </span>
-
                                     </div>
 
                                     {/* Status */}
-                                    <div className="flex justify-center">
+                                    <div className="flex justify-center items-center min-w-0">
                                         <span className="inline-flex items-center justify-center px-3 py-1 rounded-full border border-gray-200 text-[11px] font-bold text-gray-800 bg-white whitespace-nowrap shadow-sm">
                                             {item.status}
                                         </span>
                                     </div>
 
                                     {/* Ações */}
-                                    <div className="flex items-center justify-end">
+                                    <div className="flex items-center justify-end w-10 min-w-0">
                                         <button
-                                            className="text-gray-400 hover:text-green-600 transition p-1"
+                                            className="text-gray-400 hover:text-green-600 hover:bg-green-50 transition p-1.5 rounded-lg"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 onConfirmPaymentClick && onConfirmPaymentClick(item);
@@ -124,7 +142,7 @@ const Transactions = ({ extrato, isLoading, onClick, onConfirmPaymentClick }: Tr
                                         </button>
                                     </div>
                                 </div>
-                            )
+                            );
                         })}
                         {/* Loading state indicator for infinite scroll simulation */}
                         <div className="py-6 flex justify-center items-center text-xs font-bold text-gray-400 uppercase tracking-wider">
@@ -134,7 +152,7 @@ const Transactions = ({ extrato, isLoading, onClick, onConfirmPaymentClick }: Tr
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Transactions;
